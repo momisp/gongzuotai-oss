@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>数墙迷宫</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            touch-action: none;
+            background: #f0f4f8;
+            user-select: none;
+        }
+
+        #gameContainer {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            background-image: linear-gradient(0deg, #f0f0f0 1px, transparent 1px);
+            background-size: 100% 24px;
+            z-index: 0;
+        }
+
+        /* 开始界面 */
+        #startScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            background: rgba(240, 244, 248, 0.95);
+        }
+
+        .game-title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+        }
+
+        .instructions {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 50px;
+            max-width: 85%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .instructions h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .instructions ul {
+            list-style: none;
+        }
+
+        .instructions li {
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 16px;
+            line-height: 1.6;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .instructions li::before {
+            content: "•";
+            color: #3182ce;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+            color: white;
+            border: none;
+            padding: 18px 60px;
+            font-size: 22px;
+            font-weight: bold;
+            border-radius: 50px;
+            box-shadow: 0 6px 20px rgba(49, 130, 206, 0.4);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .start-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 3px 10px rgba(49, 130, 206, 0.3);
+        }
+
+        /* 游戏界面 */
+        #gameScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        #gameScreen.active {
+            display: flex;
+        }
+
+        /* 顶部UI */
+        .top-ui {
+            flex-shrink: 0;
+            padding: max(14px, env(safe-area-inset-top)) 20px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            z-index: 50;
+        }
+
+        .top-ui-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .back-btn {
+            flex-shrink: 0;
+            height: 48px;
+            padding: 0 20px 0 16px;
+            border-radius: 24px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            color: #3182ce;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .back-btn:active {
+            transform: scale(0.96);
+            background: #f7fafc;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .back-btn .back-label {
+            color: #2d3748;
+        }
+
+        .level-badge {
+            height: 48px;
+            padding: 0 22px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            font-size: 15px;
+            color: #718096;
+            font-weight: 500;
+        }
+
+        .level-badge .stat-value {
+            color: #2d3748;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .top-ui-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 14px 18px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .stat-label {
+            color: #718096;
+            font-weight: 500;
+            font-size: 13px;
+            letter-spacing: 0.02em;
+        }
+
+        .stat-card .stat-value {
+            color: #3182ce;
+            font-weight: 700;
+            font-size: 28px;
+            line-height: 1;
+        }
+
+        .error-lives {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .life-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            flex-shrink: 0;
+            transition: background 0.2s ease;
+        }
+
+        .life-dot.used {
+            background: #fc8181;
+            box-shadow: 0 0 0 2px rgba(252, 129, 129, 0.25);
+        }
+
+        /* 可滚动主内容区 */
+        .game-scroll {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-y;
+            padding: 0 16px 16px;
+        }
+
+        /* 网格区域 */
+        .grid-container {
+            margin: 0 auto 16px;
+            width: fit-content;
+            max-width: 100%;
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .grid {
+            display: grid;
+            gap: 1px;
+            background: #cbd5e0;
+            border: 2px solid #cbd5e0;
+        }
+
+        .cell {
+            width: 56px;
+            height: 56px;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .cell.number {
+            color: #2d3748;
+            cursor: default;
+        }
+
+        .cell.white {
+            background: white;
+        }
+
+        .cell.black {
+            background: #2d3748;
+            color: white;
+        }
+
+        .cell.gray {
+            background: #e2e8f0;
+        }
+
+        .cell:active {
+            transform: scale(0.95);
+        }
+
+        .cell.error {
+            background: #fed7d7;
+            animation: shake 0.3s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+
+        /* 底部按钮 */
+        .button-area {
+            flex-shrink: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 12px 16px max(16px, env(safe-area-inset-bottom));
+            background: linear-gradient(to top, rgba(240, 244, 248, 0.98) 70%, transparent);
+            border-top: 1px solid rgba(226, 232, 240, 0.6);
+            z-index: 50;
+        }
+
+        .game-btn {
+            padding: 16px 40px;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
+        }
+
+        .game-btn:active {
+            transform: scale(0.95);
+        }
+
+        .game-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 结果弹窗 */
+        .result-modal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            z-index: 200;
+            display: none;
+            text-align: center;
+            min-width: 300px;
+            animation: modalPop 0.3s ease forwards;
+        }
+
+        @keyframes modalPop {
+            to { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .result-title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+
+        .result-title.success {
+            color: #38a169;
+        }
+
+        .result-title.failure {
+            color: #e53e3e;
+        }
+
+        .result-text {
+            font-size: 18px;
+            color: #4a5568;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .result-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 0 5px;
+        }
+
+        .result-btn:active {
+            transform: scale(0.95);
+        }
+
+        .badge-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        /* 规则区域 */
+        .rules-area {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            padding-bottom: 8px;
+        }
+
+        .rules-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .rules-card h3 {
+            color: #2d3748;
+            font-size: 18px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .rules-card ul {
+            list-style: none;
+        }
+
+        .rules-card li {
+            color: #4a5568;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 8px;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .rules-card li::before {
+            content: "•";
+            color: #3182ce;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 480px) {
+            .game-title {
+                font-size: 32px;
+                margin-bottom: 24px;
+            }
+
+            .instructions {
+                padding: 20px;
+                margin-bottom: 32px;
+            }
+
+            .instructions li {
+                font-size: 14px;
+            }
+
+            .start-btn {
+                padding: 14px 48px;
+                font-size: 18px;
+            }
+
+            #startScreen {
+                padding: 20px;
+                justify-content: flex-start;
+                padding-top: max(40px, env(safe-area-inset-top));
+                overflow-y: auto;
+            }
+
+            .top-ui {
+                padding: max(12px, env(safe-area-inset-top)) 16px 14px;
+                gap: 12px;
+            }
+
+            .back-btn,
+            .level-badge {
+                height: 44px;
+                border-radius: 22px;
+            }
+
+            .back-btn {
+                padding: 0 14px 0 12px;
+                font-size: 15px;
+            }
+
+            .back-btn .back-label {
+                display: none;
+            }
+
+            .level-badge {
+                padding: 0 16px;
+                font-size: 14px;
+            }
+
+            .top-ui-stats {
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 12px 14px;
+                gap: 8px;
+                border-radius: 14px;
+            }
+
+            .stat-card .stat-value {
+                font-size: 24px;
+            }
+
+            .error-lives {
+                gap: 8px;
+            }
+
+            .life-dot {
+                width: 12px;
+                height: 12px;
+            }
+
+            .grid-container {
+                padding: 8px;
+            }
+
+            .cell {
+                width: min(52px, calc((100vw - 80px) / 5));
+                height: min(52px, calc((100vw - 80px) / 5));
+                font-size: clamp(16px, 4.5vw, 22px);
+            }
+
+            .rules-card {
+                padding: 14px 16px;
+            }
+
+            .rules-card h3 {
+                font-size: 16px;
+            }
+
+            .rules-card li {
+                font-size: 13px;
+                margin-bottom: 6px;
+            }
+
+            .game-btn {
+                flex: 1;
+                max-width: 120px;
+                padding: 12px 16px;
+                font-size: 15px;
+            }
+
+            .button-area {
+                gap: 8px;
+            }
+
+            .result-modal {
+                min-width: auto;
+                width: calc(100% - 40px);
+                max-width: 320px;
+                padding: 28px 24px;
+            }
+
+            .result-title {
+                font-size: 26px;
+            }
+        }
+
+        @media (max-height: 700px) and (max-width: 480px) {
+            .cell {
+                width: min(44px, calc((100vw - 64px) / 5));
+                height: min(44px, calc((100vw - 64px) / 5));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div class="background"></div>
+        
+        <!-- 开始界面 -->
+        <div id="startScreen">
+            <h1 class="game-title">数墙迷宫</h1>
+            <button class="start-btn" id="startBtn">开始解谜</button>
+        </div>
+
+        <!-- 游戏界面 -->
+        <div id="gameScreen">
+            <div class="top-ui">
+                <div class="top-ui-head">
+                    <button class="back-btn" id="backBtn" type="button" aria-label="返回">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+                        <span class="back-label">返回</span>
+                    </button>
+                    <div class="level-badge">
+                        <span>关卡</span>
+                        <span class="stat-value"><span id="currentLevel">1</span> / 1</span>
+                    </div>
+                </div>
+                <div class="top-ui-stats">
+                    <div class="stat-card">
+                        <span class="stat-label">剩余格子</span>
+                        <span class="stat-value" id="remainingCells">0</span>
+                    </div>
+                    <div class="stat-card" id="errorsDisplay">
+                        <span class="stat-label">错误次数</span>
+                        <div class="error-lives">
+                            <span class="life-dot"></span>
+                            <span class="life-dot"></span>
+                            <span class="life-dot"></span>
+                            <span class="life-dot"></span>
+                            <span class="life-dot"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-scroll">
+                <div class="grid-container">
+                    <div class="grid" id="grid"></div>
+                </div>
+
+                <div class="rules-area">
+                    <div class="rules-card">
+                        <h3>游戏规则</h3>
+                        <ul>
+                            <li>带数字的格子是“岛屿”，数字表示该岛屿所占格子数量（包括自身）</li>
+                            <li>点击格子切换状态：白（未确定）→ 黑（墙）→ 灰（岛屿）</li>
+                            <li>规则1：所有岛屿彼此不接触（仅四方向，对角允许接触）</li>
+                            <li>规则2：所有黑色格子必须形成一片连续区域</li>
+                            <li>规则3：不能有2x2的黑色方块</li>
+                            <li>验证：检查当前是否违反规则，错误会增加错误计数</li>
+                            <li>提示：自动填充一个确定的格子</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-area">
+                <button class="game-btn" id="resetBtn">重置</button>
+                <button class="game-btn" id="verifyBtn">验证</button>
+                <button class="game-btn" id="hintBtn">提示</button>
+            </div>
+        </div>
+
+        <!-- 结果弹窗 -->
+        <div class="result-modal" id="resultModal">
+            <div class="badge-icon" id="badgeIcon"></div>
+            <div class="result-title" id="resultTitle">恭喜通关！</div>
+            <div class="result-text" id="resultText">你完成了5x5关卡，获得了“解谜者”徽章！</div>
+            <div>
+                <button class="result-btn" id="resultBtn">继续</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 游戏配置
+        const gameConfig = {
+            maxErrors: 5,
+            levels: [
+                {
+                    size: 5,
+                    numbers: [
+                        {x: 0, y: 0, value: 2},
+                        {x: 0, y: 3, value: 3},
+                        {x: 2, y: 2, value: 2},
+                        {x: 4, y: 1, value: 2},
+                        {x: 4, y: 4, value: 3}
+                    ]
+                }
+            ]
+        };
+
+        // 游戏状态
+        let gameState = {
+            currentLevel: 0,
+            grid: [],
+            size: 0,
+            errors: 0,
+            gameOver: false,
+            originalNumbers: []
+        };
+
+        // DOM元素
+        const startScreen = document.getElementById('startScreen');
+        const gameScreen = document.getElementById('gameScreen');
+        const startBtn = document.getElementById('startBtn');
+        const backBtn = document.getElementById('backBtn');
+        const grid = document.getElementById('grid');
+        const resetBtn = document.getElementById('resetBtn');
+        const verifyBtn = document.getElementById('verifyBtn');
+        const hintBtn = document.getElementById('hintBtn');
+        const remainingCellsSpan = document.getElementById('remainingCells');
+        const errorsDisplay = document.getElementById('errorsDisplay');
+        const currentLevelSpan = document.getElementById('currentLevel');
+        const resultModal = document.getElementById('resultModal');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultText = document.getElementById('resultText');
+        const resultBtn = document.getElementById('resultBtn');
+        const badgeIcon = document.getElementById('badgeIcon');
+
+        // 格子状态枚举
+        const CellState = {
+            WHITE: 'white',
+            BLACK: 'black',
+            GRAY: 'gray'
+        };
+
+        // 初始化游戏
+        function initGame() {
+            gameState = {
+                currentLevel: 0,
+                grid: [],
+                size: 0,
+                errors: 0,
+                gameOver: false,
+                originalNumbers: []
+            };
+            updateErrorsDisplay();
+            loadLevel(0);
+        }
+
+        // 加载关卡
+        function loadLevel(levelIndex) {
+            const level = gameConfig.levels[levelIndex];
+            gameState.currentLevel = levelIndex;
+            gameState.size = level.size;
+            gameState.errors = 0;
+            gameState.gameOver = false;
+            
+            // 初始化网格
+            gameState.grid = Array(level.size).fill().map(() => 
+                Array(level.size).fill().map(() => ({
+                    state: CellState.WHITE,
+                    number: null,
+                    isNumber: false
+                }))
+            );
+
+            // 填充数字
+            level.numbers.forEach(num => {
+                gameState.grid[num.y][num.x].number = num.value;
+                gameState.grid[num.y][num.x].isNumber = true;
+                gameState.grid[num.y][num.x].state = CellState.GRAY;
+            });
+
+            gameState.originalNumbers = level.numbers;
+            
+            currentLevelSpan.textContent = levelIndex + 1;
+            updateErrorsDisplay();
+            renderGrid();
+            updateRemainingCells();
+        }
+
+        // 渲染网格
+        function renderGrid() {
+            grid.innerHTML = '';
+            grid.style.gridTemplateColumns = `repeat(${gameState.size}, 1fr)`;
+            
+            for (let y = 0; y < gameState.size; y++) {
+                for (let x = 0; x < gameState.size; x++) {
+                    const cell = document.createElement('div');
+                    cell.className = `cell ${gameState.grid[y][x].state}`;
+                    
+                    if (gameState.grid[y][x].isNumber) {
+                        cell.classList.add('number');
+                        cell.textContent = gameState.grid[y][x].number;
+                    }
+                    
+                    cell.addEventListener('click', () => handleCellClick(x, y));
+                    grid.appendChild(cell);
+                }
+            }
+        }
+
+        // 处理格子点击
+        function handleCellClick(x, y) {
+            if (gameState.gameOver) return;
+            if (gameState.grid[y][x].isNumber) return;
+            
+            const cell = gameState.grid[y][x];
+            
+            // 状态循环：白→黑→灰→白
+            switch (cell.state) {
+                case CellState.WHITE:
+                    cell.state = CellState.BLACK;
+                    break;
+                case CellState.BLACK:
+                    cell.state = CellState.GRAY;
+                    break;
+                case CellState.GRAY:
+                    cell.state = CellState.WHITE;
+                    break;
+            }
+            
+            renderGrid();
+            updateRemainingCells();
+        }
+
+        // 更新剩余单元格计数
+        function updateRemainingCells() {
+            let remaining = 0;
+            for (let y = 0; y < gameState.size; y++) {
+                for (let x = 0; x < gameState.size; x++) {
+                    if (!gameState.grid[y][x].isNumber && gameState.grid[y][x].state === CellState.WHITE) {
+                        remaining++;
+                    }
+                }
+            }
+            remainingCellsSpan.textContent = remaining;
+        }
+
+        // 更新错误显示
+        function updateErrorsDisplay() {
+            const dots = errorsDisplay.querySelectorAll('.life-dot');
+            dots.forEach((dot, index) => {
+                if (index < gameState.errors) {
+                    dot.classList.add('used');
+                } else {
+                    dot.classList.remove('used');
+                }
+            });
+        }
+
+        // 验证游戏
+        function verifyGame() {
+            if (gameState.gameOver) return;
+            
+            const errors = [];
+            
+            // 检查2x2黑色方块
+            for (let y = 0; y < gameState.size - 1; y++) {
+                for (let x = 0; x < gameState.size - 1; x++) {
+                    if (gameState.grid[y][x].state === CellState.BLACK &&
+                        gameState.grid[y][x+1].state === CellState.BLACK &&
+                        gameState.grid[y+1][x].state === CellState.BLACK &&
+                        gameState.grid[y+1][x+1].state === CellState.BLACK) {
+                        errors.push({type: '2x2', x, y});
+                    }
+                }
+            }
+            
+            // 检查岛屿是否连通且大小正确
+            const visited = Array(gameState.size).fill().map(() => Array(gameState.size).fill(false));
+            const islands = [];
+            
+            for (let y = 0; y < gameState.size; y++) {
+                for (let x = 0; x < gameState.size; x++) {
+                    if (gameState.grid[y][x].state === CellState.GRAY && !visited[y][x]) {
+                        const island = floodFill(x, y, CellState.GRAY, visited);
+                        islands.push(island);
+                        
+                        // 检查岛屿是否包含数字
+                        const hasNumber = island.cells.some(cell => 
+                            gameState.grid[cell.y][cell.x].isNumber
+                        );
+                        
+                        if (!hasNumber) {
+                            errors.push({type: 'island_no_number', x, y});
+                        } else {
+                            // 找到数字，检查大小
+                            const numberCell = island.cells.find(cell => 
+                                gameState.grid[cell.y][cell.x].isNumber
+                            );
+                            const expectedSize = gameState.grid[numberCell.y][numberCell.x].number;
+                            if (island.size !== expectedSize) {
+                                errors.push({type: 'island_size', x, y, expected: expectedSize, actual: island.size});
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // 检查岛屿是否接触（包括对角）
+            for (let i = 0; i < islands.length; i++) {
+                for (let j = i + 1; j < islands.length; j++) {
+                    if (areIslandsTouching(islands[i], islands[j])) {
+                        errors.push({type: 'islands_touching', island1: i, island2: j});
+                    }
+                }
+            }
+            
+            // 检查黑色格子是否连通
+            const blackVisited = Array(gameState.size).fill().map(() => Array(gameState.size).fill(false));
+            let blackCount = 0;
+            let firstBlack = null;
+            
+            for (let y = 0; y < gameState.size; y++) {
+                for (let x = 0; x < gameState.size; x++) {
+                    if (gameState.grid[y][x].state === CellState.BLACK) {
+                        blackCount++;
+                        if (!firstBlack) firstBlack = {x, y};
+                    }
+                }
+            }
+            
+            if (blackCount > 0) {
+                const blackRegion = floodFill(firstBlack.x, firstBlack.y, CellState.BLACK, blackVisited);
+                if (blackRegion.size !== blackCount) {
+                    errors.push({type: 'black_disconnected'});
+                }
+            }
+            
+            // 处理错误
+            if (errors.length > 0) {
+                gameState.errors++;
+                updateErrorsDisplay();
+                
+                if (gameState.errors >= gameConfig.maxErrors) {
+                    showResult(false, '你已经犯了5次错误，建议重置关卡重新尝试。', () => {
+                        loadLevel(gameState.currentLevel);
+                    });
+                } else {
+                    showResult(false, `发现 ${errors.length} 个错误，请修正后重试。`);
+                }
+                
+                // 高亮错误单元格
+                highlightErrors(errors);
+                
+                return false;
+            }
+            
+            // 检查是否完成
+            const allFilled = gameState.grid.every(row => 
+                row.every(cell => cell.state !== CellState.WHITE)
+            );
+            
+            if (allFilled) {
+                if (gameState.currentLevel >= gameConfig.levels.length - 1) {
+                    showResult(true, '恭喜你完成了所有关卡！你获得了"解谜者"的荣誉称号！', () => {
+                        startScreen.style.display = 'flex';
+                        gameScreen.classList.remove('active');
+                    }, '🏆');
+                } else {
+                    showResult(true, `太棒了！你完成了第${gameState.currentLevel + 1}关！`, () => {
+                        loadLevel(gameState.currentLevel + 1);
+                    });
+                }
+                return true;
+            } else {
+                showResult(false, '当前没有错误，但还有未填充的格子，请继续完成。');
+                return true;
+            }
+        }
+
+        // 泛洪填充
+        function floodFill(startX, startY, targetState, visited) {
+            const queue = [{x: startX, y: startY}];
+            const cells = [];
+            let size = 0;
+            
+            if (visited[startY][startX]) return {size: 0, cells: []};
+            
+            visited[startY][startX] = true;
+            
+            while (queue.length > 0) {
+                const {x, y} = queue.shift();
+                cells.push({x, y});
+                size++;
+                
+                // 四连通检查
+                const dirs = [[-1,0], [1,0], [0,-1], [0,1]];
+                for (const [dx, dy] of dirs) {
+                    const nx = x + dx;
+                    const ny = y + dy;
+                    if (nx >= 0 && nx < gameState.size && ny >= 0 && ny < gameState.size) {
+                        if (!visited[ny][nx] && gameState.grid[ny][nx].state === targetState) {
+                            visited[ny][nx] = true;
+                            queue.push({x: nx, y: ny});
+                        }
+                    }
+                }
+            }
+            
+            return {size, cells};
+        }
+
+        // 检查岛屿是否接触（仅四方向，对角允许）
+        function areIslandsTouching(island1, island2) {
+            for (const cell1 of island1.cells) {
+                for (const cell2 of island2.cells) {
+                    const dx = Math.abs(cell1.x - cell2.x);
+                    const dy = Math.abs(cell1.y - cell2.y);
+                    // 仅上下左右相邻才算接触，对角不算
+                    if ((dx === 1 && dy === 0) || (dx === 0 && dy === 1)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        // 高亮错误
+        function highlightErrors(errors) {
+            const cells = grid.querySelectorAll('.cell');
+            
+            // 先移除所有错误状态
+            cells.forEach(cell => cell.classList.remove('error'));
+            
+            // 添加错误状态
+            errors.forEach(err => {
+                if (err.x !== undefined && err.y !== undefined) {
+                    const index = err.y * gameState.size + err.x;
+                    if (cells[index]) {
+                        cells[index].classList.add('error');
+                    }
+                    
+                    // 2x2错误需要高亮四个格子
+                    if (err.type === '2x2') {
+                        for (let dy = 0; dy < 2; dy++) {
+                            for (let dx = 0; dx < 2; dx++) {
+                                const idx = (err.y + dy) * gameState.size + (err.x + dx);
+                                if (cells[idx]) cells[idx].classList.add('error');
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 3秒后移除错误高亮
+            setTimeout(() => {
+                cells.forEach(cell => cell.classList.remove('error'));
+            }, 3000);
+        }
+
+        // 使用提示
+        function useHint() {
+            if (gameState.gameOver) return;
+            
+            // 简单提示：找一个肯定是黑色的格子（数字格旁边必须是黑色的情况）
+            // 这里简化实现，随机填充一个未确定的格子为正确状态
+            const undecidedCells = [];
+            
+            for (let y = 0; y < gameState.size; y++) {
+                for (let x = 0; x < gameState.size; x++) {
+                    if (!gameState.grid[y][x].isNumber && gameState.grid[y][x].state === CellState.WHITE) {
+                        undecidedCells.push({x, y});
+                    }
+                }
+            }
+            
+            if (undecidedCells.length === 0) {
+                showResult(false, '没有可以提示的格子了，请继续完成谜题。');
+                return;
+            }
+            
+            // 随机选一个格子，简单规则：数字格周围优先设为灰色
+            const randomCell = undecidedCells[Math.floor(Math.random() * undecidedCells.length)];
+            const {x, y} = randomCell;
+            
+            // 简单启发式：如果旁边有数字格，设为灰色，否则设为黑色
+            const hasNumberNearby = checkNeighbors(x, y, cell => cell.isNumber);
+            gameState.grid[y][x].state = hasNumberNearby ? CellState.GRAY : CellState.BLACK;
+            
+            renderGrid();
+            updateRemainingCells();
+        }
+
+        // 检查邻居
+        function checkNeighbors(x, y, predicate) {
+            const dirs = [[-1,0], [1,0], [0,-1], [0,1], [-1,-1], [-1,1], [1,-1], [1,1]];
+            for (const [dx, dy] of dirs) {
+                const nx = x + dx;
+                const ny = y + dy;
+                if (nx >= 0 && nx < gameState.size && ny >= 0 && ny < gameState.size) {
+                    if (predicate(gameState.grid[ny][nx])) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        // 显示结果弹窗
+        function showResult(success, text, callback = null, badge = '') {
+            gameState.gameOver = true;
+            resultTitle.textContent = success ? '🎉 恭喜！' : '❌ 发现错误';
+            resultTitle.className = success ? 'result-title success' : 'result-title failure';
+            resultText.textContent = text;
+            badgeIcon.textContent = badge;
+            
+            resultBtn.onclick = () => {
+                resultModal.style.display = 'none';
+                gameState.gameOver = false;
+                if (callback) callback();
+            };
+            
+            resultModal.style.display = 'block';
+        }
+
+        // 事件监听
+        startBtn.addEventListener('click', () => {
+            startScreen.style.display = 'none';
+            gameScreen.classList.add('active');
+            initGame();
+        });
+
+        backBtn.addEventListener('click', () => {
+            startScreen.style.display = 'flex';
+            gameScreen.classList.remove('active');
+        });
+
+        resetBtn.addEventListener('click', () => {
+            loadLevel(gameState.currentLevel);
+        });
+
+        verifyBtn.addEventListener('click', verifyGame);
+
+        hintBtn.addEventListener('click', useHint);
+    </script>
+</body>
+</html>

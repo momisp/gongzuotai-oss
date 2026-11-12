@@ -1,0 +1,20 @@
+id: v1_full_regression
+name: 新商务 v1 全量回归（页面可见指标 80 项）
+summary: 复制为 v1_full_regression.yaml 后填入真实地址与密码
+sort: 20
+kind: v1_full_regression
+scenes:
+  - v1_full_regression
+loginUrl: http://sw2.example.com/#/login
+pageUrl: http://sw2.example.com/#/layout/dashboard
+apiBaseUrl: http://sw2.example.com/api
+gameDbs:
+  - game_lx
+  - game_yq
+  - game_hw
+sourceDbMap:
+  lx: game_lx
+  yq: game_yq
+  hw: game_hw
+username: admin
+password: CHANGE_ME

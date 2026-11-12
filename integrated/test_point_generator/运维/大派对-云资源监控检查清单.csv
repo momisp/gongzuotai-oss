@@ -1,0 +1,16 @@
+序号,资源名称,阿里云账号,控制台链接,日检项,活动前1h加检项,到期续费时间,优先级,备注
+1,大派对2-空间,aa1007777119,https://cloudmonitornext.console.aliyun.com/app-group/244715179/resource,"CPU内存磁盘水位;云监控告警;应用分组","核心接口可用性;带宽连接数",2026-10-03T16:00:00Z,高,表内云监控分组链接
+2,大派对1-空间,aa1007777119,,"同上","同上",2026-09-29T16:00:00Z,高,到期较早建议提前30天续费提醒
+3,大派对,aa1007777119,,"同上","同上",2027-03-14T16:00:00Z,中,
+4,宙包,aa1007777119,,"同上","同上",2027-04-19T16:00:00Z,中,
+5,阿里云实名认证,aa1007777119,https://market.aliyun.com/detail/cmapi014760,"认证有效;套餐欠费","-",,中,到期需从控制台补登
+6,阿里云短信,hsxc95,https://dysms.console.aliyun.com/overview,"套餐余量;失败率","验证码链路抽检",,高,活动期提高频率
+6b,宙包·阿里云短信,zyyz95,https://dysms.console.aliyun.com/overview,"套餐余量;失败率","验证码链路抽检",,高,宙包业务短信通道
+7,阿里云OSS存储,aa1007777120,https://oss.console.aliyun.com/package,"资源包余量;用量费用","静态资源200;热点前缀",,中,
+8,阿里云CDN,aa1007777120,https://cdn.console.aliyun.com/resource,"流量带宽;命中率","缓存与回源",,中,
+9,SSL证书,aa1007777119,https://yundun.console.aliyun.com/?p=cas#/instance/buy/cn-hangzhou,"实例到期;部署一致","HTTPS全链路抽检",,高,以CAS实例列表到期为准
+10,域名解析-dpd,运维/DNS,,,"dpd.yuzou99.com与dpd.quanyu888.com解析",,高,对照域名主体表
+11,域名解析-region,运维/DNS,,,"region双域名",,中,
+12,域名解析-zhoubao,运维/DNS,,,"zhoubao.yuzou99.com",,中,
+13,域名解析-zb,运维/DNS,,,"zb.yzyzzb.com",,中,
+14,域名解析-open,运维/DNS,,,"open.openqy.com",,中,

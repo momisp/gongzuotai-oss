@@ -1,0 +1,12 @@
+[
+  {
+    "id": "background",
+    "prompt": "极简轻奢简约风格的低饱和柔和渐变背景，淡紫色到淡蓝色的柔和过渡，无多余杂乱元素，适配移动端竖屏",
+    "filename": "background.png"
+  },
+  {
+    "id": "player",
+    "prompt": "极简风格的圆润小巧跳跃棋子，白色主体，带有轻微蓝色渐变光泽，设计简洁流畅，纯白色背景且无阴影",
+    "filename": "alpha_player.png"
+  }
+]

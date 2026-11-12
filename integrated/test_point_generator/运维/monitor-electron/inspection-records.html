@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>运维巡检记录</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f4f6f8;
+      --card: #fff;
+      --border: #e2e6eb;
+      --text: #2b2e33;
+      --muted: #6b7280;
+      --link: #3567b5;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1e1f22;
+        --card: #2a2c31;
+        --border: #3d424b;
+        --text: #e8eaed;
+        --muted: #9aa0a6;
+        --link: #8ab4f8;
+      }
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "Microsoft YaHei UI", sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--bg);
+      padding: 16px;
+    }
+    h1 {
+      margin: 0 0 4px;
+      font-size: 17px;
+      font-weight: 650;
+    }
+    .sub {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 14px;
+    }
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    li {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      padding: 10px 12px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+    }
+    li:hover {
+      border-color: var(--link);
+    }
+    .name {
+      font-weight: 500;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .meta {
+      color: var(--muted);
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+    .toolbar {
+      margin-bottom: 10px;
+    }
+    button {
+      font-family: inherit;
+      font-size: 13px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      cursor: pointer;
+    }
+    button:hover {
+      border-color: var(--link);
+    }
+  </style>
+</head>
+<body>
+  <h1>运维巡检记录</h1>
+  <div class="sub">单击打开 Excel；目录：应用数据 / ops-snapshots</div>
+  <div class="toolbar"><button type="button" id="refresh">刷新</button></div>
+  <ul id="list"></ul>
+  <p id="empty" class="hint" hidden>暂无巡检导出的 .xlsx。请先运行「运维 → 每日巡检」。</p>
+  <script>
+    const listEl = document.getElementById("list");
+    const emptyEl = document.getElementById("empty");
+
+    async function render() {
+      listEl.innerHTML = "";
+      const rows = await window.opsInspectionRecords.listExcels();
+      if (!rows || !rows.length) {
+        emptyEl.hidden = false;
+        return;
+      }
+      emptyEl.hidden = true;
+      for (const row of rows) {
+        const li = document.createElement("li");
+        li.title = row.path;
+        li.innerHTML =
+          '<span class="name"></span><span class="meta"></span>';
+        li.querySelector(".name").textContent = row.name;
+        li.querySelector(".meta").textContent = row.mtimeZh;
+        li.addEventListener("click", async () => {
+          const err = await window.opsInspectionRecords.openPath(row.path);
+          if (err)
+            alert("无法打开：" + row.path + "\n" + err);
+        });
+        li.addEventListener("contextmenu", (e) => {
+          e.preventDefault();
+          window.opsInspectionRecords.revealInFolder(row.path);
+        });
+        listEl.appendChild(li);
+      }
+    }
+
+    document.getElementById("refresh").addEventListener("click", render);
+
+    render();
+  </script>
+</body>
+</html>

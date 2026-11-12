@@ -1,0 +1,249 @@
+{
+  "name": "原神",
+  "note": "从 hk4e-ann-api.mihoyo.com 拉取，过滤 >200 天的长期公告；最后更新 2026-11-11 18:59",
+  "homepage": "https://ys.mihoyo.com/main/news/?type=1",
+  "events": [
+    {
+      "name": "「砺行修远」：勤修馈赠",
+      "category": "活动",
+      "start": "2026-10-31 12:00",
+      "end": "2027-01-25 03:59",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=21892&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/08/21/9d9818e0badc0b90e9c6d7e10a9023ce_1052623293537741409_transformed.png",
+      "desc": "「砺行修远」"
+    },
+    {
+      "name": "米游社原神区「每日签到」有奖活动开启",
+      "category": "游戏公告",
+      "start": "2026-11-01 12:00",
+      "end": "2026-12-01 12:00",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=22007&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2023/01/31/ab26bd549f42e9994d6946ae0f286b2e_6457522219866312059.jpg",
+      "desc": "「每日签到」有奖活动"
+    },
+    {
+      "name": "「万序衍盈」祈愿：「列律名虚·米提亚(雷)」概率UP！",
+      "category": "角色池",
+      "start": "2026-11-02 12:00",
+      "end": "2026-11-24 17:59",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=21975&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/29/20149426001cebe49306d302759c6583_4650607404276568474_transformed.png",
+      "desc": "「万序衍盈」祈愿"
+    },
+    {
+      "name": "「众水的颂诗」祈愿：「不休独舞·芙宁娜(水)」概率UP！",
+      "category": "角色池",
+      "start": "2026-11-02 12:00",
+      "end": "2026-11-24 17:59",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=21976&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/22/2172395fdd3f889555cded68cca35375_7593406950524986009_transformed.png",
+      "desc": "「众水的颂诗」祈愿"
+    },
+    {
+      "name": "「神铸赋形」祈愿：「法器·秘星典谕」「单手剑·静水流涌之辉」概率UP！",
+      "category": "武器池",
+      "start": "2026-11-02 12:00",
+      "end": "2026-11-24 17:59",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=21977&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/22/1c310d17afae82dd7bb7372cbeaed743_4075456262757058792_transformed.png",
+      "desc": "「神铸赋形」祈愿"
+    },
+    {
+      "name": "「全域镇卫·逆捍谬罚」活动：参与自选邀请4星角色",
+      "category": "活动",
+      "start": "2026-11-02 12:00",
+      "end": "2026-12-16 07:00",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=21969&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/22/e96137014e72837b250c64a0597a499a_3074106729558546171_transformed.png",
+      "desc": "「全域镇卫·逆捍谬罚」"
+    },
+    {
+      "name": "「坏灭肇始之时」时限内完成魔神任务，可额外获得原石、角色突破素材等奖励",
+      "category": "活动",
+      "start": "2026-11-02 12:00",
+      "end": "2026-12-15 14:59",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=21970&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/22/a5bbfa72d7fc93255508ca3ff6dc3299_6904764978104179559_transformed.png",
+      "desc": "「坏灭肇始之时」"
+    },
+    {
+      "name": "「晶石如林生长之地」时限内完成探索任务，可额外获得原石*400奖励",
+      "category": "活动",
+      "start": "2026-11-02 12:00",
+      "end": "2027-01-26 14:59",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=21971&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/22/b4e24575d382260288052e37ec73a0d3_6544350286135739473_transformed.png",
+      "desc": "「晶石如林生长之地」"
+    },
+    {
+      "name": "「冒险助力礼包」第53期限时上架",
+      "category": "活动",
+      "start": "2026-11-02 12:00",
+      "end": "2026-11-18 23:59",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=21973&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/22/a90b75f716c911c46537123a923cd93f_6803434933391322474_transformed.png",
+      "desc": "「冒险助力礼包」"
+    },
+    {
+      "name": "「相遇·悠久旅途之暇」：千音雅集更新",
+      "category": "活动",
+      "start": "2026-11-02 12:00",
+      "end": "2026-12-15 14:59",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=21972&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/22/aa608d918b4a7dd1e64800924206aca6_3477417027548812705_transformed.png",
+      "desc": "「相遇·悠久旅途之暇」"
+    },
+    {
+      "name": "「灵圣纪行」活动说明",
+      "category": "活动",
+      "start": "2026-11-02 12:00",
+      "end": "2026-12-14 03:59",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=21974&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/22/d963610a533c0845d27c299fc787dee3_7215570413195948473_transformed.png",
+      "desc": "「灵圣纪行」"
+    },
+    {
+      "name": "「七圣召唤」铸境研炼：无量疾战",
+      "category": "活动",
+      "start": "2026-11-02 12:00",
+      "end": "2026-12-16 07:00",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=20834&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2024/11/05/b4bce45d1b78ce5aef4399d8aa2a51da_6095647547673851587.jpg",
+      "desc": "「七圣召唤」铸境研炼"
+    },
+    {
+      "name": "「覆音赛季」赛季开启公告说明",
+      "category": "千星奇域",
+      "start": "2026-11-02 12:00",
+      "end": "2026-12-16 07:00",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=21993&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/26/0d03aa0ea4f39bd2d98456c6c5e4c6de_8154648004225176302_transformed.jpg",
+      "desc": "「覆音赛季」"
+    },
+    {
+      "name": "「绮衣珍赏·赫炽」参与获得自选奇偶装扮套装「奇珍缀趣」",
+      "category": "千星奇域",
+      "start": "2026-11-02 12:00",
+      "end": "2026-12-16 07:00",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=21991&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/26/2ac976c16237c9bf2c1062912d4f12ac_2860779115354267693_transformed.jpg",
+      "desc": "「绮衣珍赏·赫炽」"
+    },
+    {
+      "name": "「奇域秘藏·雪阵霜庭」奇偶装扮上架",
+      "category": "角色池",
+      "start": "2026-11-02 12:00",
+      "end": "2026-12-14 03:59",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=21990&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/26/ab62a3156ec573b0ac4019c52ad92879_8457739668128220446_transformed.jpg",
+      "desc": "「奇域秘藏·雪阵霜庭」"
+    },
+    {
+      "name": "「奇域秘藏·覆音谐度」奇偶装扮上新",
+      "category": "角色池",
+      "start": "2026-11-02 12:00",
+      "end": "2026-12-14 03:59",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=21989&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/26/e9314ad5d1f13d7b9152b0a5df67b54b_4927859762068964616_transformed.jpg",
+      "desc": "「奇域秘藏·覆音谐度」"
+    },
+    {
+      "name": "全新内容一览：角色·祈愿·武器·地区·剧情等",
+      "category": "游戏公告",
+      "start": "2026-11-04 07:00",
+      "end": "2026-12-16 06:00",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=22011&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "",
+      "desc": "7.2版本现已开启"
+    },
+    {
+      "name": "「坏灭肇始之时」7.2版本更新说明",
+      "category": "游戏公告",
+      "start": "2026-11-04 07:00",
+      "end": "2026-12-16 06:00",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=22015&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/11/02/d4c93787739cc987c0040d0c1bf850d7_4984864243412680659_transformed.jpg",
+      "desc": "7.2版本更新说明"
+    },
+    {
+      "name": "游戏更新修复与优化说明",
+      "category": "游戏公告",
+      "start": "2026-11-04 08:00",
+      "end": "2026-12-16 06:00",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=22031&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/announcement/2020/11/11/a539394edc88c73effd030507be02681_8843944720719944518.jpg",
+      "desc": "更新内容汇总"
+    },
+    {
+      "name": "「千星创作赛·拾光季」活动正式开启！",
+      "category": "千星奇域",
+      "start": "2026-11-04 10:00",
+      "end": "2026-12-08 11:59",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=22000&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/11/04/796da341f8ffd47cdc52d424990a57a3_7674172808068838428.png",
+      "desc": ""
+    },
+    {
+      "name": "「幽境危战」活动：紊乱地脉挑战",
+      "category": "活动",
+      "start": "2026-11-09 12:00",
+      "end": "2026-12-15 03:59",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=21168&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2025/10/23/d030bb81196ef3fff410d9f9c4d6120d_5245917935282258365_transformed.jpg",
+      "desc": "「幽境危战」"
+    },
+    {
+      "name": "菲林斯印象服开售 纳西妲粘土人上架",
+      "category": "游戏公告",
+      "start": "2026-11-10 12:00",
+      "end": "2026-11-18 23:59",
+      "source": "原神 · 米哈游官网公告",
+      "url": "https://ys.mihoyo.com/main/news/?type=1",
+      "detailUrl": "https://webstatic.mihoyo.com/hk4e/announcement/index.html?ann_id=22036&game=hk4e&game_biz=hk4e_cn&lang=zh-cn",
+      "image": "",
+      "desc": ""
+    }
+  ]
+}

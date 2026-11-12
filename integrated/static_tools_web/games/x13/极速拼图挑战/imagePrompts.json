@@ -1,0 +1,14 @@
+[
+  {
+    "id": "background",
+    "prompt": "简约卡通插画风纯色浅蓝色背景，适配移动端竖屏，视觉干净无杂乱元素，色彩柔和线条流畅",
+    "filename": "background.png",
+    "size": "2048x2048"
+  },
+  {
+    "id": "puzzleImage",
+    "prompt": "简约卡通插画风可爱的小熊猫，单一场景，线条流畅色彩柔和，无复杂细节，拼图边缘清晰，纯白色背景且无阴影",
+    "filename": "alpha_puzzle_image.png",
+    "size": "2048x2048"
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "_comment": "供每日巡检导出 Excel「域名主体相关」工作表使用；可按自家台账增删改。每行数组共 7 列，对应 A~G（空字段用 null）。",
+  "domainRows": [
+    [null, "小程序", "app", "公众号", "域名", "新域名", "主体"],
+    ["域", "宇宙大派对", "大派对app", "新宇宙大派对：wx57ed5207210e74a2", "dpd.yuzou99.com", "dpd.quanyu888.com", "泉州宇宙派队网络科技有限公司"],
+    [null, "全域剧本游", null, null, "region.yuzou99.com", "region.quanyu888.com", "源之宇宙（福建）科技集团有限公司"],
+    ["线下剧本", "宙包", null, null, "zhoubao.yuzou99.com", null, null],
+    [null, null, null, "原宇宙大派队改名->宙包ai：wx8fb71aa6be12180e", null, null, null],
+    ["虚拟剧本", null, "宙包", null, "zb.yzyzzb.com", null, "源之宇宙（福建）科技创新有限公司"],
+    [null, null, null, null, null, null, null],
+    ["开放平台", null, null, null, "open.openqy.com", null, "泉州宇宙派队网络科技有限公司"],
+    [null, null, null, "宇宙大派队App:wxabe672da5799762e", null, null, null]
+  ]
+}

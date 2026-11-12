@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>运维监控指标</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>运维监控指标</h1>
+    <p class="hint">点击在<strong>新窗口</strong>打开控制台（不受 iframe 限制，可正常登录）。右侧 <strong>备注</strong> 填写本机备忘，保存在工作台数据目录。</p>
+  </header>
+  <nav id="nav" aria-label="指标"></nav>
+  <footer>指标来自 <code>metrics.json</code> · 备注存工作台 <code>data/metric_remarks.json</code></footer>
+
+  <div id="remarkBackdrop" class="remark-backdrop" hidden>
+    <div class="remark-dialog" role="dialog" aria-modal="true" aria-labelledby="remarkDialogTitle">
+      <h3 id="remarkDialogTitle">指标备注</h3>
+      <textarea id="remarkText" placeholder="填写该指标的备注，如待办、注意事项…"></textarea>
+      <div class="remark-actions">
+        <button type="button" id="remarkCancel">取消</button>
+        <button type="button" class="primary" id="remarkSave">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

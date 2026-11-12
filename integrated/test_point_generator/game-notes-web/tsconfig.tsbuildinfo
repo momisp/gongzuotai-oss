@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/labels.ts","./src/main.tsx","./src/storage.ts","./src/types.ts","./src/vite-env.d.ts","./src/context/appstatecontext.tsx","./src/pages/coverhome.tsx","./src/pages/entrydetail.tsx","./src/pages/entryedit.tsx","./src/pages/entrylist.tsx","./src/pages/gamelist.tsx","./src/util/time.ts"],"version":"5.6.3"}

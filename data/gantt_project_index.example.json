@@ -1,0 +1,18 @@
+[
+  {
+    "_comment": "复制为 gantt_project_index.json。真实原型/蓝湖/腾讯文档链接勿提交仓库。",
+    "gantt_project_id": "p_demo",
+    "project_name": "示例项目",
+    "zentao_execution_id": null,
+    "zentao_label": "",
+    "prototype_link_count": 0,
+    "updated_at": "",
+    "tasks": [],
+    "task_count": 0,
+    "date_start": "",
+    "date_end": "",
+    "prototype_links": [
+      { "name": "原型", "url": "https://example.com/prototype" }
+    ]
+  }
+]

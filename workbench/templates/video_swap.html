@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>视频替换工作台</title>
+  <link rel="stylesheet" href="/static/style.css?v=72">
+  <link rel="stylesheet" href="/static/theme-daisy-v1.css?v=3">
+</head>
+<body class="theme-daisy-v1 vs-standalone-body">
+  <div class="vs-standalone-shell">
+    <div class="vs-standalone-bar">
+      <a class="btn btn-sm" href="/" title="回到个人工作台首页">← 工作台首页</a>
+      <span class="hint">独立页 · 更大工作区 · 与主站共用同一套数据</span>
+    </div>
+    <section id="page-video-swap" class="page active vs-standalone-page">
+{% include 'partials/video_swap_body.html' %}
+    </section>
+  </div>
+
+  <script>
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+    async function api(path, opts = {}) {
+      const timeoutMs = Number(opts.timeoutMs || 0);
+      const controller = timeoutMs > 0 ? new AbortController() : null;
+      const timer = controller ? setTimeout(() => controller.abort(), timeoutMs) : null;
+      try {
+        const { timeoutMs: _ignore, ...fetchOpts } = opts;
+        const res = await fetch("/api/" + path, {
+          headers: { "Content-Type": "application/json" },
+          ...fetchOpts,
+          body: opts.body ? JSON.stringify(opts.body) : undefined,
+          signal: controller?.signal,
+        });
+        const data = await res.json();
+        if (!res.ok && !data.error) data.error = res.statusText || "request failed";
+        return data;
+      } catch (err) {
+        if (err?.name === "AbortError") {
+          return { error: `请求超时（>${Math.round(timeoutMs / 1000)}s）` };
+        }
+        throw err;
+      } finally {
+        if (timer) clearTimeout(timer);
+      }
+    }
+  </script>
+  <script src="/static/modules/video-swap.js?v=23"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if (typeof loadVideoSwapPage === "function") loadVideoSwapPage();
+    });
+  </script>
+</body>
+</html>

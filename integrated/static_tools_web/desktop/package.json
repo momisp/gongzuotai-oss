@@ -1,0 +1,16 @@
+{
+  "name": "tools-site-desktop",
+  "version": "1.0.0",
+  "description": "工具小站桌面壳（加载同一份 Web 资源）",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "sprite": "electron sprite-main.js"
+  },
+  "dependencies": {
+    "systeminformation": "^5.23.5"
+  },
+  "devDependencies": {
+    "electron": "^28.3.3"
+  }
+}

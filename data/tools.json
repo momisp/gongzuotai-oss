@@ -1,0 +1,242 @@
+[
+  {
+    "id": "file-paths",
+    "name": "文件路径收藏",
+    "category": "核心功能",
+    "entry": "builtin:file-paths",
+    "icon": "📁",
+    "enabled": true
+  },
+  {
+    "id": "links",
+    "name": "常用网址",
+    "category": "核心功能",
+    "entry": "builtin:links",
+    "icon": "🔗",
+    "enabled": true
+  },
+  {
+    "id": "project-assets",
+    "name": "项目资产",
+    "category": "核心功能",
+    "entry": "builtin:project-assets",
+    "icon": "📦",
+    "enabled": true
+  },
+  {
+    "id": "projects",
+    "name": "项目中心",
+    "category": "核心功能",
+    "entry": "builtin:projects",
+    "icon": "🗂️",
+    "enabled": true
+  },
+  {
+    "id": "converters",
+    "name": "数据转换工具",
+    "category": "核心功能",
+    "entry": "builtin:converters",
+    "icon": "🔧",
+    "enabled": true
+  },
+  {
+    "id": "reports",
+    "name": "测试报告生成",
+    "category": "测试工具",
+    "entry": "builtin:reports",
+    "icon": "📊",
+    "enabled": true
+  },
+  {
+    "id": "ops",
+    "name": "测试运维工作区",
+    "category": "运维",
+    "entry": "builtin:ops",
+    "icon": "🛠",
+    "enabled": true
+  },
+  {
+    "id": "test-tool",
+    "name": "测试脚本工具",
+    "category": "测试工具",
+    "entry": "builtin:test-scripts",
+    "icon": "🧪",
+    "enabled": true
+  },
+  {
+    "id": "performance",
+    "name": "压测工具",
+    "category": "测试工具",
+    "entry": "integrated:performance",
+    "icon": "⚡",
+    "enabled": true
+  },
+  {
+    "id": "test-point-generator",
+    "name": "测试点生成",
+    "category": "核心功能",
+    "entry": "integrated:test_point_generator",
+    "icon": "📝",
+    "enabled": true
+  },
+  {
+    "id": "data-verify",
+    "name": "数据验证",
+    "category": "核心功能",
+    "entry": "integrated:data_verify",
+    "icon": "🧮",
+    "enabled": true
+  },
+  {
+    "id": "game-notes-web",
+    "name": "Game Notes Web",
+    "category": "测试工具",
+    "entry": "integrated:game_notes_web",
+    "icon": "🎮",
+    "enabled": true
+  },
+  {
+    "id": "static-tools-web",
+    "name": "静态工具网站",
+    "category": "开发工具",
+    "entry": "integrated:static_tools_web",
+    "icon": "🧰",
+    "enabled": true
+  },
+  {
+    "id": "agile-sim-demo",
+    "name": "敏捷模拟平台",
+    "category": "测试工具",
+    "entry": "integrated:agile-sim-demo",
+    "icon": "🚀",
+    "enabled": true
+  },
+  {
+    "id": "monitor-electron",
+    "name": "运维监控指标",
+    "category": "运维",
+    "entry": "integrated:monitor-electron",
+    "icon": "📡",
+    "enabled": true
+  },
+  {
+    "id": "gantt-chart",
+    "name": "甘特图排期表",
+    "category": "测试工具",
+    "entry": "integrated:gantt-chart",
+    "icon": "📅",
+    "enabled": true
+  },
+  {
+    "id": "qa-notes",
+    "name": "QA 问题集",
+    "category": "核心功能",
+    "entry": "builtin:qa-notes",
+    "icon": "💡",
+    "enabled": true
+  },
+  {
+    "id": "test-info",
+    "name": "测试信息",
+    "category": "核心功能",
+    "entry": "builtin:test-info",
+    "icon": "📚",
+    "enabled": true
+  },
+  {
+    "id": "maker-lab",
+    "name": "硬件制作",
+    "category": "核心功能",
+    "entry": "builtin:maker-lab",
+    "icon": "🔩",
+    "enabled": true
+  },
+  {
+    "id": "wallpaper",
+    "name": "壁纸管理",
+    "category": "系统工具",
+    "entry": "builtin:wallpaper",
+    "icon": "🖼",
+    "enabled": true
+  },
+  {
+    "id": "auto-qa",
+    "name": "业务自动化",
+    "category": "测试工具",
+    "entry": "builtin:auto-qa",
+    "icon": "🤖",
+    "enabled": true
+  },
+  {
+    "id": "video-swap",
+    "name": "视频替换任务",
+    "category": "测试工具",
+    "entry": "builtin:video-swap",
+    "icon": "🎞",
+    "enabled": true
+  },
+  {
+    "id": "clipboard-history",
+    "name": "历史复制记录",
+    "category": "系统工具",
+    "entry": "builtin:clipboard",
+    "icon": "📋",
+    "enabled": true
+  },
+  {
+    "id": "region-record",
+    "name": "区域录屏",
+    "category": "系统工具",
+    "entry": "builtin:region-record",
+    "icon": "🎬",
+    "enabled": true
+  },
+  {
+    "id": "timelapse",
+    "name": "手机延时摄影",
+    "category": "系统工具",
+    "entry": "builtin:timelapse",
+    "icon": "📷",
+    "enabled": true
+  },
+  {
+    "id": "wechat-appeal",
+    "name": "微信链接申诉",
+    "category": "测试工具",
+    "entry": "builtin:wechat-appeal",
+    "icon": "🔗",
+    "enabled": true
+  },
+  {
+    "id": "ai-story",
+    "name": "AI Story",
+    "category": "开发工具",
+    "entry": "builtin:ai-story",
+    "icon": "🎬",
+    "enabled": true
+  },
+  {
+    "id": "relax-games",
+    "name": "解压小游戏",
+    "category": "开发工具",
+    "entry": "builtin:relax-games",
+    "icon": "🎮",
+    "enabled": true
+  },
+  {
+    "id": "cpu-monitor",
+    "name": "CPU 占用监控",
+    "category": "系统工具",
+    "entry": "builtin:cpu-monitor",
+    "icon": "📊",
+    "enabled": true
+  },
+  {
+    "id": "network-capture",
+    "name": "网络抓包",
+    "category": "系统工具",
+    "entry": "builtin:network-capture",
+    "icon": "⇄",
+    "enabled": true
+  }
+]

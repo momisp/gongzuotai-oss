@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>写作工作台</title>
+  <style>
+    :root {
+      --bg: #f4f5f7;
+      --surface: #ffffff;
+      --border: #e2e5eb;
+      --text: #1a1d26;
+      --text-muted: #6b7280;
+      --accent: #3b6fd9;
+      --accent-soft: #e8effc;
+      --sidebar-w: 220px;
+      --outline-w: 200px;
+      --radius: 10px;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .app {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* 左侧：大纲 */
+    .sidebar-outline {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-header {
+      padding: 14px 16px;
+      font-weight: 600;
+      font-size: 15px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .panel-header .hint {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--text-muted);
+    }
+
+    .outline-tree {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 8px;
+    }
+
+    .outline-item {
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--text);
+      line-height: 1.4;
+      border-left: 3px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .outline-item:hover {
+      background: var(--bg);
+    }
+
+    .outline-item.active {
+      background: var(--accent-soft);
+      border-left-color: var(--accent);
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .outline-item.level-2 {
+      padding-left: 28px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .outline-item.level-2.active {
+      color: var(--accent);
+    }
+
+    /* 主区域 */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      padding: 12px 12px 12px 0;
+      gap: 12px;
+    }
+
+    /* 顶部三栏 */
+    .top-widgets {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      flex-shrink: 0;
+      min-height: 140px;
+    }
+
+    .widget {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .widget-title {
+      padding: 10px 14px;
+      font-weight: 600;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+      background: #fafbfc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .widget-body {
+      flex: 1;
+      padding: 12px 14px;
+      overflow: auto;
+      min-height: 0;
+    }
+
+    /* 脑图缩略 */
+    .mindmap-thumb {
+      cursor: pointer;
+      height: 100%;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      background: linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+
+    .mindmap-thumb:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .mindmap-thumb::after {
+      content: "点击放大、编辑";
+      position: absolute;
+      bottom: 6px;
+      right: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .mindmap-preview {
+      width: 100%;
+      height: 100%;
+      min-height: 64px;
+    }
+
+    .mindmap-preview svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* 关键词 */
+    .keyword-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      padding: 4px 10px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 20px;
+      font-size: 12px;
+      cursor: default;
+    }
+
+    .tag-input-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .tag-input-row input {
+      flex: 1;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 12px;
+      outline: none;
+    }
+
+    .tag-input-row input:focus {
+      border-color: var(--accent);
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .btn-sm:hover {
+      filter: brightness(1.05);
+    }
+
+    /* 剪贴板 */
+    .clipboard-list {
+      list-style: none;
+    }
+
+    .clipboard-list li {
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      background: var(--bg);
+      border-radius: 6px;
+      font-size: 12px;
+      line-height: 1.5;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: border-color 0.15s;
+    }
+
+    .clipboard-list li:hover {
+      border-color: var(--accent);
+    }
+
+    .clipboard-list li .time {
+      display: block;
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* 下方工作区 */
+    .workspace {
+      flex: 1;
+      display: flex;
+      gap: 12px;
+      min-height: 0;
+    }
+
+    .panel-synopsis {
+      width: var(--outline-w);
+      flex-shrink: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .synopsis-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+    }
+
+    .synopsis-item {
+      padding: 10px 12px;
+      margin-bottom: 4px;
+      border-radius: 6px;
+      font-size: 13px;
+      line-height: 1.5;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .synopsis-item:hover {
+      background: var(--bg);
+    }
+
+    .synopsis-item.active {
+      background: var(--accent-soft);
+      border-color: #c5d4f5;
+    }
+
+    .synopsis-item .num {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+      background: var(--border);
+      border-radius: 4px;
+      font-size: 11px;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    .synopsis-item.active .num {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* 写作区 */
+    .panel-writing {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .writing-toolbar {
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      background: #fafbfc;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .writing-toolbar .stat {
+      margin-left: auto;
+    }
+
+    #writingArea {
+      flex: 1;
+      width: 100%;
+      border: none;
+      resize: none;
+      padding: 20px 24px;
+      font-size: 16px;
+      line-height: 1.75;
+      font-family: "Georgia", "Source Han Serif SC", "Songti SC", serif;
+      outline: none;
+      color: var(--text);
+    }
+
+    #writingArea::placeholder {
+      color: #b0b5c0;
+    }
+
+    /* 脑图弹窗 */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      width: min(900px, 100%);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header h2 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: var(--bg);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      color: var(--text-muted);
+    }
+
+    .modal-close:hover {
+      background: var(--border);
+      color: var(--text);
+    }
+
+    .modal-body {
+      flex: 1;
+      padding: 20px;
+      overflow: auto;
+      min-height: 320px;
+    }
+
+    .mindmap-editor {
+      width: 100%;
+      min-height: 280px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fafbfc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .btn {
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .btn:hover {
+      filter: brightness(0.98);
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.06);
+    }
+
+    @media (max-width: 900px) {
+      .top-widgets {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+      .workspace {
+        flex-direction: column;
+      }
+      .panel-synopsis {
+        width: 100%;
+        max-height: 160px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- 大纲侧栏 -->
+    <aside class="sidebar-outline">
+      <div class="panel-header">
+        <span>大纲</span>
+      </div>
+      <nav class="outline-tree" id="outlineTree">
+        <div class="outline-item active" data-id="1">第一章 · 开篇</div>
+        <div class="outline-item level-2" data-id="1-1">1.1 背景引入</div>
+        <div class="outline-item level-2" data-id="1-2">1.2 问题提出</div>
+        <div class="outline-item" data-id="2">第二章 · 论证</div>
+        <div class="outline-item level-2" data-id="2-1">2.1 核心观点</div>
+        <div class="outline-item level-2" data-id="2-2">2.2 案例支撑</div>
+        <div class="outline-item" data-id="3">第三章 · 收束</div>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <!-- 顶部：脑图 / 关键词 / 剪贴板 -->
+      <section class="top-widgets">
+        <div class="widget">
+          <div class="widget-title">
+            <span>缩小的脑图</span>
+          </div>
+          <div class="widget-body">
+            <div class="mindmap-thumb" id="mindmapThumb" title="点击放大、编辑">
+              <div class="mindmap-preview" id="mindmapPreview"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="widget">
+          <div class="widget-title"><span>关键词</span></div>
+          <div class="widget-body">
+            <div class="keyword-tags" id="keywordTags">
+              <span class="tag">结构</span>
+              <span class="tag">论证</span>
+              <span class="tag">案例</span>
+            </div>
+            <div class="tag-input-row">
+              <input type="text" id="keywordInput" placeholder="添加关键词…" />
+              <button type="button" class="btn-sm" id="addKeyword">添加</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="widget">
+          <div class="widget-title"><span>剪贴板</span></div>
+          <div class="widget-body">
+            <ul class="clipboard-list" id="clipboardList">
+              <li data-text="引用：好的开头决定读者是否继续阅读。">
+                引用：好的开头决定读者是否继续阅读。
+                <span class="time">刚刚</span>
+              </li>
+              <li data-text="数据：2024年相关调研显示…">
+                数据：2024年相关调研显示…
+                <span class="time">5 分钟前</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 提纲 + 写作区 -->
+      <section class="workspace">
+        <div class="panel-synopsis">
+          <div class="panel-header"><span>提纲</span></div>
+          <div class="synopsis-list" id="synopsisList">
+            <div class="synopsis-item active" data-section="1">
+              <span class="num">1</span>交代背景，引出主题
+            </div>
+            <div class="synopsis-item" data-section="2">
+              <span class="num">2</span>展开论述，辅以例证
+            </div>
+            <div class="synopsis-item" data-section="3">
+              <span class="num">3</span>总结升华，呼应开头
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-writing">
+          <div class="panel-header">
+            <span>写作区</span>
+            <span class="hint">在此正文创作</span>
+          </div>
+          <div class="writing-toolbar">
+            <span>当前章节：第一章 · 开篇</span>
+            <span class="stat" id="wordCount">0 字</span>
+          </div>
+          <textarea
+            id="writingArea"
+            placeholder="在此开始写作…&#10;&#10;提示：点击左侧「提纲」切换段落焦点；点击「剪贴板」条目可插入到此处。"
+          ></textarea>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 脑图放大编辑弹窗 -->
+  <div class="modal-overlay" id="mindmapModal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">脑图 · 放大编辑</h2>
+        <button type="button" class="modal-close" id="modalClose" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="mindmap-editor" id="mindmapEditor"></div>
+        <p style="margin-top:12px;font-size:12px;color:var(--text-muted);">
+          提示：此处为脑图编辑占位区，可接入 markmap、jsMind 等库实现真实脑图。
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" id="modalCancel">取消</button>
+        <button type="button" class="btn btn-primary" id="modalSave">保存并缩小</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var mindmapSvg = '<svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">' +
+        '<circle cx="100" cy="50" r="18" fill="#3b6fd9"/>' +
+        '<text x="100" y="54" text-anchor="middle" fill="#fff" font-size="10">主题</text>' +
+        '<line x1="82" y1="50" x2="45" y2="30" stroke="#94a3b8" stroke-width="1.5"/>' +
+        '<circle cx="40" cy="28" r="12" fill="#e8effc" stroke="#3b6fd9"/>' +
+        '<line x1="118" y1="50" x2="155" y2="30" stroke="#94a3b8" stroke-width="1.5"/>' +
+        '<circle cx="160" cy="28" r="12" fill="#e8effc" stroke="#3b6fd9"/>' +
+        '<line x1="100" y1="68" x2="100" y2="82" stroke="#94a3b8" stroke-width="1.5"/>' +
+        '<circle cx="100" cy="88" r="10" fill="#e8effc" stroke="#3b6fd9"/>' +
+        '</svg>';
+
+      var preview = document.getElementById('mindmapPreview');
+      var editor = document.getElementById('mindmapEditor');
+      preview.innerHTML = mindmapSvg;
+      editor.innerHTML = mindmapSvg.replace('viewBox="0 0 200 100"', 'viewBox="0 0 200 100" style="max-width:100%;height:auto"');
+
+      var modal = document.getElementById('mindmapModal');
+      document.getElementById('mindmapThumb').addEventListener('click', function () {
+        modal.classList.add('open');
+      });
+      function closeModal() {
+        modal.classList.remove('open');
+      }
+      document.getElementById('modalClose').addEventListener('click', closeModal);
+      document.getElementById('modalCancel').addEventListener('click', closeModal);
+      document.getElementById('modalSave').addEventListener('click', function () {
+        preview.innerHTML = editor.innerHTML;
+        closeModal();
+      });
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeModal();
+      });
+
+      document.querySelectorAll('.outline-item').forEach(function (el) {
+        el.addEventListener('click', function () {
+          document.querySelectorAll('.outline-item').forEach(function (i) { i.classList.remove('active'); });
+          el.classList.add('active');
+        });
+      });
+
+      document.querySelectorAll('.synopsis-item').forEach(function (el) {
+        el.addEventListener('click', function () {
+          document.querySelectorAll('.synopsis-item').forEach(function (i) { i.classList.remove('active'); });
+          el.classList.add('active');
+        });
+      });
+
+      document.getElementById('addKeyword').addEventListener('click', function () {
+        var input = document.getElementById('keywordInput');
+        var text = (input.value || '').trim();
+        if (!text) return;
+        var span = document.createElement('span');
+        span.className = 'tag';
+        span.textContent = text;
+        document.getElementById('keywordTags').appendChild(span);
+        input.value = '';
+      });
+      document.getElementById('keywordInput').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') document.getElementById('addKeyword').click();
+      });
+
+      document.getElementById('clipboardList').addEventListener('click', function (e) {
+        var li = e.target.closest('li');
+        if (!li) return;
+        var text = li.getAttribute('data-text') || li.childNodes[0].textContent.trim();
+        var area = document.getElementById('writingArea');
+        var sep = area.value && !area.value.endsWith('\n') ? '\n\n' : '';
+        area.value += sep + text;
+        area.dispatchEvent(new Event('input'));
+        area.focus();
+      });
+
+      var writingArea = document.getElementById('writingArea');
+      var wordCount = document.getElementById('wordCount');
+      writingArea.addEventListener('input', function () {
+        var n = (writingArea.value || '').replace(/\s/g, '').length;
+        wordCount.textContent = n + ' 字';
+      });
+    })();
+  </script>
+</body>
+</html>

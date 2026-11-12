@@ -1,0 +1,7 @@
+# 复制为 .env 后填写（勿提交 .env 到公开仓库）
+
+# 群机器人 Webhook 完整地址（钉钉群 → 智能群助手 → 添加机器人 → 自定义 → Webhook）
+DINGTALK_WEBHOOK=https://oapi.dingtalk.com/robot/send?access_token=72cdd38aab28601d628bde5d9d056b6af9c167efb836f719bb2c539759306662
+
+# 若机器人启用了「加签」，填写 SEC 开头的密钥；未开启则留空
+DINGTALK_SECRET=SEC8c8ef66d479006206e7cf3098498fcf64a32c742b1e13db7ff8cc129d00d7cb0

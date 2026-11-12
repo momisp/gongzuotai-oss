@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>充值模拟（内网专用）</title>
+  <style>
+    :root {
+      --primary: #1890ff;
+      --primary-hover: #40a9ff;
+      --text: #1a1a1a;
+      --text-secondary: #666;
+      --border: #e0e0e0;
+      --bg-page: #f5f7fa;
+      --bg-card: #fff;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+      --danger: #cf1322;
+      --danger-bg: #fff2f0;
+      --success-border: #52c41a;
+      --success-bg: #f6ffed;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC",
+        "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background: var(--bg-page);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 20px 18px 48px;
+      min-height: 100vh;
+    }
+
+    @media (min-width: 640px) {
+      .page {
+        padding: 28px 24px 56px;
+      }
+    }
+
+    .page-title {
+      margin: 0 0 12px;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .banner-internal {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      box-shadow: var(--shadow);
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+
+    .banner-internal__tag {
+      flex-shrink: 0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(24, 144, 255, 0.12);
+      color: var(--primary);
+    }
+
+    .form-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .field {
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .input-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .input-row .input {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font: inherit;
+      background: #fff;
+      color: var(--text);
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.15);
+    }
+
+    .input-select {
+      cursor: pointer;
+      appearance: auto;
+    }
+
+    .filter-label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .history-block {
+      margin-bottom: 4px;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-height: 0;
+    }
+
+    .chip {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .chip:hover {
+      border-color: #bbb;
+    }
+
+    .chip--history:focus {
+      outline: 2px solid rgba(24, 144, 255, 0.35);
+      outline-offset: 2px;
+    }
+
+    .actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      padding: 10px 22px;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .btn-outline {
+      background: var(--bg-card);
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .btn-outline:hover {
+      border-color: #bbb;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+      border-color: transparent;
+      padding: 4px 8px;
+      font-size: 0.8rem;
+    }
+
+    .btn-ghost:hover {
+      color: var(--danger);
+    }
+
+    .hint {
+      flex: 1;
+      min-width: 200px;
+      margin: 0;
+      font-size: 0.88rem;
+      line-height: 1.55;
+      color: var(--text-secondary);
+    }
+
+    .hint code {
+      font-size: 0.82em;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: rgba(24, 144, 255, 0.08);
+      color: var(--primary);
+    }
+
+    .main-split {
+      display: grid;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    @media (min-width: 860px) {
+      .main-split {
+        grid-template-columns: 340px 1fr;
+        align-items: start;
+      }
+    }
+
+    .record-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      min-height: 220px;
+    }
+
+    .record-panel__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      background: #fafbfc;
+    }
+
+    .record-panel__title {
+      margin: 0;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .record-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: 520px;
+      overflow: auto;
+    }
+
+    .record-empty {
+      padding: 28px 16px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    .record-item {
+      width: 100%;
+      text-align: left;
+      border: 0;
+      border-bottom: 1px solid #f0f0f0;
+      background: #fff;
+      padding: 12px 14px;
+      cursor: pointer;
+      display: block;
+    }
+
+    .record-item:hover {
+      background: #f5f9ff;
+    }
+
+    .record-item__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .record-item__order {
+      font-size: 0.86rem;
+      font-weight: 600;
+      word-break: break-all;
+    }
+
+    .record-item__badge {
+      flex-shrink: 0;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .record-item__badge.ok {
+      background: #f6ffed;
+      color: #389e0d;
+      border: 1px solid #b7eb8f;
+    }
+
+    .record-item__badge.fail {
+      background: #fff2f0;
+      color: #cf1322;
+      border: 1px solid #ffccc7;
+    }
+
+    .record-item__meta {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+
+    .result {
+      padding: 16px 18px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      box-shadow: var(--shadow);
+      font-size: 0.9rem;
+      color: #333;
+      line-height: 1.55;
+      min-height: 220px;
+    }
+
+    .result.error {
+      border-color: #ffccc7;
+      background: var(--danger-bg);
+      color: #434343;
+    }
+
+    .result.ok {
+      border-color: #b7eb8f;
+      background: var(--success-bg);
+      color: #333;
+    }
+
+    .result-plain {
+      white-space: pre-wrap;
+      word-break: break-all;
+      font-size: 0.82rem;
+    }
+
+    .result-placeholder {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .result-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .result-title {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .result.ok .result-title {
+      color: #389e0d;
+    }
+
+    .result.error .result-title {
+      color: var(--danger);
+    }
+
+    .btn-log {
+      flex-shrink: 0;
+      padding: 4px 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 6px;
+      border: 1px solid #ffa39e;
+      background: #fff1f0;
+      color: var(--danger);
+      cursor: pointer;
+    }
+
+    .btn-log:hover {
+      background: #ffccc7;
+    }
+
+    .btn-log[aria-expanded="true"] {
+      border-color: #91d5ff;
+      background: #e6f7ff;
+      color: var(--primary);
+    }
+
+    .result-rows {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .result-rows li {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 0.92rem;
+    }
+
+    .result-rows .k {
+      flex-shrink: 0;
+      color: var(--text-secondary);
+      min-width: 4.5em;
+    }
+
+    .result-rows .v {
+      word-break: break-all;
+      font-weight: 500;
+    }
+
+    .result-msg {
+      margin: 8px 0 0;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    .result-log {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 0.78rem;
+      font-family: ui-monospace, Consolas, monospace;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 320px;
+      overflow: auto;
+      line-height: 1.45;
+      color: #434343;
+    }
+
+    .result-log.is-open {
+      display: block;
+    }
+
+    .back-link {
+      margin-top: 20px;
+      font-size: 0.88rem;
+    }
+
+    .back-link a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .back-link a:hover {
+      color: var(--primary);
+    }
+
+    .modal-mask {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 1000;
+    }
+
+    .modal-mask.is-open {
+      display: flex;
+    }
+
+    .modal {
+      width: min(720px, 100%);
+      max-height: min(86vh, 860px);
+      overflow: auto;
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+      padding: 18px 18px 16px;
+    }
+
+    .modal__head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .modal__title {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .modal__close {
+      flex-shrink: 0;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 8px;
+      padding: 4px 10px;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+
+    .modal__close:hover {
+      border-color: #bbb;
+      color: var(--text);
+    }
+
+    .modal .result-log {
+      display: block;
+      max-height: 360px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1 class="page-title">充值模拟</h1>
+    <div class="banner-internal">
+      <span class="banner-internal__tag">内网专用</span>
+      <span>请勿对公网暴露本服务；仅供测试环境联调。</span>
+    </div>
+
+    <div class="form-card">
+      <div class="field">
+        <label class="field-label" for="database">环境</label>
+        <select id="database" class="input input-select" aria-label="选择环境">
+          <option value="game_lx">龙翔（game_lx）</option>
+          <option value="game_yq">游趣（game_yq）</option>
+          <option value="game_ly">龙耀（game_ly）</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="callbackType">回调</label>
+        <select id="callbackType" class="input input-select" aria-label="选择回调类型">
+          <option value="game">充值回调（游戏内货币）</option>
+          <option value="balance">平台币充值回调</option>
+          <option value="bind">绑币充值回调</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="notifyStatus">通知状态</label>
+        <select id="notifyStatus" class="input input-select" aria-label="选择通知状态">
+          <option value="success">支付成功（原逻辑）</option>
+          <option value="alipay_closed">支付宝·TRADE_CLOSED 未付关单【事故回归】</option>
+          <option value="alipay_closed_refund">支付宝·TRADE_CLOSED 全额退款关单</option>
+          <option value="alipay_partial_refund">支付宝·部分退款（SUCCESS+退款字段）</option>
+          <option value="alipay_success">支付宝·TRADE_SUCCESS</option>
+          <option value="alipay_finished">支付宝·TRADE_FINISHED</option>
+          <option value="alipay_wait">支付宝·WAIT_BUYER_PAY</option>
+          <option value="wx_success">微信·支付成功 SUCCESS</option>
+          <option value="wx_closed">微信·已关闭 CLOSED</option>
+          <option value="wx_notpay">微信·未支付 NOTPAY</option>
+          <option value="wx_payerror">微信·支付失败 PAYERROR</option>
+          <option value="wx_refund">微信·转入退款 REFUND</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="account">玩家账号</label>
+        <div class="input-row">
+          <input
+            id="account"
+            class="input"
+            type="text"
+            placeholder="输入玩家账号"
+            autocomplete="off"
+          />
+          <button type="button" class="btn btn-outline" id="btn-clear">清空</button>
+        </div>
+      </div>
+
+      <div class="historyBlock history-block field">
+        <div class="filter-label">历史输入（点击回填）</div>
+        <div class="chip-row" id="history" aria-live="polite"></div>
+      </div>
+
+      <div class="actions-row">
+        <button type="button" class="btn btn-primary" id="btn-recharge">发送回调</button>
+        <p class="hint" id="type-hint">
+          取最新一笔订单后按「通知状态」发起回调。成功走原
+          <code>supper_pay_callback</code>；关单等会附带
+          <code>trade_status</code>/<code>trade_state</code>。
+          游趣 <code>yq.example.com</code> / 龙翔 <code>dev.example.com</code> / 龙耀 <code>ly.example.com</code>（库 <code>dev_example_com</code>）。
+        </p>
+      </div>
+    </div>
+
+    <div class="main-split">
+      <section class="record-panel" aria-label="历史回调记录">
+        <div class="record-panel__head">
+          <h2 class="record-panel__title">历史回调记录</h2>
+          <button type="button" class="btn btn-ghost" id="btn-clear-records">清空</button>
+        </div>
+        <ul class="record-list" id="record-list"></ul>
+      </section>
+      <div id="result" class="result result-placeholder">
+        发送回调后，这里显示本次结果；左侧可点历史记录弹窗查看完整返回与日志。
+      </div>
+    </div>
+
+    <p class="back-link"><a href="/">← 返回入口页</a></p>
+  </div>
+
+  <div class="modal-mask" id="modal-mask" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+    <div class="modal">
+      <div class="modal__head">
+        <h3 class="modal__title" id="modal-title">回调详情</h3>
+        <button type="button" class="modal__close" id="modal-close">关闭</button>
+      </div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <script>
+    const KEY = "recharge_sim_history_v1";
+    const DB_KEY = "recharge_sim_database_v1";
+    const TYPE_KEY = "recharge_sim_callback_type_v1";
+    const STATUS_KEY = "recharge_sim_notify_status_v1";
+    const RECORDS_KEY = "recharge_sim_records_v1";
+    const MAXH = 8;
+    const MAX_RECORDS = 40;
+    const DB_ALLOWED = new Set(["game_lx", "game_yq", "game_ly"]);
+    const TYPE_ALLOWED = new Set(["game", "balance", "bind"]);
+    const STATUS_ALLOWED = new Set([
+      "success",
+      "alipay_success",
+      "alipay_finished",
+      "alipay_closed",
+      "alipay_closed_refund",
+      "alipay_partial_refund",
+      "alipay_wait",
+      "wx_success",
+      "wx_closed",
+      "wx_notpay",
+      "wx_payerror",
+      "wx_refund",
+    ]);
+    const TYPE_HINTS = {
+      game:
+        '取单：<code>tab_spend WHERE user_account=? ORDER BY id DESC LIMIT 1</code>，用订单 <code>pay_config_id</code> 拼 <code>pid</code>。',
+      balance:
+        '取单：<code>tab_spend_balance WHERE pay_account=? ORDER BY id DESC LIMIT 1</code>，回调 <code>pid</code> 固定为 <code>0</code>。',
+      bind:
+        '取单：<code>tab_spend_bind WHERE user_account=? ORDER BY id DESC LIMIT 1</code>，回调 <code>pid</code> 固定为 <code>0</code>。',
+    };
+    const STATUS_HINTS = {
+      success: "原支付成功逻辑，字段不变。",
+      alipay_closed:
+        "事故回归：附带 <code>trade_status=TRADE_CLOSED</code>（无退款字段）。核对订单不得变成功、无结算无发货。",
+      alipay_closed_refund:
+        "全额退款关单：CLOSED + <code>refund_fee</code>/<code>gmt_refund</code>。不得再当新支付成功。",
+      alipay_partial_refund:
+        "部分退款：仍 SUCCESS 但带退款字段，不得重新完整发货。",
+      alipay_finished: "FINISHED 不得与 SUCCESS 叠成两笔成功副作用。",
+      alipay_wait: "待支付，不得结算/发货。",
+      wx_closed: "微信关闭，不得结算/发货。",
+      wx_notpay: "微信未支付，不得结算/发货。",
+      wx_refund: "转入退款，不得再当新成功发货。",
+    };
+
+    function loadHistory() {
+      try {
+        const raw = localStorage.getItem(KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveHistory(arr) {
+      localStorage.setItem(KEY, JSON.stringify(arr.slice(0, MAXH)));
+    }
+
+    function pushHistory(name) {
+      const n = (name || "").trim();
+      if (!n) return;
+      const arr = loadHistory().filter((x) => x !== n);
+      arr.unshift(n);
+      saveHistory(arr);
+      renderHistory();
+    }
+
+    function loadRecords() {
+      try {
+        const raw = localStorage.getItem(RECORDS_KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveRecords(arr) {
+      localStorage.setItem(RECORDS_KEY, JSON.stringify(arr.slice(0, MAX_RECORDS)));
+    }
+
+    function pushRecord(account, data) {
+      const sent = (data && data.sent) || {};
+      const item = {
+        id: Date.now() + "_" + Math.random().toString(36).slice(2, 8),
+        at: new Date().toISOString(),
+        account: account || "",
+        ok: !!(data && data.ok),
+        data: data || {},
+        orderNo: sent.out_trade_no || "",
+        amount: sent.real_amount != null ? String(sent.real_amount) : "",
+      };
+      const arr = loadRecords();
+      arr.unshift(item);
+      saveRecords(arr);
+      renderRecords();
+      return item;
+    }
+
+    const accountEl = document.getElementById("account");
+    const databaseEl = document.getElementById("database");
+    const callbackTypeEl = document.getElementById("callbackType");
+    const notifyStatusEl = document.getElementById("notifyStatus");
+    const typeHintEl = document.getElementById("type-hint");
+    const historyEl = document.getElementById("history");
+    const historyBlock = document.querySelector(".historyBlock");
+    const btn = document.getElementById("btn-recharge");
+    const recordListEl = document.getElementById("record-list");
+    const modalMask = document.getElementById("modal-mask");
+    const modalBody = document.getElementById("modal-body");
+    const modalTitle = document.getElementById("modal-title");
+
+    function loadSavedDb() {
+      try {
+        const v = localStorage.getItem(DB_KEY) || "";
+        if (DB_ALLOWED.has(v)) databaseEl.value = v;
+      } catch {
+        /* ignore */
+      }
+    }
+
+    function loadSavedType() {
+      try {
+        const v = localStorage.getItem(TYPE_KEY) || "";
+        if (TYPE_ALLOWED.has(v)) callbackTypeEl.value = v;
+      } catch {
+        /* ignore */
+      }
+    }
+
+    function loadSavedStatus() {
+      try {
+        const v = localStorage.getItem(STATUS_KEY) || "";
+        if (STATUS_ALLOWED.has(v)) notifyStatusEl.value = v;
+      } catch {
+        /* ignore */
+      }
+    }
+
+    function updateTypeHint() {
+      const tip = TYPE_HINTS[callbackTypeEl.value] || TYPE_HINTS.game;
+      const st =
+        STATUS_HINTS[notifyStatusEl.value] ||
+        "将按所选通知状态附带渠道字段后发起回调。";
+      typeHintEl.innerHTML =
+        tip +
+        " " +
+        st +
+        " 游趣 <code>yq.example.com</code> / 龙翔 <code>dev.example.com</code> / 龙耀 <code>ly.example.com</code>（库 <code>dev_example_com</code>）。";
+      const isNeg = ![
+        "success",
+        "alipay_success",
+        "alipay_finished",
+        "wx_success",
+      ].includes(notifyStatusEl.value);
+      btn.textContent = isNeg ? "发送负向回调" : "发送回调";
+    }
+
+    databaseEl.addEventListener("change", () => {
+      try {
+        localStorage.setItem(DB_KEY, databaseEl.value);
+      } catch {
+        /* ignore */
+      }
+    });
+
+    callbackTypeEl.addEventListener("change", () => {
+      try {
+        localStorage.setItem(TYPE_KEY, callbackTypeEl.value);
+      } catch {
+        /* ignore */
+      }
+      updateTypeHint();
+    });
+
+    notifyStatusEl.addEventListener("change", () => {
+      try {
+        localStorage.setItem(STATUS_KEY, notifyStatusEl.value);
+      } catch {
+        /* ignore */
+      }
+      updateTypeHint();
+    });
+
+    function renderHistory() {
+      const arr = loadHistory();
+      historyEl.innerHTML = "";
+      if (!arr.length) {
+        historyBlock.style.display = "none";
+        return;
+      }
+      historyBlock.style.display = "";
+      for (const name of arr) {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "chip chip--history";
+        b.textContent = name;
+        b.title = "点击填入「玩家账号」";
+        b.addEventListener("click", () => {
+          accountEl.value = name;
+          accountEl.focus();
+        });
+        historyEl.appendChild(b);
+      }
+    }
+
+    const resultEl = document.getElementById("result");
+
+    const TYPE_SHORT = {
+      game: "游戏币",
+      balance: "平台币",
+      bind: "绑币",
+    };
+
+    document.getElementById("btn-clear").addEventListener("click", () => {
+      accountEl.value = "";
+      accountEl.focus();
+    });
+
+    document.getElementById("btn-clear-records").addEventListener("click", () => {
+      if (!loadRecords().length) return;
+      if (!confirm("确定清空全部历史回调记录？")) return;
+      saveRecords([]);
+      renderRecords();
+    });
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function formatPayType(payType) {
+      const t = String(payType || "").toLowerCase();
+      if (!t) return "—";
+      if (/wx|wechat|微信/.test(t)) return "微信";
+      if (/ali|zfb|支付宝/.test(t)) return "支付宝";
+      return String(payType);
+    }
+
+    function typeShortLabel(data) {
+      if (data && TYPE_SHORT[data.callbackType]) return TYPE_SHORT[data.callbackType];
+      const label = (data && data.callbackTypeLabel) || "";
+      if (label.includes("平台币")) return "平台币";
+      if (label.includes("绑币")) return "绑币";
+      if (label) return label.replace(/充值回调|（游戏内货币）/g, "").trim() || "充值";
+      return "充值";
+    }
+
+    function formatTime(iso) {
+      if (!iso) return "—";
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return String(iso);
+      const p = (n) => String(n).padStart(2, "0");
+      return (
+        `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ` +
+        `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`
+      );
+    }
+
+    function summarize(data) {
+      const ok = !!(data && data.ok);
+      const sent = (data && data.sent) || {};
+      const amount =
+        sent.real_amount != null && sent.real_amount !== ""
+          ? sent.real_amount
+          : "—";
+      const orderNo = sent.out_trade_no || "—";
+      const payWay = formatPayType(sent.pay_type);
+      const statusLabel =
+        (data && data.notifyStatusLabel) ||
+        (data && data.notifyStatus) ||
+        "支付成功";
+      const channelState =
+        (data && (data.trade_status || data.trade_state)) ||
+        sent.trade_status ||
+        sent.trade_state ||
+        "—";
+      const title =
+        typeShortLabel(data) +
+        " · " +
+        statusLabel +
+        (ok ? " · 已发出" : " · 失败");
+      return { ok, amount, orderNo, payWay, statusLabel, channelState, title };
+    }
+
+    function buildDetailHtml(data, opts) {
+      const s = summarize(data);
+      const msg = (data && data.message) || "";
+      const pretty = JSON.stringify(data, null, 2);
+      const showToggle = !!(opts && opts.toggleLog);
+      return (
+        '<div class="result-head">' +
+        '<p class="result-title">' +
+        escapeHtml(s.title) +
+        "</p>" +
+        (showToggle
+          ? '<button type="button" class="btn-log" data-toggle-log aria-expanded="false">日志</button>'
+          : "") +
+        "</div>" +
+        '<ul class="result-rows">' +
+        '<li><span class="k">通知状态</span><span class="v">' +
+        escapeHtml(s.statusLabel) +
+        "</span></li>" +
+        '<li><span class="k">渠道状态</span><span class="v">' +
+        escapeHtml(String(s.channelState)) +
+        "</span></li>" +
+        '<li><span class="k">充值金额</span><span class="v">' +
+        escapeHtml(s.amount) +
+        "</span></li>" +
+        '<li><span class="k">订单号</span><span class="v">' +
+        escapeHtml(s.orderNo) +
+        "</span></li>" +
+        '<li><span class="k">支付方式</span><span class="v">' +
+        escapeHtml(s.payWay) +
+        "</span></li>" +
+        (data && data.databaseLabel
+          ? '<li><span class="k">环境</span><span class="v">' +
+            escapeHtml(data.databaseLabel) +
+            "</span></li>"
+          : "") +
+        (opts && opts.account
+          ? '<li><span class="k">账号</span><span class="v">' +
+            escapeHtml(opts.account) +
+            "</span></li>"
+          : "") +
+        (opts && opts.at
+          ? '<li><span class="k">时间</span><span class="v">' +
+            escapeHtml(formatTime(opts.at)) +
+            "</span></li>"
+          : "") +
+        "</ul>" +
+        (msg ? '<p class="result-msg">' + escapeHtml(msg) + "</p>" : "") +
+        '<pre class="result-log' +
+        (showToggle ? "" : " is-open") +
+        '" data-log>' +
+        escapeHtml(pretty) +
+        "</pre>"
+      );
+    }
+
+    function bindLogToggle(root) {
+      const btnLog = root.querySelector("[data-toggle-log]");
+      const logEl = root.querySelector("[data-log]");
+      if (!btnLog || !logEl) return;
+      btnLog.addEventListener("click", (e) => {
+        const open = logEl.classList.toggle("is-open");
+        e.currentTarget.setAttribute("aria-expanded", open ? "true" : "false");
+        e.currentTarget.textContent = open ? "收起" : "日志";
+      });
+    }
+
+    function showPlain(text, type) {
+      resultEl.className = "result result-plain " + (type || "");
+      resultEl.textContent = text;
+    }
+
+    function showSummary(data) {
+      const s = summarize(data);
+      resultEl.className = "result " + (s.ok ? "ok" : "error");
+      resultEl.innerHTML = buildDetailHtml(data, { toggleLog: true });
+      bindLogToggle(resultEl);
+    }
+
+    function renderRecords() {
+      const arr = loadRecords();
+      recordListEl.innerHTML = "";
+      if (!arr.length) {
+        const li = document.createElement("li");
+        li.className = "record-empty";
+        li.textContent = "暂无记录。发送回调后会显示在这里，点击可查看完整返回与日志。";
+        recordListEl.appendChild(li);
+        return;
+      }
+      for (const item of arr) {
+        const data = item.data || {};
+        const s = summarize(data);
+        const li = document.createElement("li");
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "record-item";
+        b.innerHTML =
+          '<div class="record-item__top">' +
+          '<span class="record-item__order">' +
+          escapeHtml(item.orderNo || s.orderNo || "无订单号") +
+          "</span>" +
+          '<span class="record-item__badge ' +
+          (item.ok ? "ok" : "fail") +
+          '">' +
+          (item.ok ? "已发出" : "失败") +
+          "</span>" +
+          "</div>" +
+          '<div class="record-item__meta">' +
+          escapeHtml(formatTime(item.at)) +
+          " · " +
+          escapeHtml(data.databaseLabel || data.database || "—") +
+          " · " +
+          escapeHtml(s.statusLabel) +
+          "<br/>账号 " +
+          escapeHtml(item.account || "—") +
+          " · 金额 " +
+          escapeHtml(item.amount || s.amount || "—") +
+          "</div>";
+        b.addEventListener("click", () => openModal(item));
+        li.appendChild(b);
+        recordListEl.appendChild(li);
+      }
+    }
+
+    function openModal(item) {
+      const data = (item && item.data) || {};
+      const s = summarize(data);
+      modalTitle.textContent = s.title;
+      modalBody.innerHTML = buildDetailHtml(data, {
+        toggleLog: false,
+        account: item.account,
+        at: item.at,
+      });
+      modalMask.hidden = false;
+      modalMask.classList.add("is-open");
+    }
+
+    function closeModal() {
+      modalMask.classList.remove("is-open");
+      modalMask.hidden = true;
+    }
+
+    document.getElementById("modal-close").addEventListener("click", closeModal);
+    modalMask.addEventListener("click", (e) => {
+      if (e.target === modalMask) closeModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modalMask.classList.contains("is-open")) {
+        closeModal();
+      }
+    });
+
+    btn.addEventListener("click", async () => {
+      const account = accountEl.value.trim();
+      const database = databaseEl.value;
+      const callbackType = callbackTypeEl.value;
+      const notifyStatus = notifyStatusEl.value;
+      if (!account) {
+        showPlain("请输入玩家账号", "error");
+        return;
+      }
+      btn.disabled = true;
+      showPlain("请求中…", "");
+      try {
+        const r = await fetch("/api/simulate-recharge", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            account,
+            database,
+            callbackType,
+            notifyStatus,
+          }),
+        });
+        const data = await r.json();
+        showSummary(data);
+        pushRecord(account, data);
+        if (data.ok) pushHistory(account);
+      } catch (e) {
+        const fail = { ok: false, message: String(e), sent: {} };
+        showPlain(String(e), "error");
+        pushRecord(account, fail);
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    loadSavedDb();
+    loadSavedType();
+    loadSavedStatus();
+    updateTypeHint();
+    renderHistory();
+    renderRecords();
+    accountEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") btn.click();
+    });
+  </script>
+</body>
+</html>

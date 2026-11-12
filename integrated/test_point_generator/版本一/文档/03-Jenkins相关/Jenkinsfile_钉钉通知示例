@@ -1,0 +1,111 @@
+pipeline {
+  agent any
+  
+  environment {
+    // 钉钉 Webhook URL（建议使用 Jenkins 凭据管理）
+    // DINGTALK_WEBHOOK = credentials('dingtalk-webhook')
+    // 或者直接填写（不推荐，安全性低）
+    DINGTALK_WEBHOOK = 'https://oapi.dingtalk.com/robot/send?access_token=your_token_here'
+  }
+  
+  stages {
+    stage('运行 Apifox 测试') {
+      steps {
+        script {
+          echo '开始执行接口自动化测试...'
+          bat '''
+            chcp 65001 >nul
+            "C:\\Program Files\\nodejs\\npx.cmd" apifox run https://api.apifox.com/api/v1/projects/7042956/api-test/ci-config/507917/detail?token=xcdCofADI1aHgTPd_knKWB -r html,cli
+          '''
+        }
+      }
+    }
+  }
+  
+  post {
+    always {
+      // 发布 HTML 报告
+      publishHTML([
+        reportName: 'Apifox Test Report',
+        reportDir: '.',
+        reportFiles: 'apifox-report.html',
+        reportTitles: '接口自动化测试报告',
+        keepAll: true
+      ])
+    }
+    
+    success {
+      script {
+        def reportUrl = "${env.BUILD_URL}HTML_Report/"
+        def message = """
+        ✅ **接口自动化测试执行成功**
+        
+        **构建信息：**
+        - 任务名称：${env.JOB_NAME}
+        - 构建编号：#${env.BUILD_NUMBER}
+        - 构建时间：${new Date().format('yyyy-MM-dd HH:mm:ss')}
+        
+        **测试报告：**
+        [点击查看完整报告](${reportUrl})
+        
+        **相关链接：**
+        - [构建详情](${env.BUILD_URL})
+        - [控制台输出](${env.BUILD_URL}console)
+        """
+        
+        sendDingTalkMessage('成功', message)
+      }
+    }
+    
+    failure {
+      script {
+        def reportUrl = "${env.BUILD_URL}HTML_Report/"
+        def message = """
+        ❌ **接口自动化测试执行失败**
+        
+        **构建信息：**
+        - 任务名称：${env.JOB_NAME}
+        - 构建编号：#${env.BUILD_NUMBER}
+        - 构建时间：${new Date().format('yyyy-MM-dd HH:mm:ss')}
+        
+        **测试报告：**
+        [点击查看完整报告](${reportUrl})
+        
+        **相关链接：**
+        - [构建详情](${env.BUILD_URL})
+        - [控制台输出](${env.BUILD_URL}console)
+        
+        ⚠️ **请及时查看测试报告并修复问题！**
+        """
+        
+        sendDingTalkMessage('失败', message)
+      }
+    }
+  }
+}
+
+// 发送钉钉消息的函数
+def sendDingTalkMessage(status, message) {
+  try {
+    def payload = [
+      msgtype: 'markdown',
+      markdown: [
+        title: "接口自动化测试 - ${status}",
+        text: message
+      ]
+    ]
+    
+    def response = httpRequest(
+      httpMode: 'POST',
+      url: env.DINGTALK_WEBHOOK,
+      contentType: 'APPLICATION_JSON',
+      requestBody: groovy.json.JsonOutput.toJson(payload),
+      validResponseCodes: '200'
+    )
+    
+    echo "✅ 钉钉通知发送成功: ${response.status}"
+  } catch (Exception e) {
+    echo "❌ 钉钉通知发送失败: ${e.getMessage()}"
+    // 不中断构建流程
+  }
+}

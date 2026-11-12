@@ -1,0 +1,41 @@
+# 需要先安装：Docker Desktop（Windows）并确保 HWiNFO + PromDapter 已在宿主机运行（10445）
+# 启动：在本目录执行 docker compose up -d
+# Grafana：http://localhost:3000  默认账号 admin / 密码 admin（首次登录会要求改密，可在下面环境变量改）
+#
+# 显式项目名：避免父级目录为中文时 Docker Compose 报「project name must not be empty」
+
+name: tools-monitoring
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.48.1
+    container_name: tools-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --web.enable-lifecycle
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+  grafana:
+    image: grafana/grafana:10.2.3
+    container_name: tools-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - prometheus
+
+volumes:
+  grafana-data:

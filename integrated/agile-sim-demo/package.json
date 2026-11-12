@@ -1,0 +1,33 @@
+{
+  "name": "agile-sim-demo",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k \"node server/index.mjs\" \"vite --port 5173\"",
+    "dev:workbench": "concurrently -k \"node server/index.mjs\" \"vite --port 5173 --mode workbench\"",
+    "dev:lan": "concurrently -k \"node server/index.mjs\" \"vite --port 5173 --host\"",
+    "start": "node scripts/start.mjs",
+    "start:lan": "node scripts/start.mjs --lan",
+    "build": "vite build",
+    "build:workbench": "vite build --base /agile-sim/",
+    "preview": "vite preview",
+    "setup:playwright": "playwright install chromium",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "playwright": "^1.52.0",
+    "undici": "^7.29.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite": "^5.4.14"
+  }
+}

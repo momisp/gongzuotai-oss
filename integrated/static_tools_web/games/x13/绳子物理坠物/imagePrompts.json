@@ -1,0 +1,6 @@
+[
+  { "id": "background", "prompt": "清新简约2D游戏背景，浅纯色渐变，淡雅色调，极简几何装饰线条，干净舒适的视觉体验，无杂乱元素，适配移动端竖屏显示", "filename": "background.png" },
+  { "id": "ball", "prompt": "圆润可爱的彩色小球，多种颜色（红、蓝、绿、黄、紫），表面光滑有光泽，卡通萌系风格，纯白色背景且无阴影", "filename": "alpha_ball.png" },
+  { "id": "container", "prompt": "圆润可爱的收纳篮子容器，浅木色编织纹理，开口向上，卡通萌系风格，造型简洁，纯白色背景且无阴影", "filename": "alpha_container.png" },
+  { "id": "obstacle", "prompt": "卡通风格的障碍物，带刺的阻挡球，警示红色调，圆润但带尖刺装饰，萌系风格，纯白色背景且无阴影", "filename": "alpha_obstacle.png" }
+]

@@ -1,0 +1,162 @@
+{
+  "version": 1,
+  "updatedAt": "2026-06-21",
+  "records": [
+    {
+      "id": "bh3-qte-ky-vita-sparkle",
+      "game": "bh3",
+      "gameName": "崩坏3",
+      "title": "升变之理 QTE 队 · 咚！炽愿吉星 / 诡戏千役 / 孑遗千星",
+      "team": [
+        { "name": "咚！炽愿吉星", "role": "队长 · 主C", "element": "星尘 / 火", "ring": "升变之理" },
+        { "name": "诡戏千役【友情出演】", "role": "队员 · 量子火", "element": "量子 / 火", "ring": "天渊易位 · 界域共鸣" },
+        { "name": "孑遗千星", "role": "队员 · 机械雷", "element": "机械 / 雷", "ring": "天渊易位 · 星影偕行" }
+      ],
+      "keyLegend": [
+        { "key": "J", "label": "普攻" },
+        { "key": "E", "label": "武器技" },
+        { "key": "I", "label": "必杀" },
+        { "key": "Q", "label": "QTE" },
+        { "key": "R", "label": "星之环" },
+        { "key": "1/2/3", "label": "开环选人" }
+      ],
+      "synergy": "咚！炽愿吉星为升变之理队长，开环后三名天渊易位角色各获得一次「斗转星移」（强化 QTE），入场后进入「升变增幅」并享受星环相关加成。协同者德丽莎·阿波卡利斯（S 阶）可让队长额外多一次斗转星移。",
+      "tags": ["升变之理", "QTE", "8.1", "寂灭"],
+      "summary": "开环三轮斗转星移：长按R选人 → 各角色 J/E 小循环 → 回队长；非开环期 Q 换人维持循环。",
+      "images": [
+        {
+          "caption": "升变之理 · 开环选人示意",
+          "note": "长按R → 1(队长) → 2(花火) → 3(薇塔) → Q 回队长"
+        },
+        {
+          "caption": "咚！炽愿吉星 · 动能分支",
+          "note": "斗转后行运：J×5 → E（动能翻倍，E 引爆印记）"
+        },
+        {
+          "caption": "孑遗千星 · 震星循环",
+          "note": "I 进震星 → E → J×4 → 长按J；SP 够再 I"
+        }
+      ],
+      "phases": [
+        {
+          "name": "战前准备",
+          "steps": [
+            { "time": "—", "actor": "全队", "action": "星环能级蓄满 150", "detail": "非开环期 J/E 分支、星环吸积回能；薇塔长按J 额外回能。" },
+            { "time": "—", "actor": "协同", "action": "德丽莎·阿波卡利斯（S）", "detail": "开环后队长可多一次斗转（长按R → 1 两次）。" }
+          ]
+        },
+        {
+          "name": "星环爆发 · 升变之理一轮（三次斗转星移）",
+          "steps": [
+            { "time": "0s", "actor": "咚！炽愿吉星", "action": "长按R → 1 → J×5 → E", "detail": "斗转星移入场，【行运】动能×2；E 引爆印记。" },
+            { "time": "+8s", "actor": "诡戏千役", "action": "2 → E → J×5 → E", "detail": "斗转星移；首 E 切态，末 E 特殊分支。" },
+            { "time": "+18s", "actor": "孑遗千星", "action": "3 → I → E → J×4 → 长按J", "detail": "I 进震星（首次真时停）；分支回 SP。" },
+            { "time": "+28s", "actor": "孑遗千星", "action": "I", "detail": "SP≥125，二段大给全队穿透。" },
+            { "time": "+32s", "actor": "咚！炽愿吉星", "action": "Q → J×5 → E", "detail": "回队长；有德丽莎则第二次斗转。三人斗转用尽，星环蓄能。" }
+          ]
+        },
+        {
+          "name": "非开环期 · 常规循环",
+          "steps": [
+            { "time": "—", "actor": "孑遗千星", "action": "Q → I → E → J×4 → 长按J", "detail": "后台回 SP；通常可再 I。" },
+            { "time": "—", "actor": "诡戏千役", "action": "Q → E → J×5 → E", "detail": "张力满末 E 特殊分支；缺能时用星环吸积。" },
+            { "time": "—", "actor": "咚！炽愿吉星", "action": "Q → J×5 → E", "detail": "行运期 J 动能×2；E 引爆印记。" },
+            { "time": "—", "actor": "全队", "action": "特定攻击 → 天渊连携", "detail": "刷新队长 Q，消除换人 CD。" }
+          ]
+        },
+        {
+          "name": "转阶段 / 高难注意",
+          "steps": [
+            { "time": "—", "actor": "孑遗千星", "action": "BOSS 无敌期提前下场", "detail": "后台攒 SP，转阶段前留长按J + I。" },
+            { "time": "—", "actor": "诡戏千役", "action": "量子 BOSS：E / I 配合坍缩", "detail": "I 可选自身或队友。" },
+            { "time": "—", "actor": "咚！炽愿吉星", "action": "星尘环境优先 E", "detail": "E 命中星尘敌人扣血上限；生命链接传流失。" }
+          ]
+        }
+      ],
+      "characterNotes": [
+        {
+          "name": "咚！炽愿吉星",
+          "points": [
+            "核心：Q 或斗转后 J×5 → E（行运动能×2）",
+            "印记：J 第四击、E、长按J 叠层，E 引爆",
+            "专武：斗转后真时停，对单 E 额外引爆"
+          ]
+        },
+        {
+          "name": "诡戏千役【友情出演】",
+          "points": [
+            "斗转后：2 → E → J×5 → E（独角戏/梦游鱼切态）",
+            "非开环：Q → E → J×5 → E",
+            "量子低血：E 可斩杀当前阶段"
+          ]
+        },
+        {
+          "name": "孑遗千星",
+          "points": [
+            "震星：I（无消耗）→ E → J×4 → 长按J",
+            "二段：SP≥125 时 I，CD 好就放",
+            "长按J 消耗星环吸积，加速下轮开环"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "platform": "bilibili",
+          "type": "video",
+          "label": "【女武神讲堂】咚！炽愿吉星 · 升变队机制与操作",
+          "url": "https://www.bilibili.com/video/BV1RjfLYWEmh",
+          "author": "Sennyuki风早千雪"
+        },
+        {
+          "platform": "bilibili",
+          "type": "video",
+          "label": "【深渊作业】琪薇花 · 升变吼姆全流程（与本队一致）",
+          "url": "https://www.bilibili.com/video/BV1HsNgeNErC",
+          "author": "Sennyuki风早千雪"
+        },
+        {
+          "platform": "bilibili",
+          "type": "video",
+          "label": "孑遗千星 · 机甲形态操作指南",
+          "url": "https://www.bilibili.com/video/BV1ZxtjeMEpJ",
+          "author": "月光中心_official"
+        },
+        {
+          "platform": "bilibili",
+          "type": "video",
+          "label": "咚！炽愿吉星 · 4 分钟玩法入门",
+          "url": "https://www.bilibili.com/video/BV1qQfBYZECp",
+          "author": "相思斷肠红"
+        },
+        {
+          "platform": "miyoushe",
+          "type": "official",
+          "label": "【官方资讯】新角色情报 · 咚！炽愿吉星（升变之理配队说明）",
+          "url": "https://www.taptap.cn/moment/626501930335604273",
+          "note": "爱酱小跟班官方情报，与米游社/TapTap 同步发布；明确可与诡戏千役、孑遗千星组升变队"
+        },
+        {
+          "platform": "miyoushe",
+          "type": "post",
+          "label": "【版主攻略】升变之理 · 花火/薇塔天渊易位与三人转",
+          "url": "https://www.taptap.cn/moment/619211223526803088",
+          "author": "小布（官方版主）",
+          "note": "含花火、薇塔在升变队的分工与深渊 BOSS 流程参考"
+        },
+        {
+          "platform": "miyoushe",
+          "type": "post",
+          "label": "升变之理 · 花火 QTE 实战流程（小鹅+花火）",
+          "url": "https://www.miyoushe.com/bh3/article/74902595",
+          "author": "朔守"
+        },
+        {
+          "platform": "miyoushe",
+          "type": "topic",
+          "label": "米游社 · 花火话题（实战流程合集）",
+          "url": "https://www.miyoushe.com/bh3/topicDetail/1688"
+        }
+      ]
+    }
+  ]
+}

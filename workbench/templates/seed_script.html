@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>造数脚本</title>
+  <link rel="stylesheet" href="/static/style.css?v=51">
+  <link rel="stylesheet" href="/static/theme-daisy-v1.css?v=2">
+</head>
+<body class="theme-daisy-v1 br-page">
+  <div class="br-shell">
+    <header class="page-header">
+      <div>
+        <h1 id="ss-title">造数脚本</h1>
+        <p class="subtitle">有接口的直接开跑；没有的标成待补充，不编造。sw6 只能查，不能改。</p>
+      </div>
+      <div class="page-header-actions">
+        <label class="bf-field">
+          <span>平台</span>
+          <select id="ss-target">
+            <option value="lx">龙翔</option>
+            <option value="yq">游趣</option>
+            <option value="hw">汇玩</option>
+          </select>
+        </label>
+        <button class="btn" type="button" onclick="loadSeedScriptPage()">刷新</button>
+      </div>
+    </header>
+    <p class="bf-hint" id="ss-hint"></p>
+    <p class="hint" id="ss-game-fixed"></p>
+    <div id="ss-missing" class="ss-missing hidden"></div>
+    <div id="ss-groups" class="br-role-stack"></div>
+  </div>
+  <div id="ss-http-modal" class="ss-modal hidden" onclick="if(event.target===this)closeHttpLog()">
+    <div class="ss-modal-card">
+      <div class="ss-modal-head">
+        <h3 id="ss-http-title">请求日志</h3>
+        <button class="btn btn-sm" type="button" onclick="closeHttpLog()">关闭</button>
+      </div>
+      <p class="hint" id="ss-http-meta"></p>
+      <h4>请求体</h4>
+      <pre class="ss-http-pre" id="ss-http-req">（无）</pre>
+      <h4>响应体</h4>
+      <pre class="ss-http-pre" id="ss-http-res">（无）</pre>
+    </div>
+  </div>
+  <script src="/static/seed_script.js?v=6"></script>
+</body>
+</html>

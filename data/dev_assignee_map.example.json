@@ -1,0 +1,14 @@
+{
+  "_comment": "复制为 dev_assignee_map.json（勿提交）。nameToAccount：XMind 中文名 → 禅道账号；accountToName：账号 → 展示名；defaultAccount/defaultName：未写人名时的默认指派。",
+  "defaultAccount": "frontend_dev",
+  "defaultName": "前端同学",
+  "nameToAccount": {
+    "张三": "zhangsan",
+    "李四": "lisi"
+  },
+  "accountToName": {
+    "zhangsan": "张三",
+    "lisi": "李四",
+    "frontend_dev": "前端同学"
+  }
+}

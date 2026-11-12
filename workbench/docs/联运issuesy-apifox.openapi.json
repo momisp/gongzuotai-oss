@@ -1,0 +1,275 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "联运分发包 issuesy SDK",
+    "description": "联运分发包（com.xigu.distribute）调用 `dev.example.com/issuesy/sdk/*` 接口。\n\n## 验签（md5_sign）\n\n与工作台游戏 SDK **不同**：联运固定盐 `mengchuang`（来自分发包 `com.mch.baselibrary.util.Sign`），**不是** `game_key`。\n\n算法（与工作台 `encrypt_md5` 同形，仅盐不同）：\n1. 去掉 `md5_sign`\n2. 按参数名 **字典序** 排序\n3. **只拼接全部 value**（不含 key 名）\n4. 末尾拼接盐 `mengchuang`\n5. 对 UTF-8 字节做 MD5，得到 32 位小写 hex，写入 `md5_sign`\n\n伪代码：\n```js\nfunction issuesyMd5Sign(body) {\n  const salt = 'mengchuang';\n  const keys = Object.keys(body).filter(k => k !== 'md5_sign').sort();\n  const raw = keys.map(k => String(body[k] ?? '')).join('') + salt;\n  return CryptoJS.MD5(raw).toString();\n}\n```\n\n## 配置说明（与验签无关/弱相关）\n\n| 项 | 值 | 说明 |\n|----|----|------|\n| yzyz_game_key | （APK `assets/yzyzconfig.ini` 双层 Base64） | 分发包本地配置，解密后映射为 xg_game_key |\n| yzyz_game_name | 幻世九歌-浮光千雪(安卓版) | 展示名 |\n| game_key | `Ga9fSBlAapkyZw7W` | 联运申请 `service_config.game_key`（渠道侧），**不参与** issuesy 的 md5_sign |\n| game_channel_id | `2362` | 对应 `tab_issue_game_apply.id` |\n\n## Body 编码\n\n`Content-Type: application/x-www-form-urlencoded`，Body 为 **整段 JSON 明文**（不要再包一层 form 字段名；与 curl `--data-urlencode '{...}'` 等价的常见抓包形态是直接 POST JSON 文本）。\n\n## 实测（role_id=2 / role_name=联运角色名）\n\n- `user_role_record` → `code=200` 角色记录成功\n- `pay_create` → `code=200` 请求成功，返回 `ff_order`",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://dev.example.com",
+      "description": "联运测试环境"
+    }
+  ],
+  "tags": [
+    { "name": "issuesy", "description": "联运分发 SDK" }
+  ],
+  "paths": {
+    "/issuesy/sdk/channel_pack_status": {
+      "post": {
+        "tags": ["issuesy"],
+        "summary": "渠道包状态/开关",
+        "operationId": "channelPackStatus",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": ["equipment_num", "game_channel_id", "sdk_os", "md5_sign"],
+                "properties": {
+                  "equipment_num": { "type": "string", "example": "4c99a782c5d4c2eb" },
+                  "game_channel_id": { "type": "string", "example": "2362" },
+                  "sdk_os": { "type": "string", "example": "1", "description": "1=安卓" },
+                  "md5_sign": { "type": "string", "description": "见文档验签说明" }
+                }
+              },
+              "example": {
+                "equipment_num": "4c99a782c5d4c2eb",
+                "game_channel_id": "2362",
+                "sdk_os": "1",
+                "md5_sign": "339606d50eaae68a98c5998182c9b98a"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": 200,
+                  "msg": "请求成功",
+                  "data": { "login": 1, "pay": 1, "channel_data": [], "promote_url": "" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/issuesy/sdk/user_login": {
+      "post": {
+        "tags": ["issuesy"],
+        "summary": "联运渠道登录",
+        "operationId": "issuesyUserLogin",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "channel_uid": { "type": "string", "example": "41" },
+                  "equipment_num": { "type": "string" },
+                  "game_channel_id": { "type": "string", "example": "2362" },
+                  "login_extend": { "type": "string", "example": "http://yq.example.com" },
+                  "sdk_os": { "type": "string", "example": "1" },
+                  "token": { "type": "string", "description": "平台侧用户 token" },
+                  "user_birthday": { "type": "string", "example": "19970119" },
+                  "user_certification": { "type": "string", "example": "1" },
+                  "md5_sign": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": 200,
+                  "msg": "请求成功",
+                  "data": {
+                    "user_id": "sue_1",
+                    "token": "...",
+                    "user_certification": "1",
+                    "user_birthday": "19970119"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/issuesy/sdk/user_role_record": {
+      "post": {
+        "tags": ["issuesy"],
+        "summary": "上传角色",
+        "operationId": "userRoleRecord",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "channel_uid",
+                  "equipment_num",
+                  "game_channel_id",
+                  "level",
+                  "role_id",
+                  "role_name",
+                  "sdk_os",
+                  "server_id",
+                  "server_name",
+                  "md5_sign"
+                ],
+                "properties": {
+                  "channel_uid": { "type": "string", "example": "41" },
+                  "equipment_num": { "type": "string", "example": "4c99a782c5d4c2eb" },
+                  "game_channel_id": { "type": "string", "example": "2362" },
+                  "level": { "type": "string", "example": "1" },
+                  "role_id": { "type": "string", "example": "2" },
+                  "role_name": { "type": "string", "example": "联运角色名" },
+                  "sdk_os": { "type": "string", "example": "1" },
+                  "server_id": { "type": "string", "example": "1" },
+                  "server_name": { "type": "string", "example": "测试1区" },
+                  "md5_sign": { "type": "string", "example": "99709b63b1e234117fb3fa3416c6f530" }
+                }
+              },
+              "example": {
+                "channel_uid": "41",
+                "equipment_num": "4c99a782c5d4c2eb",
+                "game_channel_id": "2362",
+                "level": "1",
+                "role_id": "2",
+                "role_name": "联运角色名",
+                "sdk_os": "1",
+                "server_id": "1",
+                "server_name": "测试1区",
+                "md5_sign": "99709b63b1e234117fb3fa3416c6f530"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "example": { "code": 200, "msg": "角色记录成功", "data": [] }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/issuesy/sdk/pay_create": {
+      "post": {
+        "tags": ["issuesy"],
+        "summary": "创建订单",
+        "operationId": "payCreate",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "channel_uid",
+                  "equipment_num",
+                  "extend",
+                  "game_channel_id",
+                  "level",
+                  "pay_amount",
+                  "props_name",
+                  "role_id",
+                  "role_name",
+                  "sdk_os",
+                  "server_id",
+                  "server_name",
+                  "md5_sign"
+                ],
+                "properties": {
+                  "channel_uid": { "type": "string", "example": "41" },
+                  "equipment_num": { "type": "string", "example": "4c99a782c5d4c2eb" },
+                  "extend": {
+                    "type": "string",
+                    "example": "1792039154856_xgsdk_1",
+                    "description": "建议每次刷新：毫秒时间戳 + _xgsdk_1，避免「游戏订单重复」"
+                  },
+                  "game_channel_id": { "type": "string", "example": "2362" },
+                  "level": { "type": "string", "example": "1" },
+                  "pay_amount": { "type": "string", "example": "0.12" },
+                  "props_name": { "type": "string", "example": "10元宝" },
+                  "role_id": { "type": "string", "example": "2" },
+                  "role_name": { "type": "string", "example": "联运角色名" },
+                  "sdk_os": { "type": "string", "example": "1" },
+                  "server_id": { "type": "string", "example": "1" },
+                  "server_name": { "type": "string", "example": "渠道测试2服" },
+                  "md5_sign": { "type": "string", "example": "07d87aeebd94d4932f01ff689e172ef0" }
+                }
+              },
+              "example": {
+                "channel_uid": "41",
+                "equipment_num": "4c99a782c5d4c2eb",
+                "extend": "1792039154856_xgsdk_1",
+                "game_channel_id": "2362",
+                "level": "1",
+                "pay_amount": "0.12",
+                "props_name": "10元宝",
+                "role_id": "2",
+                "role_name": "联运角色名",
+                "sdk_os": "1",
+                "server_id": "1",
+                "server_name": "渠道测试2服",
+                "md5_sign": "07d87aeebd94d4932f01ff689e172ef0"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "example": {
+                  "code": 200,
+                  "msg": "请求成功",
+                  "data": {
+                    "ff_order": "eaypJSwdY6XLlofIbC36J6kUZkXVJIfcbznaVtYmVyIjoiRkZf...",
+                    "login_extend": "http://yq.example.com",
+                    "callbalc_url": "http://dev.example.com/issuesy/callback/pay_callback/channel_code/17/game_id/552.html",
+                    "channel_data": [],
+                    "type": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "x-apifox-orders": [
+      "channelPackStatus",
+      "issuesyUserLogin",
+      "userRoleRecord",
+      "payCreate"
+    ]
+  },
+  "x-apifox-folder": "联运分发包/issuesy",
+  "x-issuesy-sign": {
+    "salt": "mengchuang",
+    "algo": "ksort(values) + salt -> md5 hex lower",
+    "not_game_key": "Ga9fSBlAapkyZw7W",
+    "apifox_pre_script": "function issuesyMd5Sign(body) {\n  var salt = 'mengchuang';\n  var keys = Object.keys(body || {}).filter(function (k) { return k !== 'md5_sign'; }).sort();\n  var raw = keys.map(function (k) {\n    var v = body[k];\n    return (v === null || v === undefined) ? '' : String(v);\n  }).join('') + salt;\n  return CryptoJS.MD5(raw).toString();\n}\n\nvar raw = pm.request.body.raw || '';\nvar body = JSON.parse(raw);\nif (!body.extend || pm.environment.get('refreshExtend') === '1') {\n  if (body.hasOwnProperty('extend')) {\n    body.extend = String(Date.now()) + '_xgsdk_1';\n  }\n}\ndelete body.md5_sign;\nbody.md5_sign = issuesyMd5Sign(body);\npm.request.body.update({\n  mode: 'raw',\n  raw: JSON.stringify(body),\n  options: { raw: { language: 'json' } }\n});\npm.request.headers.upsert({ key: 'Content-Type', value: 'application/x-www-form-urlencoded' });\nconsole.log('[issuesy] md5_sign=', body.md5_sign);\nconsole.log('[issuesy] body=', JSON.stringify(body));"
+  }
+}

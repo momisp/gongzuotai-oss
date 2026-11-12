@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>一杆清台</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: var(--bg-dark);
+  font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, sans-serif;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== 全局配置 ===== */
+:root {
+  --gold: #ffd700;
+  --gold-light: #ffe566;
+  --gold-dark: #b8960f;
+  --green-felt: #1a7a3a;
+  --green-glow: rgba(26, 122, 58, 0.4);
+  --wood: #5c3317;
+  --wood-light: #8b5a2b;
+  --bg-dark: #0a0e14;
+  --bg-card: rgba(255, 255, 255, 0.06);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-gold: rgba(255, 215, 0, 0.25);
+  --text-muted: rgba(255, 255, 255, 0.45);
+  --text-secondary: rgba(255, 255, 255, 0.72);
+  --shadow-gold: 0 4px 24px rgba(255, 215, 0, 0.25);
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+}
+
+/* ===== 开始界面 ===== */
+#startScreen {
+  position: fixed; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  background: var(--bg-dark);
+  z-index: 100;
+  transition: opacity 0.5s;
+}
+#startScreen.hidden { opacity: 0; pointer-events: none; }
+
+.start-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(26, 122, 58, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(255, 215, 0, 0.06) 0%, transparent 50%),
+    linear-gradient(180deg, #0a0e14 0%, #0f1a12 45%, #0a0e14 100%);
+  z-index: 0;
+}
+.start-bg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 15% 25%, rgba(230, 57, 70, 0.12) 0%, transparent 8%),
+    radial-gradient(circle at 85% 20%, rgba(72, 149, 239, 0.1) 0%, transparent 7%),
+    radial-gradient(circle at 75% 75%, rgba(155, 93, 229, 0.08) 0%, transparent 6%);
+  animation: bgFloat 8s ease-in-out infinite alternate;
+}
+.start-bg::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%);
+}
+
+@keyframes bgFloat {
+  from { opacity: 0.6; transform: scale(1); }
+  to { opacity: 1; transform: scale(1.05); }
+}
+
+.start-content {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column;
+  align-items: center;
+  padding: max(24px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+  max-height: 100vh;
+  overflow-y: auto;
+  width: 100%;
+  max-width: 400px;
+}
+
+.logo-area {
+  text-align: center;
+  margin-bottom: clamp(20px, 4vh, 32px);
+}
+
+.logo-balls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.logo-balls span {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4), inset -2px -3px 6px rgba(0,0,0,0.3), inset 2px 2px 4px rgba(255,255,255,0.25);
+  animation: ballBounce 2s ease-in-out infinite;
+}
+.logo-balls span:nth-child(1) { background: #e63946; animation-delay: 0s; }
+.logo-balls span:nth-child(2) { background: #f4d35e; animation-delay: 0.15s; }
+.logo-balls span:nth-child(3) { background: #f0f0f0; animation-delay: 0.3s; width: 34px; height: 34px; margin-top: -3px; }
+.logo-balls span:nth-child(4) { background: #4895ef; animation-delay: 0.45s; }
+.logo-balls span:nth-child(5) { background: #9b5de5; animation-delay: 0.6s; }
+
+@keyframes ballBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.game-title {
+  font-size: clamp(28px, 8vw, 40px);
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 8px rgba(255,215,0,0.3));
+  margin-bottom: 6px;
+  letter-spacing: 6px;
+}
+.game-subtitle {
+  font-size: clamp(13px, 3.2vw, 15px);
+  color: var(--text-muted);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+}
+
+.rules-box {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-lg);
+  padding: 20px 22px;
+  margin-bottom: clamp(24px, 4vh, 36px);
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.rules-box h3 {
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  text-align: center;
+  letter-spacing: 2px;
+}
+.rules-box ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.rules-box li {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 8px 12px 8px 32px;
+  position: relative;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+}
+.rules-box li::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px rgba(255,215,0,0.5);
+}
+
+.start-btn {
+  width: min(260px, 100%);
+  height: 54px;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold) 40%, var(--gold-dark));
+  border: none;
+  border-radius: 27px;
+  color: #1a1200;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: var(--shadow-gold);
+  position: relative;
+  overflow: hidden;
+}
+.start-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, transparent 50%);
+  pointer-events: none;
+}
+.start-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 12px rgba(255,215,0,0.2);
+}
+
+/* ===== 游戏界面 ===== */
+#gameScreen {
+  position: fixed; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center;
+  background:
+    radial-gradient(ellipse 100% 60% at 50% 100%, rgba(26, 122, 58, 0.12) 0%, transparent 55%),
+    var(--bg-dark);
+}
+
+/* 顶部信息栏 */
+.game-header {
+  width: 100%;
+  padding: max(10px, env(safe-area-inset-top)) 12px 10px;
+  z-index: 10;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.brand-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.brand-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 2px;
+  white-space: nowrap;
+}
+
+.stats-panel {
+  display: flex;
+  align-items: stretch;
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 6px;
+  min-width: 0;
+  text-align: center;
+}
+.stat-divider {
+  width: 1px;
+  background: var(--border-subtle);
+  flex-shrink: 0;
+}
+.stat-label {
+  display: block;
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.stat-value {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+.stat-value.gold { color: var(--gold); }
+.stat-value.status-aiming { color: #4ade80; }
+.stat-value.status-moving { color: #60a5fa; }
+.stat-value.status-done { color: var(--gold); }
+
+.stat-value-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* 进球进度点 */
+.ball-dots {
+  display: flex;
+  gap: 3px;
+}
+.ball-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+.ball-dot.pocketed {
+  background: var(--gold);
+  border-color: var(--gold-light);
+  box-shadow: 0 0 6px rgba(255,215,0,0.5);
+  transform: scale(1.15);
+}
+
+/* Canvas容器 */
+.canvas-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+  position: relative;
+  padding: 4px 12px;
+}
+.table-frame {
+  position: relative;
+  border-radius: 8px;
+  box-shadow:
+    0 0 0 1px rgba(255,215,0,0.08),
+    0 8px 32px rgba(0,0,0,0.5),
+    0 0 60px rgba(26, 122, 58, 0.15);
+}
+.table-frame::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(255,215,0,0.15), transparent 40%, rgba(26,122,58,0.1));
+  z-index: -1;
+  pointer-events: none;
+}
+#gameCanvas {
+  display: block;
+  border-radius: 6px;
+}
+
+/* 底部区域 */
+.game-footer {
+  width: 100%;
+  padding: 6px 12px max(12px, env(safe-area-inset-bottom));
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.control-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 12px 14px;
+}
+
+.power-meter-wrap {
+  margin-bottom: 10px;
+}
+.power-meter-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+.power-meter-label span:last-child {
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 12px;
+}
+.power-meter {
+  height: 5px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.power-meter-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #4ade80, #fbbf24, #ef4444);
+  transition: width 0.08s ease-out;
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.4);
+}
+
+.bottom-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.bottom-hint .hint-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* 重新开始按钮 */
+.restart-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 36px;
+  padding: 0 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s, border-color 0.15s;
+  letter-spacing: 1px;
+}
+.restart-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+.restart-btn:active {
+  transform: scale(0.94);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--border-gold);
+}
+
+/* ===== 结果弹窗 ===== */
+.result-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 200;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s;
+  padding: 20px;
+}
+.result-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.result-card {
+  background: linear-gradient(160deg, rgba(30, 45, 60, 0.95) 0%, rgba(13, 20, 32, 0.98) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-xl);
+  padding: 36px 28px 28px;
+  text-align: center;
+  width: min(320px, 100%);
+  transform: scale(0.85) translateY(20px);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+}
+.result-overlay.show .result-card {
+  transform: scale(1) translateY(0);
+}
+.result-icon {
+  font-size: 52px;
+  margin-bottom: 12px;
+  display: block;
+  animation: iconPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
+}
+@keyframes iconPop {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.result-title {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--gold);
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+}
+.result-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+.result-btn {
+  width: min(200px, 100%);
+  height: 48px;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+  border: none;
+  border-radius: 24px;
+  color: #1a1200;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.15s;
+  letter-spacing: 3px;
+  box-shadow: var(--shadow-gold);
+}
+.result-card.fail {
+  border-color: rgba(239, 68, 68, 0.35);
+}
+.result-card.fail .result-title {
+  color: #f87171;
+}
+.result-card.fail .result-btn {
+  background: linear-gradient(135deg, #fca5a5, #ef4444);
+  box-shadow: 0 4px 24px rgba(239, 68, 68, 0.3);
+}
+.result-btn:active {
+  transform: scale(0.96);
+}
+
+/* 金色光芒动画 */
+@keyframes goldenPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(255,215,0,0.3); }
+  50% { box-shadow: 0 0 60px rgba(255,215,0,0.8), 0 0 100px rgba(255,215,0,0.3); }
+}
+.golden-glow {
+  animation: goldenPulse 0.8s ease-in-out infinite;
+}
+
+/* 台球桌装饰动画 */
+@keyframes tableShine {
+  0% { opacity: 0; }
+  50% { opacity: 0.15; }
+  100% { opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- 开始界面 -->
+<div id="startScreen">
+  <div class="start-bg"></div>
+  <div class="start-content">
+    <div class="logo-area">
+      <div class="logo-balls">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="game-title">一杆清台</div>
+    </div>
+    <div class="rules-box">
+      <h3>玩法说明</h3>
+      <ul>
+        <li>按住母球向下方拖动拉杆瞄准</li>
+        <li>拖动距离控制力度，方向控制角度</li>
+        <li>松开手指发射母球</li>
+        <li>一杆将4个彩球全部打入袋口</li>
+        <li>母球入袋则挑战失败</li>
+        <li>可无限次重试当前布局</li>
+      </ul>
+    </div>
+    <button class="start-btn" id="btnStart">开始游戏</button>
+  </div>
+</div>
+
+<!-- 游戏界面 -->
+<div id="gameScreen" style="display:none;">
+  <header class="game-header">
+    <div class="header-bar">
+      <div class="header-brand">
+        <span class="brand-icon">🎱</span>
+        <span class="brand-text">一杆清台</span>
+      </div>
+      <button class="restart-btn" id="btnRestart" title="重新开始">
+        <span class="restart-icon">↻</span>
+        <span class="restart-label">重置</span>
+      </button>
+    </div>
+    <div class="stats-panel">
+      <div class="stat-item">
+        <span class="stat-label">进球</span>
+        <div class="stat-value-row">
+          <span class="stat-value gold" id="pocketedCount">0/4</span>
+          <div class="ball-dots" id="ballDots">
+            <span class="ball-dot"></span>
+            <span class="ball-dot"></span>
+            <span class="ball-dot"></span>
+            <span class="ball-dot"></span>
+          </div>
+        </div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-label">力度</span>
+        <span class="stat-value" id="powerDisplay">--</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-label">状态</span>
+        <span class="stat-value status-aiming" id="statusDisplay">瞄准</span>
+      </div>
+    </div>
+  </header>
+  <div class="canvas-wrap">
+    <div class="table-frame">
+      <canvas id="gameCanvas"></canvas>
+    </div>
+  </div>
+  <footer class="game-footer">
+    <div class="control-panel">
+      <div class="power-meter-wrap">
+        <div class="power-meter-label">
+          <span>拉杆力度</span>
+          <span id="powerMeterText">0%</span>
+        </div>
+        <div class="power-meter">
+          <div class="power-meter-fill" id="powerMeterFill"></div>
+        </div>
+      </div>
+      <div class="bottom-hint" id="bottomHint">
+        <span class="hint-icon">👆</span>
+        <span class="hint-text">按住母球向下拖动拉杆，松开击球</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- 结果弹窗 -->
+<div class="result-overlay" id="resultOverlay">
+  <div class="result-card" id="resultCard">
+    <div class="result-icon" id="resultIcon">🏆</div>
+    <div class="result-title" id="resultTitle">台球大师</div>
+    <div class="result-desc" id="resultDesc">恭喜！一杆清台！</div>
+    <button class="result-btn" id="resultBtn">再来一局</button>
+  </div>
+</div>
+
+<!-- 音效（Web Audio API） -->
+<script>
+// ===== 全局配置 =====
+const gameConfig = {
+  // 桌面参数（竖屏）
+  tableWidth: 360,          // 桌面逻辑宽度
+  tableHeight: 620,         // 桌面逻辑高度
+  cushionWidth: 28,         // 边框宽度
+  pocketRadius: 20,         // 袋口半径
+  ballRadius: 11,           // 球的半径
+
+  // 物理参数
+  friction: 0.985,          // 摩擦衰减系数（每帧）
+  minSpeed: 0.15,           // 最低速度阈值（低于此停止）
+  restitution: 0.92,        // 碰撞恢复系数
+  wallRestitution: 0.75,    // 墙壁碰撞恢复系数
+  maxPower: 22,             // 最大击球力度
+  powerScale: 0.12,         // 拖拽距离到力度的换算
+
+  // 颜色
+  feltColor: '#1a7a3a',
+  feltDarkColor: '#15692f',
+  cushionColor: '#5c3317',
+  cushionLightColor: '#8b5a2b',
+  pocketColor: '#0a0a0a',
+  cueBallColor: '#f0f0f0',
+  ballColors: ['#e63946', '#f4d35e', '#4895ef', '#9b5de5'], // 红、黄、蓝、紫
+
+  // 布局
+  ballLayout: null,         // null=默认三角布局
+};
+
+// ===== UI 辅助 =====
+const ui = {
+  setPower(percent) {
+    const pct = percent == null ? 0 : Math.round(percent);
+    const text = percent == null ? '--' : pct + '%';
+    document.getElementById('powerDisplay').textContent = text;
+    document.getElementById('powerMeterText').textContent = percent == null ? '0%' : pct + '%';
+    document.getElementById('powerMeterFill').style.width = (percent == null ? 0 : pct) + '%';
+  },
+  setStatus(text) {
+    const el = document.getElementById('statusDisplay');
+    el.textContent = text;
+    el.className = 'stat-value';
+    if (text === '瞄准') el.classList.add('status-aiming');
+    else if (text === '运动中') el.classList.add('status-moving');
+    else el.classList.add('status-done');
+  },
+  setPocketed(count, total) {
+    document.getElementById('pocketedCount').textContent = count + '/' + total;
+    document.querySelectorAll('#ballDots .ball-dot').forEach((dot, i) => {
+      dot.classList.toggle('pocketed', i < count);
+    });
+  },
+  setHint(text, icon) {
+    const hint = document.getElementById('bottomHint');
+    hint.querySelector('.hint-text').textContent = text;
+    if (icon) hint.querySelector('.hint-icon').textContent = icon;
+  }
+};
+
+// ===== 音效引擎 =====
+class SoundEngine {
+  constructor() {
+    this.ctx = null;
+    this.enabled = true;
+  }
+  init() {
+    try {
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    } catch(e) {
+      this.enabled = false;
+    }
+  }
+  play(type) {
+    if (!this.enabled || !this.ctx) return;
+    if (this.ctx.state === 'suspended') this.ctx.resume();
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    switch(type) {
+      case 'hit': // 球碰撞
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, now);
+        osc.frequency.exponentialRampToValueAtTime(200, now + 0.1);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+        osc.start(now);
+        osc.stop(now + 0.15);
+        break;
+      case 'pocket': // 进袋
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.15);
+        gain.gain.setValueAtTime(0.4, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+        osc.start(now);
+        osc.stop(now + 0.25);
+        // 加一个和弦
+        const osc2 = this.ctx.createOscillator();
+        const gain2 = this.ctx.createGain();
+        osc2.connect(gain2);
+        gain2.connect(this.ctx.destination);
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(900, now);
+        osc2.frequency.exponentialRampToValueAtTime(1800, now + 0.15);
+        gain2.gain.setValueAtTime(0.2, now);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+        osc2.start(now);
+        osc2.stop(now + 0.25);
+        break;
+      case 'wall': // 墙壁碰撞
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(300, now);
+        osc.frequency.exponentialRampToValueAtTime(100, now + 0.08);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+        osc.start(now);
+        osc.stop(now + 0.1);
+        break;
+      case 'win': // 通关
+        [523, 659, 784, 1047].forEach((freq, i) => {
+          const o = this.ctx.createOscillator();
+          const g = this.ctx.createGain();
+          o.connect(g);
+          g.connect(this.ctx.destination);
+          o.type = 'sine';
+          o.frequency.setValueAtTime(freq, now + i * 0.15);
+          g.gain.setValueAtTime(0.3, now + i * 0.15);
+          g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.15 + 0.4);
+          o.start(now + i * 0.15);
+          o.stop(now + i * 0.15 + 0.4);
+        });
+        break;
+      case 'fail': // 失败
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(300, now);
+        osc.frequency.exponentialRampToValueAtTime(80, now + 0.4);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+        osc.start(now);
+        osc.stop(now + 0.5);
+        break;
+      case 'shoot': // 击球
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(400, now);
+        osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+        osc.start(now);
+        osc.stop(now + 0.12);
+        break;
+    }
+  }
+}
+
+// ===== 向量工具 =====
+class Vec2 {
+  constructor(x = 0, y = 0) { this.x = x; this.y = y; }
+  add(v) { return new Vec2(this.x + v.x, this.y + v.y); }
+  sub(v) { return new Vec2(this.x - v.x, this.y - v.y); }
+  mul(s) { return new Vec2(this.x * s, this.y * s); }
+  len() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+  norm() { const l = this.len(); return l > 0 ? this.mul(1/l) : new Vec2(); }
+  dot(v) { return this.x * v.x + this.y * v.y; }
+  dist(v) { return this.sub(v).len(); }
+  clone() { return new Vec2(this.x, this.y); }
+  lerp(v, t) { return new Vec2(this.x + (v.x - this.x) * t, this.y + (v.y - this.y) * t); }
+}
+
+// ===== 进袋特效 =====
+class PocketEffect {
+  constructor(ballX, ballY, pocketX, pocketY, color, type) {
+    this.x = pocketX;
+    this.y = pocketY;
+    this.color = color;
+    this.type = type;
+    this.life = 50;
+    this.particles = [];
+    this.sparks = [];
+    this.rings = [{ r: 8, alpha: 0.9 }];
+    this.flash = 1;
+
+    const count = type === 'fail' ? 14 : 22;
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 1.2 + Math.random() * 4;
+      this.particles.push({
+        x: ballX + (Math.random() - 0.5) * 6,
+        y: ballY + (Math.random() - 0.5) * 6,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        size: 1.5 + Math.random() * 3.5,
+        alpha: 1,
+        decay: 0.018 + Math.random() * 0.025
+      });
+    }
+
+    for (let i = 0; i < 8; i++) {
+      const angle = (i / 8) * Math.PI * 2 + Math.random() * 0.4;
+      this.sparks.push({
+        x: pocketX,
+        y: pocketY,
+        vx: Math.cos(angle) * (2.5 + Math.random() * 2),
+        vy: Math.sin(angle) * (2.5 + Math.random() * 2),
+        len: 6 + Math.random() * 8,
+        alpha: 1
+      });
+    }
+  }
+
+  update() {
+    this.life--;
+    this.flash *= 0.88;
+    for (const p of this.particles) {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vx *= 0.94;
+      p.vy *= 0.94;
+      p.vy += 0.06;
+      p.alpha -= p.decay;
+    }
+    for (const s of this.sparks) {
+      s.x += s.vx;
+      s.y += s.vy;
+      s.alpha -= 0.045;
+    }
+    for (const ring of this.rings) {
+      ring.r += 2.2;
+      ring.alpha *= 0.9;
+    }
+  }
+
+  get alive() {
+    return this.life > 0;
+  }
+
+  draw(ctx) {
+    const glowColor = this.type === 'fail' ? '#ef4444' : (this.type === 'win' ? '#ffd700' : this.color);
+
+    if (this.flash > 0.05) {
+      const midAlpha = this.type === 'fail' ? this.flash * 0.55 : this.flash * 0.45;
+      const midColor = this.type === 'fail'
+        ? `rgba(239,68,68,${midAlpha})`
+        : `rgba(255,215,0,${midAlpha})`;
+      const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, 28);
+      grad.addColorStop(0, `rgba(255,255,255,${this.flash * 0.55})`);
+      grad.addColorStop(0.45, midColor);
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, 28, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    for (const ring of this.rings) {
+      if (ring.alpha < 0.03) continue;
+      ctx.strokeStyle = this.type === 'fail'
+        ? `rgba(239,68,68,${ring.alpha})`
+        : `rgba(255,215,0,${ring.alpha * 0.7})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, ring.r, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    for (const s of this.sparks) {
+      if (s.alpha <= 0) continue;
+      ctx.strokeStyle = `rgba(255,255,255,${s.alpha})`;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(s.x, s.y);
+      ctx.lineTo(s.x - s.vx * 1.5, s.y - s.vy * 1.5);
+      ctx.stroke();
+    }
+
+    for (const p of this.particles) {
+      if (p.alpha <= 0) continue;
+      ctx.globalAlpha = p.alpha;
+      ctx.fillStyle = p.alpha > 0.5 ? this.color : glowColor;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * p.alpha, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+}
+
+// ===== 球类 =====
+class Ball {
+  constructor(x, y, color, id) {
+    this.pos = new Vec2(x, y);
+    this.vel = new Vec2(0, 0);
+    this.radius = gameConfig.ballRadius;
+    this.color = color;
+    this.id = id;
+    this.pocketed = false;
+    this.rotation = 0;
+    this.sinking = false;
+    this.sinkProgress = 0;
+    this.sinkStart = null;
+    this.sinkTarget = null;
+    this.sinkScale = 1;
+  }
+  get speed() { return this.vel.len(); }
+  get isMoving() { return this.speed > gameConfig.minSpeed; }
+  update() {
+    if (this.pocketed || this.sinking) return;
+    this.pos = this.pos.add(this.vel);
+    this.vel = this.vel.mul(gameConfig.friction);
+    if (this.speed < gameConfig.minSpeed) {
+      this.vel = new Vec2(0, 0);
+    }
+    // 滚动旋转
+    this.rotation += this.speed * 0.1;
+  }
+}
+
+// ===== 游戏主类 =====
+class PoolGame {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.sound = new SoundEngine();
+    this.balls = [];
+    this.pockets = [];
+    this.cueBall = null;
+    this.state = 'aiming'; // aiming | shooting | moving | win | fail
+    this.pocketedBalls = 0;
+    this.totalTargetBalls = 4;
+
+    // 瞄准
+    this.isDragging = false;
+    this.dragStart = null;
+    this.dragEnd = null;
+    this.aimAngle = 0;
+    this.aimPower = 0;
+
+    // 缩放
+    this.scale = 1;
+    this.offsetX = 0;
+    this.offsetY = 0;
+
+    // 金色光芒效果
+    this.goldenTimer = 0;
+    this.goldenActive = false;
+
+    // 进袋特效
+    this.pocketEffects = [];
+
+    // 背景图
+    this.bgImage = null;
+
+    this.init();
+  }
+
+  init() {
+    this.setupCanvas();
+    this.setupPockets();
+    this.setupBalls();
+    this.bindEvents();
+    this.loop();
+  }
+
+  setupCanvas() {
+    const wrap = this.canvas.closest('.canvas-wrap');
+    const maxW = wrap.clientWidth - 8;
+    const maxH = wrap.clientHeight - 8;
+
+    const tableW = gameConfig.tableWidth + gameConfig.cushionWidth * 2;
+    const tableH = gameConfig.tableHeight + gameConfig.cushionWidth * 2;
+    const ratio = tableW / tableH;
+
+    let w, h;
+    if (maxW / maxH > ratio) {
+      h = maxH;
+      w = h * ratio;
+    } else {
+      w = maxW;
+      h = w / ratio;
+    }
+
+    const dpr = window.devicePixelRatio || 1;
+    this.canvas.width = w * dpr;
+    this.canvas.height = h * dpr;
+    this.canvas.style.width = w + 'px';
+    this.canvas.style.height = h + 'px';
+    this.ctx.scale(dpr, dpr);
+
+    this.displayW = w;
+    this.displayH = h;
+    this.scale = w / tableW;
+    this.offsetX = 0;
+    this.offsetY = 0;
+  }
+
+  setupPockets() {
+    const tw = gameConfig.tableWidth;
+    const th = gameConfig.tableHeight;
+    const cw = gameConfig.cushionWidth;
+    const pr = gameConfig.pocketRadius;
+    // 6个袋口位置（相对于桌面左上角）
+    const offsets = [
+      { x: cw + 2, y: cw + 2 },             // 左上
+      { x: cw + tw/2, y: cw - 2 },           // 上中
+      { x: cw + tw - 2, y: cw + 2 },         // 右上
+      { x: cw + 2, y: cw + th - 2 },         // 左下
+      { x: cw + tw/2, y: cw + th + 2 },      // 下中
+      { x: cw + tw - 2, y: cw + th - 2 },    // 右下
+    ];
+    this.pockets = offsets.map((o, i) => ({
+      pos: new Vec2(o.x, o.y),
+      radius: pr,
+      id: i
+    }));
+  }
+
+  setupBalls() {
+    this.balls = [];
+    const tw = gameConfig.tableWidth;
+    const th = gameConfig.tableHeight;
+    const cw = gameConfig.cushionWidth;
+    const br = gameConfig.ballRadius;
+
+    // 母球 - 下方开球区
+    this.cueBall = new Ball(cw + tw * 0.5, cw + th * 0.82, gameConfig.cueBallColor, 'cue');
+    this.cueBall.sinkScale = 1;
+    this.balls.push(this.cueBall);
+
+    // 4个目标球 - 上方三角布局
+    const startX = cw + tw * 0.5;
+    const startY = cw + th * 0.22;
+    const gap = br * 2.2;
+
+    // 三角排列（1-2-1，朝下）
+    const positions = [
+      { x: startX, y: startY },
+      { x: startX - gap * 0.5, y: startY + gap * Math.cos(Math.PI/6) },
+      { x: startX + gap * 0.5, y: startY + gap * Math.cos(Math.PI/6) },
+      { x: startX, y: startY + gap * 2 * Math.cos(Math.PI/6) },
+    ];
+
+    positions.forEach((p, i) => {
+      const ball = new Ball(p.x, p.y, gameConfig.ballColors[i], i);
+      ball.sinkScale = 1;
+      this.balls.push(ball);
+    });
+
+    this.totalTargetBalls = 4;
+    this.pocketedBalls = 0;
+    this.state = 'aiming';
+    this.goldenActive = false;
+    this.goldenTimer = 0;
+    this.pocketEffects = [];
+
+    ui.setPocketed(0, 4);
+    ui.setStatus('瞄准');
+    ui.setPower(null);
+    ui.setHint('按住母球向下拖动拉杆，松开击球', '👆');
+  }
+
+  // 逻辑坐标 → 显示坐标
+  toScreen(pos) {
+    return new Vec2(
+      (pos.x * this.scale) + this.offsetX,
+      (pos.y * this.scale) + this.offsetY
+    );
+  }
+
+  // 显示坐标 → 逻辑坐标
+  toLogic(sx, sy) {
+    return new Vec2(
+      (sx - this.offsetX) / this.scale,
+      (sy - this.offsetY) / this.scale
+    );
+  }
+
+  bindEvents() {
+    const c = this.canvas;
+
+    const getPos = (e) => {
+      const rect = c.getBoundingClientRect();
+      const t = e.touches ? e.touches[0] : e;
+      return { x: t.clientX - rect.left, y: t.clientY - rect.top };
+    };
+
+    const onStart = (e) => {
+      e.preventDefault();
+      if (this.state !== 'aiming') return;
+      const p = getPos(e);
+      const logic = this.toLogic(p.x, p.y);
+      // 检查是否点在母球附近（放大触摸区域）
+      const dist = logic.dist(this.cueBall.pos);
+      if (dist < gameConfig.ballRadius * 3) {
+        this.isDragging = true;
+        this.dragStart = logic.clone();
+        this.dragEnd = logic.clone();
+      }
+    };
+
+    const onMove = (e) => {
+      e.preventDefault();
+      if (!this.isDragging) return;
+      const p = getPos(e);
+      this.dragEnd = this.toLogic(p.x, p.y);
+      // 计算力度和方向
+      const diff = this.dragStart.sub(this.dragEnd);
+      this.aimPower = Math.min(diff.len() * gameConfig.powerScale, gameConfig.maxPower);
+      this.aimAngle = Math.atan2(diff.y, diff.x);
+      ui.setPower(this.aimPower / gameConfig.maxPower * 100);
+    };
+
+    const onEnd = (e) => {
+      e.preventDefault();
+      if (!this.isDragging) return;
+      this.isDragging = false;
+      if (this.aimPower < 0.5) {
+        this.aimPower = 0;
+        ui.setPower(null);
+        return;
+      }
+      this.shoot();
+    };
+
+    c.addEventListener('touchstart', onStart, { passive: false });
+    c.addEventListener('touchmove', onMove, { passive: false });
+    c.addEventListener('touchend', onEnd, { passive: false });
+    c.addEventListener('mousedown', onStart);
+    c.addEventListener('mousemove', onMove);
+    c.addEventListener('mouseup', onEnd);
+  }
+
+  shoot() {
+    const angle = this.aimAngle;
+    const power = this.aimPower;
+    this.cueBall.vel = new Vec2(
+      Math.cos(angle) * power,
+      Math.sin(angle) * power
+    );
+    this.state = 'moving';
+    this.aimPower = 0;
+    this.sound.play('shoot');
+    ui.setStatus('运动中');
+    ui.setPower(null);
+    ui.setHint('等待球停止...', '⏳');
+  }
+
+  checkPocket(ball) {
+    for (const pocket of this.pockets) {
+      const dist = ball.pos.dist(pocket.pos);
+      if (dist < pocket.radius + ball.radius * 0.3) {
+        return pocket;
+      }
+    }
+    return null;
+  }
+
+  handlePockets() {
+    for (const ball of this.balls) {
+      if (ball.pocketed || ball.sinking) continue;
+      const pocket = this.checkPocket(ball);
+      if (pocket) {
+        this.startBallSink(ball, pocket);
+      }
+    }
+  }
+
+  startBallSink(ball, pocket) {
+    ball.sinking = true;
+    ball.sinkProgress = 0;
+    ball.sinkStart = ball.pos.clone();
+    ball.sinkTarget = pocket.pos.clone();
+    ball.vel = new Vec2(0, 0);
+
+    const effectType = ball.id === 'cue' ? 'fail' : 'normal';
+    this.pocketEffects.push(new PocketEffect(
+      ball.pos.x, ball.pos.y,
+      pocket.pos.x, pocket.pos.y,
+      ball.color, effectType
+    ));
+    this.sound.play('pocket');
+  }
+
+  finishBallSink(ball) {
+    ball.sinking = false;
+    ball.pocketed = true;
+    ball.sinkScale = 0;
+
+    if (ball.id === 'cue') {
+      this.state = 'fail';
+      setTimeout(() => this.showResult('fail'), 600);
+    } else {
+      this.pocketedBalls++;
+      ui.setPocketed(this.pocketedBalls, this.totalTargetBalls);
+      if (this.pocketedBalls >= this.totalTargetBalls) {
+        this.state = 'win';
+        this.goldenActive = true;
+        this.goldenTimer = 0;
+        this.pocketEffects.push(new PocketEffect(
+          ball.sinkTarget.x, ball.sinkTarget.y,
+          ball.sinkTarget.x, ball.sinkTarget.y,
+          '#ffd700', 'win'
+        ));
+        this.sound.play('win');
+        setTimeout(() => this.showResult('win'), 1200);
+      }
+    }
+  }
+
+  updateSinkingBalls() {
+    for (const ball of this.balls) {
+      if (!ball.sinking) continue;
+      ball.sinkProgress += 0.07;
+      const t = ball.sinkProgress * ball.sinkProgress;
+      ball.pos = ball.sinkStart.lerp(ball.sinkTarget, t);
+      ball.sinkScale = Math.max(0, 1 - t * 1.1);
+      ball.rotation += 0.4;
+      if (ball.sinkProgress >= 1) {
+        this.finishBallSink(ball);
+      }
+    }
+  }
+
+  updatePocketEffects() {
+    this.pocketEffects = this.pocketEffects.filter(e => {
+      e.update();
+      return e.alive;
+    });
+  }
+
+  handleWallCollision(ball) {
+    if (ball.pocketed) return;
+    const cw = gameConfig.cushionWidth;
+    const tw = gameConfig.tableWidth;
+    const th = gameConfig.tableHeight;
+    const br = ball.radius;
+    const wr = gameConfig.wallRestitution;
+
+    // 左墙
+    if (ball.pos.x - br < cw) {
+      ball.pos.x = cw + br;
+      ball.vel.x = Math.abs(ball.vel.x) * wr;
+      this.sound.play('wall');
+    }
+    // 右墙
+    if (ball.pos.x + br > cw + tw) {
+      ball.pos.x = cw + tw - br;
+      ball.vel.x = -Math.abs(ball.vel.x) * wr;
+      this.sound.play('wall');
+    }
+    // 上墙
+    if (ball.pos.y - br < cw) {
+      ball.pos.y = cw + br;
+      ball.vel.y = Math.abs(ball.vel.y) * wr;
+      this.sound.play('wall');
+    }
+    // 下墙
+    if (ball.pos.y + br > cw + th) {
+      ball.pos.y = cw + th - br;
+      ball.vel.y = -Math.abs(ball.vel.y) * wr;
+      this.sound.play('wall');
+    }
+  }
+
+  handleBallCollisions() {
+    const activeBalls = this.balls.filter(b => !b.pocketed);
+    for (let i = 0; i < activeBalls.length; i++) {
+      for (let j = i + 1; j < activeBalls.length; j++) {
+        const a = activeBalls[i];
+        const b = activeBalls[j];
+        const diff = a.pos.sub(b.pos);
+        const dist = diff.len();
+        const minDist = a.radius + b.radius;
+
+        if (dist < minDist && dist > 0) {
+          // 分离球
+          const normal = diff.norm();
+          const overlap = minDist - dist;
+          a.pos = a.pos.add(normal.mul(overlap * 0.5));
+          b.pos = b.pos.sub(normal.mul(overlap * 0.5));
+
+          // 弹性碰撞
+          const relVel = a.vel.sub(b.vel);
+          const velAlongNormal = relVel.dot(normal);
+
+          if (velAlongNormal > 0) continue; // 已经分离
+
+          const restitution = gameConfig.restitution;
+          const impulse = -(1 + restitution) * velAlongNormal / 2;
+
+          a.vel = a.vel.add(normal.mul(impulse));
+          b.vel = b.vel.sub(normal.mul(impulse));
+
+          this.sound.play('hit');
+        }
+      }
+    }
+  }
+
+  checkAllStopped() {
+    return this.balls.every(b => b.pocketed || (!b.isMoving && !b.sinking));
+  }
+
+  update() {
+    this.updateSinkingBalls();
+    this.updatePocketEffects();
+
+    if (this.state === 'moving') {
+      // 更新所有球位置
+      for (const ball of this.balls) {
+        ball.update();
+      }
+
+      // 碰撞检测
+      this.handleBallCollisions();
+      for (const ball of this.balls) {
+        this.handleWallCollision(ball);
+      }
+      this.handlePockets();
+
+      // 检查是否全部停止
+      if (this.state === 'moving' && this.checkAllStopped()) {
+        if (this.pocketedBalls < this.totalTargetBalls) {
+          this.state = 'aiming';
+          ui.setStatus('瞄准');
+          ui.setHint('按住母球向下拖动拉杆，松开击球', '👆');
+        }
+      }
+    }
+
+    if (this.goldenActive) {
+      this.goldenTimer++;
+    }
+  }
+
+  draw() {
+    const ctx = this.ctx;
+    const s = this.scale;
+    ctx.clearRect(0, 0, this.displayW, this.displayH);
+
+    ctx.save();
+    ctx.scale(s, s);
+
+    this.drawTable(ctx);
+    this.drawPockets(ctx);
+    this.drawBalls(ctx);
+    this.drawPocketEffects(ctx);
+    if (this.isDragging && this.state === 'aiming') {
+      this.drawAimLine(ctx);
+    }
+    if (this.goldenActive) {
+      this.drawGoldenEffect(ctx);
+    }
+
+    ctx.restore();
+  }
+
+  drawTable(ctx) {
+    const cw = gameConfig.cushionWidth;
+    const tw = gameConfig.tableWidth;
+    const th = gameConfig.tableHeight;
+
+    // 外框（木质边框）
+    const outerW = tw + cw * 2;
+    const outerH = th + cw * 2;
+
+    // 木质边框底色
+    ctx.fillStyle = gameConfig.cushionColor;
+    ctx.beginPath();
+    ctx.roundRect(0, 0, outerW, outerH, 8);
+    ctx.fill();
+
+    // 木质边框纹理
+    const grad = ctx.createLinearGradient(0, 0, outerW, outerH);
+    grad.addColorStop(0, gameConfig.cushionLightColor);
+    grad.addColorStop(0.3, gameConfig.cushionColor);
+    grad.addColorStop(0.6, gameConfig.cushionLightColor);
+    grad.addColorStop(1, gameConfig.cushionColor);
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.roundRect(0, 0, outerW, outerH, 8);
+    ctx.fill();
+
+    // 内框线
+    ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.roundRect(cw - 1, cw - 1, tw + 2, th + 2, 2);
+    ctx.stroke();
+
+    // 台面（绿色台呢）
+    const feltGrad = ctx.createRadialGradient(
+      cw + tw/2, cw + th/2, 0,
+      cw + tw/2, cw + th/2, Math.max(tw, th) * 0.6
+    );
+    feltGrad.addColorStop(0, '#1f8c42');
+    feltGrad.addColorStop(1, gameConfig.feltColor);
+    ctx.fillStyle = feltGrad;
+    ctx.fillRect(cw, cw, tw, th);
+
+    // 台呢纹理（细微噪点感）
+    ctx.fillStyle = 'rgba(0,0,0,0.02)';
+    for (let i = 0; i < 60; i++) {
+      const x = cw + Math.random() * tw;
+      const y = cw + Math.random() * th;
+      ctx.fillRect(x, y, 2, 2);
+    }
+
+    // 开球线（竖屏：水平线）
+    const lineY = cw + th * 0.75;
+    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(cw, lineY);
+    ctx.lineTo(cw + tw, lineY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // 开球半圆（下方开球区）
+    ctx.beginPath();
+    ctx.arc(cw + tw/2, lineY, tw * 0.22, 0, Math.PI);
+    ctx.stroke();
+
+    // 中心点
+    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    ctx.beginPath();
+    ctx.arc(cw + tw/2, cw + th/2, 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 边框上的菱形装饰
+    const diamonds = [0.25, 0.5, 0.75];
+    ctx.fillStyle = '#c4a35a';
+    diamonds.forEach(ratio => {
+      // 上
+      this.drawDiamond(ctx, cw + tw * ratio, cw * 0.5, 4);
+      // 下
+      this.drawDiamond(ctx, cw + tw * ratio, cw + th + cw * 0.5, 4);
+    });
+    [0.25, 0.5, 0.75].forEach(ratio => {
+      // 左
+      this.drawDiamond(ctx, cw * 0.5, cw + th * ratio, 4);
+      // 右
+      this.drawDiamond(ctx, cw + tw + cw * 0.5, cw + th * ratio, 4);
+    });
+  }
+
+  drawDiamond(ctx, x, y, size) {
+    ctx.beginPath();
+    ctx.moveTo(x, y - size);
+    ctx.lineTo(x + size * 0.6, y);
+    ctx.lineTo(x, y + size);
+    ctx.lineTo(x - size * 0.6, y);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  drawPockets(ctx) {
+    this.pockets.forEach(p => {
+      // 袋口阴影
+      ctx.fillStyle = 'rgba(0,0,0,0.4)';
+      ctx.beginPath();
+      ctx.arc(p.pos.x, p.pos.y, p.radius + 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 袋口
+      ctx.fillStyle = gameConfig.pocketColor;
+      ctx.beginPath();
+      ctx.arc(p.pos.x, p.pos.y, p.radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 袋口内圈
+      ctx.fillStyle = '#151515';
+      ctx.beginPath();
+      ctx.arc(p.pos.x, p.pos.y, p.radius - 3, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  drawPocketEffects(ctx) {
+    this.pocketEffects.forEach(e => e.draw(ctx));
+  }
+
+  drawBalls(ctx) {
+    // 先画阴影
+    this.balls.forEach(ball => {
+      if (ball.pocketed || ball.sinkScale <= 0.05) return;
+      const sp = this.toScreen(ball.pos);
+      const sr = ball.radius * this.scale;
+      // 阴影
+      ctx.fillStyle = 'rgba(0,0,0,0.25)';
+      ctx.beginPath();
+      ctx.ellipse(
+        (ball.pos.x + 2) , (ball.pos.y + 3),
+        ball.radius * 0.9, ball.radius * 0.5,
+        0, 0, Math.PI * 2
+      );
+      ctx.fill();
+    });
+
+    // 再画球
+    this.balls.forEach(ball => {
+      if (ball.pocketed || ball.sinkScale <= 0.05) return;
+      this.drawBall(ctx, ball);
+    });
+  }
+
+  drawBall(ctx, ball) {
+    const x = ball.pos.x;
+    const y = ball.pos.y;
+    const r = ball.radius * (ball.sinkScale || 1);
+    if (r < 0.5) return;
+
+    const alpha = ball.sinking ? Math.max(0.3, ball.sinkScale) : 1;
+    ctx.save();
+    ctx.globalAlpha = alpha;
+
+    // 球体底色
+    ctx.fillStyle = ball.color;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 球体渐变（3D效果）
+    const grad = ctx.createRadialGradient(
+      x - r * 0.3, y - r * 0.3, r * 0.1,
+      x, y, r
+    );
+    grad.addColorStop(0, 'rgba(255,255,255,0.5)');
+    grad.addColorStop(0.4, 'rgba(255,255,255,0.1)');
+    grad.addColorStop(1, 'rgba(0,0,0,0.3)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 高光
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.beginPath();
+    ctx.arc(x - r * 0.25, y - r * 0.25, r * 0.25, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 彩球编号
+    if (ball.id !== 'cue') {
+      // 白色圆圈背景
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(x, y, r * 0.4, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 数字
+      ctx.fillStyle = '#333';
+      ctx.font = `bold ${r * 0.55}px Arial`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(String(ball.id + 1), x, y + 0.5);
+    }
+
+    // 边缘描边
+    ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  drawAimLine(ctx) {
+    const cue = this.cueBall;
+    if (cue.pocketed || cue.sinking) return;
+
+    const diff = this.dragStart.sub(this.dragEnd);
+    const dir = diff.len() > 0 ? diff.norm() : new Vec2(1, 0);
+    const power = this.aimPower;
+    const lineLen = 60 + power * 8;
+
+    // 瞄准虚线
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.moveTo(cue.pos.x, cue.pos.y);
+    ctx.lineTo(
+      cue.pos.x + dir.x * lineLen,
+      cue.pos.y + dir.y * lineLen
+    );
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // 瞄准端点圆圈
+    const endX = cue.pos.x + dir.x * lineLen;
+    const endY = cue.pos.y + dir.y * lineLen;
+    ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(endX, endY, 4, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // 力度条（在母球旁边）
+    const barX = cue.pos.x - 20;
+    const barY = cue.pos.y - 25;
+    const barW = 40;
+    const barH = 5;
+    const ratio = power / gameConfig.maxPower;
+
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    ctx.fillRect(barX, barY, barW, barH);
+
+    // 力度颜色
+    let powerColor;
+    if (ratio < 0.33) powerColor = '#4ade80';
+    else if (ratio < 0.66) powerColor = '#fbbf24';
+    else powerColor = '#ef4444';
+
+    ctx.fillStyle = powerColor;
+    ctx.fillRect(barX, barY, barW * ratio, barH);
+
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    ctx.lineWidth = 0.5;
+    ctx.strokeRect(barX, barY, barW, barH);
+
+    // 球杆指示（从母球反方向延伸）
+    const cueLen = 80;
+    const cueStartDist = cue.radius + 4;
+    const sx = cue.pos.x - dir.x * cueStartDist;
+    const sy = cue.pos.y - dir.y * cueStartDist;
+    const ex = cue.pos.x - dir.x * (cueStartDist + cueLen);
+    const ey = cue.pos.y - dir.y * (cueStartDist + cueLen);
+
+    // 球杆
+    ctx.strokeStyle = '#c4a35a';
+    ctx.lineWidth = 4;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(sx, sy);
+    ctx.lineTo(ex, ey);
+    ctx.stroke();
+
+    // 球杆尖端
+    ctx.strokeStyle = '#e8d5a3';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(sx, sy);
+    ctx.lineTo(
+      sx - dir.x * 8,
+      sy - dir.y * 8
+    );
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  drawGoldenEffect(ctx) {
+    const cw = gameConfig.cushionWidth;
+    const tw = gameConfig.tableWidth;
+    const th = gameConfig.tableHeight;
+    const alpha = 0.15 + 0.1 * Math.sin(this.goldenTimer * 0.08);
+
+    ctx.fillStyle = `rgba(255, 215, 0, ${alpha})`;
+    ctx.fillRect(cw, cw, tw, th);
+
+    // 光芒粒子
+    const particleCount = 12;
+    for (let i = 0; i < particleCount; i++) {
+      const angle = (this.goldenTimer * 0.02) + (i * Math.PI * 2 / particleCount);
+      const radius = 50 + Math.sin(this.goldenTimer * 0.05 + i) * 40;
+      const px = cw + tw/2 + Math.cos(angle) * radius;
+      const py = cw + th/2 + Math.sin(angle) * radius;
+      const size = 2 + Math.sin(this.goldenTimer * 0.1 + i * 0.5) * 1.5;
+      ctx.fillStyle = `rgba(255, 215, 0, ${0.5 + 0.3 * Math.sin(this.goldenTimer * 0.1 + i)})`;
+      ctx.beginPath();
+      ctx.arc(px, py, size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  showResult(type) {
+    const overlay = document.getElementById('resultOverlay');
+    const icon = document.getElementById('resultIcon');
+    const title = document.getElementById('resultTitle');
+    const desc = document.getElementById('resultDesc');
+    const card = document.getElementById('resultCard');
+
+    if (type === 'win') {
+      icon.textContent = '🏆';
+      title.textContent = '台球大师';
+      desc.textContent = '恭喜！一杆清台！\n所有彩球已全部入袋';
+      card.classList.add('golden-glow');
+      card.classList.remove('fail');
+    } else {
+      icon.textContent = '😢';
+      title.textContent = '挑战失败';
+      desc.textContent = '母球入袋了！\n调整力度和角度再试试';
+      card.classList.remove('golden-glow');
+      card.classList.add('fail');
+    }
+
+    overlay.classList.add('show');
+  }
+
+  hideResult() {
+    document.getElementById('resultOverlay').classList.remove('show');
+    const card = document.getElementById('resultCard');
+    card.classList.remove('golden-glow', 'fail');
+  }
+
+  reset() {
+    this.hideResult();
+    this.setupBalls();
+  }
+
+  loop() {
+    this.update();
+    this.draw();
+    requestAnimationFrame(() => this.loop());
+  }
+}
+
+// ===== 启动 =====
+let game = null;
+
+window.addEventListener('load', () => {
+  const canvas = document.getElementById('gameCanvas');
+  game = new PoolGame(canvas);
+
+  document.getElementById('btnStart').addEventListener('click', () => {
+    game.sound.init();
+    document.getElementById('startScreen').classList.add('hidden');
+    setTimeout(() => {
+      document.getElementById('startScreen').style.display = 'none';
+      document.getElementById('gameScreen').style.display = 'flex';
+      game.setupCanvas();
+    }, 500);
+  });
+
+  document.getElementById('btnRestart').addEventListener('click', () => {
+    game.reset();
+  });
+
+  document.getElementById('resultBtn').addEventListener('click', () => {
+    game.reset();
+  });
+
+  // 窗口大小变化
+  window.addEventListener('resize', () => {
+    if (game) game.setupCanvas();
+  });
+});
+</script>
+</body>
+</html>

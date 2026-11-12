@@ -1,0 +1,19 @@
+{
+  "_comment": "复制为 oa_promote_config.json；已 gitignore。这是 OA 渠道商务，不是遨游新商务。",
+  "system": "oa_promote",
+  "baseUrl": "http://oa.example.com",
+  "loginPath": "/api/base/login",
+  "addBusinessPath": "/api/tabPromoteBusiness/add",
+  "listBusinessPath": "/api/tabPromoteBusiness/list",
+  "username": "19092424797",
+  "password": "******",
+  "createDefaults": {
+    "accountPrefix": "商务L1",
+    "uniqueAccount": true,
+    "password": "111111",
+    "real_name": "潘嘻嘻",
+    "mobile_phone": "19092424797",
+    "status": 1,
+    "level": 1
+  }
+}

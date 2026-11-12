@@ -1,0 +1,5791 @@
+{
+  "version": 2,
+  "matches": [
+    {
+      "started_at": "2026-09-11T13:09:03+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650
+      },
+      "fighters": [
+        {
+          "name": "克拉拉",
+          "tag": "clara",
+          "base_hp": 3800.0,
+          "base_atk": 650.0,
+          "move_speed": 135.0
+        },
+        {
+          "name": "景元",
+          "tag": "jingyuan",
+          "base_hp": 3400.0,
+          "base_atk": 720.0,
+          "move_speed": 153.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "克拉拉 VS 景元 开战"
+        },
+        {
+          "time_sec": 7.56,
+          "message": "克拉拉 我也想帮上忙 → 景元 -97"
+        },
+        {
+          "time_sec": 7.56,
+          "message": "景元 石火流光 → 克拉拉 -97"
+        },
+        {
+          "time_sec": 7.56,
+          "message": "克拉拉 史瓦罗反击 → 景元 -58"
+        },
+        {
+          "time_sec": 8.01,
+          "message": "景元 神君·3段 → 克拉拉 -90"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "克拉拉 进化为「反击标记」"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "景元 进化为「神君蓄势」"
+        },
+        {
+          "time_sec": 14.29,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 景元 -257"
+        },
+        {
+          "time_sec": 14.29,
+          "message": "景元 紫霄震曜 → 克拉拉 -128"
+        },
+        {
+          "time_sec": 14.29,
+          "message": "克拉拉 史瓦罗反击 → 景元 -64"
+        },
+        {
+          "time_sec": 15.87,
+          "message": "景元 神君·5段 → 克拉拉 -166"
+        },
+        {
+          "time_sec": 18.15,
+          "message": "克拉拉 我也想帮上忙 → 景元 -107"
+        },
+        {
+          "time_sec": 18.15,
+          "message": "景元 石火流光 → 克拉拉 -106"
+        },
+        {
+          "time_sec": 18.15,
+          "message": "克拉拉 史瓦罗反击 → 景元 -64"
+        },
+        {
+          "time_sec": 19.68,
+          "message": "景元 紫霄震曜 → 克拉拉 -128"
+        },
+        {
+          "time_sec": 19.68,
+          "message": "克拉拉 史瓦罗反击 → 景元 -64"
+        },
+        {
+          "time_sec": 19.68,
+          "message": "克拉拉 进化为「史瓦罗强化」"
+        },
+        {
+          "time_sec": 19.68,
+          "message": "景元 进化为「雷霆将临」"
+        },
+        {
+          "time_sec": 19.69,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 19.96,
+          "message": "景元 吾身光明 → 克拉拉 -221"
+        },
+        {
+          "time_sec": 19.96,
+          "message": "克拉拉 强化反击 → 景元 -190"
+        },
+        {
+          "time_sec": 20.37,
+          "message": "景元 石火流光 → 克拉拉 -92"
+        },
+        {
+          "time_sec": 20.37,
+          "message": "克拉拉 强化反击 → 景元 -190"
+        },
+        {
+          "time_sec": 20.77,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 景元 -285"
+        },
+        {
+          "time_sec": 20.77,
+          "message": "克拉拉 进化为「家人守望」"
+        },
+        {
+          "time_sec": 20.77,
+          "message": "景元 进化为「神君完全体」"
+        },
+        {
+          "time_sec": 20.79,
+          "message": "景元 紫霄震曜 → 克拉拉 -179"
+        },
+        {
+          "time_sec": 20.79,
+          "message": "克拉拉 史瓦罗反击 → 景元 -90"
+        },
+        {
+          "time_sec": 21.39,
+          "message": "克拉拉 我也想帮上忙 → 景元 -150"
+        },
+        {
+          "time_sec": 22.75,
+          "message": "景元 神君·10段 → 克拉拉 -465"
+        },
+        {
+          "time_sec": 23.24,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 景元 -360"
+        },
+        {
+          "time_sec": 23.24,
+          "message": "景元 石火流光 → 克拉拉 -149"
+        },
+        {
+          "time_sec": 23.24,
+          "message": "克拉拉 史瓦罗反击 → 景元 -90"
+        },
+        {
+          "time_sec": 23.25,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 23.54,
+          "message": "景元 紫霄震曜 → 克拉拉 -139"
+        },
+        {
+          "time_sec": 23.54,
+          "message": "克拉拉 强化反击 → 景元 -240"
+        },
+        {
+          "time_sec": 30.14,
+          "message": "景元 神君·5段 → 克拉拉 -232"
+        },
+        {
+          "time_sec": 32.23,
+          "message": "克拉拉 我也想帮上忙 → 景元 -150"
+        },
+        {
+          "time_sec": 32.23,
+          "message": "景元 吾身光明 → 克拉拉 -279"
+        },
+        {
+          "time_sec": 32.23,
+          "message": "克拉拉 强化反击 → 景元 -240"
+        },
+        {
+          "time_sec": 34.64,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 景元 -360"
+        },
+        {
+          "time_sec": 34.64,
+          "message": "景元 石火流光 → 克拉拉 -149"
+        },
+        {
+          "time_sec": 34.64,
+          "message": "克拉拉 史瓦罗反击 → 景元 -90"
+        },
+        {
+          "time_sec": 35.3,
+          "message": "克拉拉 我也想帮上忙 → 景元 -150"
+        },
+        {
+          "time_sec": 37.37,
+          "message": "景元 神君·6段 → 克拉拉 -279"
+        },
+        {
+          "time_sec": 45.37,
+          "message": "景元 神君·3段 → 克拉拉 -139"
+        },
+        {
+          "time_sec": 51.37,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 景元 -360"
+        },
+        {
+          "time_sec": 51.37,
+          "message": "景元 紫霄震曜 → 克拉拉 -179"
+        },
+        {
+          "time_sec": 51.37,
+          "message": "克拉拉 史瓦罗反击 → 景元 -90"
+        },
+        {
+          "time_sec": 51.38,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 51.66,
+          "message": "克拉拉 我也想帮上忙 → 景元 -150"
+        },
+        {
+          "time_sec": 51.66,
+          "message": "景元 石火流光 → 克拉拉 -116"
+        },
+        {
+          "time_sec": 51.66,
+          "message": "克拉拉 强化反击 → 景元 -240"
+        },
+        {
+          "time_sec": 51.68,
+          "message": "克拉拉 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T13:09:59+08:00",
+      "duration_sec": 51.68,
+      "reason": "completed",
+      "winner": "克拉拉",
+      "final": [
+        {
+          "name": "克拉拉",
+          "hp": 1216.8,
+          "max_hp": 4560.0,
+          "skill_points": 1,
+          "energy": 30.0,
+          "stage": "家人守望"
+        },
+        {
+          "name": "景元",
+          "hp": 0.0,
+          "max_hp": 4080.0,
+          "skill_points": 1,
+          "energy": 120.0,
+          "stage": "神君完全体"
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T13:10:07+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650
+      },
+      "fighters": [
+        {
+          "name": "希儿",
+          "tag": "seele",
+          "base_hp": 3200.0,
+          "base_atk": 780.0,
+          "move_speed": 185.0
+        },
+        {
+          "name": "景元",
+          "tag": "jingyuan",
+          "base_hp": 3400.0,
+          "base_atk": 720.0,
+          "move_speed": 153.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "希儿 VS 景元 开战"
+        },
+        {
+          "time_sec": 6.46,
+          "message": "希儿 强袭 → 景元 -117"
+        },
+        {
+          "time_sec": 6.46,
+          "message": "景元 石火流光 → 希儿 -108"
+        },
+        {
+          "time_sec": 8.0,
+          "message": "景元 神君·3段 → 希儿 -90"
+        },
+        {
+          "time_sec": 10.0,
+          "message": "希儿 进化为「增幅疾行」"
+        },
+        {
+          "time_sec": 10.0,
+          "message": "景元 进化为「神君蓄势」"
+        },
+        {
+          "time_sec": 11.51,
+          "message": "希儿 归刃 → 景元 -283"
+        },
+        {
+          "time_sec": 12.04,
+          "message": "希儿 强袭 → 景元 -128"
+        },
+        {
+          "time_sec": 12.52,
+          "message": "景元 紫霄震曜 → 希儿 -142"
+        },
+        {
+          "time_sec": 12.52,
+          "message": "希儿 进化为「乱蝶觉醒」"
+        },
+        {
+          "time_sec": 12.52,
+          "message": "景元 进化为「雷霆将临」"
+        },
+        {
+          "time_sec": 12.88,
+          "message": "希儿 乱蝶 → 景元 -849"
+        },
+        {
+          "time_sec": 13.3,
+          "message": "希儿 归刃 → 景元 -439"
+        },
+        {
+          "time_sec": 15.68,
+          "message": "景元 石火流光 → 希儿 -131"
+        },
+        {
+          "time_sec": 15.68,
+          "message": "希儿 进化为「量子终境」"
+        },
+        {
+          "time_sec": 15.68,
+          "message": "景元 进化为「神君完全体」"
+        },
+        {
+          "time_sec": 15.71,
+          "message": "景元 神君·5段 → 希儿 -232"
+        },
+        {
+          "time_sec": 16.11,
+          "message": "景元 吾身光明 → 希儿 -399"
+        },
+        {
+          "time_sec": 16.51,
+          "message": "景元 紫霄震曜 → 希儿 -199"
+        },
+        {
+          "time_sec": 16.59,
+          "message": "希儿 强袭 → 景元 -252"
+        },
+        {
+          "time_sec": 18.68,
+          "message": "希儿 乱蝶 → 景元 -1072"
+        },
+        {
+          "time_sec": 18.68,
+          "message": "景元 石火流光 → 希儿 -166"
+        },
+        {
+          "time_sec": 18.68,
+          "message": "希儿 触发再现 → 景元 -90"
+        },
+        {
+          "time_sec": 21.05,
+          "message": "希儿 归刃 → 景元 -554"
+        },
+        {
+          "time_sec": 21.05,
+          "message": "景元 紫霄震曜 → 希儿 -199"
+        },
+        {
+          "time_sec": 21.99,
+          "message": "景元 神君·10段 → 希儿 -465"
+        },
+        {
+          "time_sec": 23.21,
+          "message": "希儿 强袭 → 景元 -252"
+        },
+        {
+          "time_sec": 23.21,
+          "message": "景元 石火流光 → 希儿 -166"
+        },
+        {
+          "time_sec": 24.56,
+          "message": "希儿 归刃 → 景元 -554"
+        },
+        {
+          "time_sec": 24.58,
+          "message": "希儿 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T13:10:34+08:00",
+      "duration_sec": 24.58,
+      "reason": "completed",
+      "winner": "希儿",
+      "final": [
+        {
+          "name": "希儿",
+          "hp": 1537.4,
+          "max_hp": 3840.0,
+          "skill_points": 0,
+          "energy": 90.0,
+          "stage": "量子终境"
+        },
+        {
+          "name": "景元",
+          "hp": 0.0,
+          "max_hp": 4080.0,
+          "skill_points": 1,
+          "energy": 130.0,
+          "stage": "神君完全体"
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T13:10:44+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650
+      },
+      "fighters": [
+        {
+          "name": "克拉拉",
+          "tag": "clara",
+          "base_hp": 3800.0,
+          "base_atk": 650.0,
+          "move_speed": 135.0
+        },
+        {
+          "name": "希儿",
+          "tag": "seele",
+          "base_hp": 3200.0,
+          "base_atk": 780.0,
+          "move_speed": 185.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "克拉拉 VS 希儿 开战"
+        },
+        {
+          "time_sec": 6.13,
+          "message": "希儿 强袭 → 克拉拉 -105"
+        },
+        {
+          "time_sec": 6.13,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -58"
+        },
+        {
+          "time_sec": 6.66,
+          "message": "希儿 归刃 → 克拉拉 -231"
+        },
+        {
+          "time_sec": 6.66,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -58"
+        },
+        {
+          "time_sec": 6.66,
+          "message": "克拉拉 进化为「反击标记」"
+        },
+        {
+          "time_sec": 6.66,
+          "message": "希儿 进化为「增幅疾行」"
+        },
+        {
+          "time_sec": 12.01,
+          "message": "克拉拉 我也想帮上忙 → 希儿 -107"
+        },
+        {
+          "time_sec": 12.01,
+          "message": "希儿 强袭 → 克拉拉 -115"
+        },
+        {
+          "time_sec": 12.01,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -64"
+        },
+        {
+          "time_sec": 20.0,
+          "message": "克拉拉 进化为「史瓦罗强化」"
+        },
+        {
+          "time_sec": 20.0,
+          "message": "希儿 进化为「乱蝶觉醒」"
+        },
+        {
+          "time_sec": 25.96,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 希儿 -285"
+        },
+        {
+          "time_sec": 28.27,
+          "message": "希儿 乱蝶 → 克拉拉 -764"
+        },
+        {
+          "time_sec": 28.27,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -71"
+        },
+        {
+          "time_sec": 28.67,
+          "message": "希儿 归刃 → 克拉拉 -395"
+        },
+        {
+          "time_sec": 28.67,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -71"
+        },
+        {
+          "time_sec": 28.67,
+          "message": "克拉拉 进化为「家人守望」"
+        },
+        {
+          "time_sec": 28.67,
+          "message": "希儿 进化为「量子终境」"
+        },
+        {
+          "time_sec": 28.69,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 31.36,
+          "message": "克拉拉 我也想帮上忙 → 希儿 -150"
+        },
+        {
+          "time_sec": 39.88,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 希儿 -360"
+        },
+        {
+          "time_sec": 39.88,
+          "message": "希儿 强袭 → 克拉拉 -176"
+        },
+        {
+          "time_sec": 39.88,
+          "message": "克拉拉 强化反击 → 希儿 -240"
+        },
+        {
+          "time_sec": 44.9,
+          "message": "希儿 乱蝶 → 克拉拉 -750"
+        },
+        {
+          "time_sec": 44.9,
+          "message": "克拉拉 强化反击 → 希儿 -240"
+        },
+        {
+          "time_sec": 45.27,
+          "message": "克拉拉 我也想帮上忙 → 希儿 -150"
+        },
+        {
+          "time_sec": 47.71,
+          "message": "希儿 归刃 → 克拉拉 -499"
+        },
+        {
+          "time_sec": 47.71,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -90"
+        },
+        {
+          "time_sec": 48.24,
+          "message": "希儿 强袭 → 克拉拉 -227"
+        },
+        {
+          "time_sec": 48.24,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -90"
+        },
+        {
+          "time_sec": 48.24,
+          "message": "希儿 触发再现 → 克拉拉 -90"
+        },
+        {
+          "time_sec": 48.25,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 49.01,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 希儿 -360"
+        },
+        {
+          "time_sec": 53.45,
+          "message": "克拉拉 我也想帮上忙 → 希儿 -150"
+        },
+        {
+          "time_sec": 53.45,
+          "message": "希儿 归刃 → 克拉拉 -388"
+        },
+        {
+          "time_sec": 53.45,
+          "message": "克拉拉 强化反击 → 希儿 -240"
+        },
+        {
+          "time_sec": 61.24,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 希儿 -360"
+        },
+        {
+          "time_sec": 61.24,
+          "message": "希儿 乱蝶 → 克拉拉 -750"
+        },
+        {
+          "time_sec": 61.24,
+          "message": "克拉拉 强化反击 → 希儿 -240"
+        },
+        {
+          "time_sec": 64.03,
+          "message": "克拉拉 我也想帮上忙 → 希儿 -150"
+        },
+        {
+          "time_sec": 64.03,
+          "message": "希儿 强袭 → 克拉拉 -227"
+        },
+        {
+          "time_sec": 64.03,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -90"
+        },
+        {
+          "time_sec": 64.05,
+          "message": "希儿 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T13:11:51+08:00",
+      "duration_sec": 64.05,
+      "reason": "completed",
+      "winner": "希儿",
+      "final": [
+        {
+          "name": "克拉拉",
+          "hp": 0.0,
+          "max_hp": 4560.0,
+          "skill_points": 1,
+          "energy": 110.0,
+          "stage": "家人守望"
+        },
+        {
+          "name": "希儿",
+          "hp": 210.3,
+          "max_hp": 3840.0,
+          "skill_points": 1,
+          "energy": 40.0,
+          "stage": "量子终境"
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T13:23:56+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650,
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "鱼钩",
+          "tag": "hook",
+          "base_hp": 3500.0,
+          "base_atk": 680.0,
+          "move_speed": 147.0
+        },
+        {
+          "name": "希儿",
+          "tag": "seele",
+          "base_hp": 3200.0,
+          "base_atk": 780.0,
+          "move_speed": 185.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 VS 希儿 开战"
+        },
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 释放弹跳鱼线（第1次，4秒）"
+        },
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 的鱼钩勾住 希儿，开始回收"
+        },
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 鱼钩回收 → 希儿 -183"
+        }
+      ],
+      "ended_at": "2026-09-11T13:23:56+08:00",
+      "duration_sec": 0.0,
+      "reason": "restart",
+      "winner": "",
+      "final": [
+        {
+          "name": "鱼钩",
+          "hp": 3500.0,
+          "max_hp": 3500.0,
+          "skill_points": 0,
+          "energy": 50.0,
+          "stage": "初学垂钓",
+          "hook_releases": 1
+        },
+        {
+          "name": "希儿",
+          "hp": 3016.4,
+          "max_hp": 3200.0,
+          "skill_points": 0,
+          "energy": 10.0,
+          "stage": "蝶影初现",
+          "hook_releases": 0
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T13:23:56+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650,
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "鱼钩",
+          "tag": "hook",
+          "base_hp": 3500.0,
+          "base_atk": 680.0,
+          "move_speed": 147.0
+        },
+        {
+          "name": "希儿",
+          "tag": "seele",
+          "base_hp": 3200.0,
+          "base_atk": 780.0,
+          "move_speed": 185.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 VS 希儿 开战"
+        },
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 释放弹跳鱼线（第1次，4秒）"
+        },
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 放线超时，开始空钩回收"
+        },
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 回收途中勾住 希儿"
+        }
+      ],
+      "ended_at": "2026-09-11T13:23:56+08:00",
+      "duration_sec": 0.0,
+      "reason": "restart",
+      "winner": "",
+      "final": [
+        {
+          "name": "鱼钩",
+          "hp": 3500.0,
+          "max_hp": 3500.0,
+          "skill_points": 0,
+          "energy": 0.0,
+          "stage": "初学垂钓",
+          "hook_releases": 1
+        },
+        {
+          "name": "希儿",
+          "hp": 3200.0,
+          "max_hp": 3200.0,
+          "skill_points": 0,
+          "energy": 0.0,
+          "stage": "蝶影初现",
+          "hook_releases": 0
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T13:26:37+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650,
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "鱼钩",
+          "tag": "hook",
+          "base_hp": 3500.0,
+          "base_atk": 680.0,
+          "move_speed": 147.0
+        },
+        {
+          "name": "希儿",
+          "tag": "seele",
+          "base_hp": 3200.0,
+          "base_atk": 780.0,
+          "move_speed": 185.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 VS 希儿 开战"
+        },
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 甩钩 → 希儿 -102"
+        },
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 释放弹跳鱼线（第1次，4秒）"
+        },
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 放线超时，开始空钩回收"
+        },
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 收回鱼钩，本次未命中"
+        }
+      ],
+      "ended_at": "2026-09-11T13:26:37+08:00",
+      "duration_sec": 0.0,
+      "reason": "restart",
+      "winner": "",
+      "final": [
+        {
+          "name": "鱼钩",
+          "hp": 3500.0,
+          "max_hp": 3500.0,
+          "skill_points": 0,
+          "energy": 50.0,
+          "stage": "初学垂钓",
+          "hook_releases": 1
+        },
+        {
+          "name": "希儿",
+          "hp": 3098.0,
+          "max_hp": 3200.0,
+          "skill_points": 0,
+          "energy": 10.0,
+          "stage": "蝶影初现",
+          "hook_releases": 0
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T13:26:37+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650,
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "鱼钩",
+          "tag": "hook",
+          "base_hp": 3500.0,
+          "base_atk": 680.0,
+          "move_speed": 147.0
+        },
+        {
+          "name": "希儿",
+          "tag": "seele",
+          "base_hp": 3200.0,
+          "base_atk": 780.0,
+          "move_speed": 185.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 VS 希儿 开战"
+        },
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 释放弹跳鱼线（第1次，4秒）"
+        },
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 的鱼钩勾住 希儿，开始回收"
+        },
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 鱼钩回收 → 希儿 -183"
+        }
+      ],
+      "ended_at": "2026-09-11T13:26:37+08:00",
+      "duration_sec": 0.0,
+      "reason": "restart",
+      "winner": "",
+      "final": [
+        {
+          "name": "鱼钩",
+          "hp": 3500.0,
+          "max_hp": 3500.0,
+          "skill_points": 0,
+          "energy": 0.0,
+          "stage": "初学垂钓",
+          "hook_releases": 1
+        },
+        {
+          "name": "希儿",
+          "hp": 3016.4,
+          "max_hp": 3200.0,
+          "skill_points": 0,
+          "energy": 10.0,
+          "stage": "蝶影初现",
+          "hook_releases": 0
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T13:26:37+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650,
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "鱼钩",
+          "tag": "hook",
+          "base_hp": 3500.0,
+          "base_atk": 680.0,
+          "move_speed": 147.0
+        },
+        {
+          "name": "希儿",
+          "tag": "seele",
+          "base_hp": 3200.0,
+          "base_atk": 780.0,
+          "move_speed": 185.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 VS 希儿 开战"
+        },
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 释放弹跳鱼线（第1次，4秒）"
+        },
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 放线超时，开始空钩回收"
+        },
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 回收途中勾住 希儿"
+        }
+      ],
+      "ended_at": "2026-09-11T13:26:37+08:00",
+      "duration_sec": 0.0,
+      "reason": "restart",
+      "winner": "",
+      "final": [
+        {
+          "name": "鱼钩",
+          "hp": 3500.0,
+          "max_hp": 3500.0,
+          "skill_points": 0,
+          "energy": 0.0,
+          "stage": "初学垂钓",
+          "hook_releases": 1
+        },
+        {
+          "name": "希儿",
+          "hp": 3200.0,
+          "max_hp": 3200.0,
+          "skill_points": 0,
+          "energy": 0.0,
+          "stage": "蝶影初现",
+          "hook_releases": 0
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T14:02:41+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650,
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "鱼钩",
+          "tag": "hook",
+          "base_hp": 3500.0,
+          "base_atk": 680.0,
+          "move_speed": 147.0
+        },
+        {
+          "name": "克拉拉",
+          "tag": "clara",
+          "base_hp": 3800.0,
+          "base_atk": 650.0,
+          "move_speed": 135.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 VS 克拉拉 开战"
+        },
+        {
+          "time_sec": 7.74,
+          "message": "鱼钩 甩钩 → 克拉拉 -91"
+        },
+        {
+          "time_sec": 7.74,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -97"
+        },
+        {
+          "time_sec": 7.74,
+          "message": "克拉拉 史瓦罗反击 → 鱼钩 -58"
+        },
+        {
+          "time_sec": 10.0,
+          "message": "鱼钩 进化为「熟练抛线」"
+        },
+        {
+          "time_sec": 10.0,
+          "message": "克拉拉 进化为「反击标记」"
+        },
+        {
+          "time_sec": 14.59,
+          "message": "鱼钩 释放弹跳鱼线（第1次，4秒）"
+        },
+        {
+          "time_sec": 14.59,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 鱼钩 -257"
+        },
+        {
+          "time_sec": 14.91,
+          "message": "鱼钩 的鱼钩勾住 克拉拉，开始回收"
+        },
+        {
+          "time_sec": 15.36,
+          "message": "鱼钩 鱼钩回收 → 克拉拉 -181"
+        },
+        {
+          "time_sec": 15.36,
+          "message": "克拉拉 史瓦罗反击 → 鱼钩 -64"
+        },
+        {
+          "time_sec": 21.36,
+          "message": "鱼钩 甩钩 → 克拉拉 -100"
+        },
+        {
+          "time_sec": 21.36,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -107"
+        },
+        {
+          "time_sec": 21.36,
+          "message": "克拉拉 史瓦罗反击 → 鱼钩 -64"
+        },
+        {
+          "time_sec": 21.36,
+          "message": "鱼钩 进化为「深水猎手」"
+        },
+        {
+          "time_sec": 21.36,
+          "message": "克拉拉 进化为「史瓦罗强化」"
+        },
+        {
+          "time_sec": 21.38,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 21.67,
+          "message": "鱼钩 释放弹跳鱼线（第2次，4秒）"
+        },
+        {
+          "time_sec": 21.67,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 鱼钩 -285"
+        },
+        {
+          "time_sec": 25.68,
+          "message": "鱼钩 放线超时，开始空钩回收"
+        },
+        {
+          "time_sec": 27.95,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -118"
+        },
+        {
+          "time_sec": 28.49,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -118"
+        },
+        {
+          "time_sec": 28.49,
+          "message": "鱼钩 进化为「永不空军」"
+        },
+        {
+          "time_sec": 28.49,
+          "message": "克拉拉 进化为「家人守望」"
+        },
+        {
+          "time_sec": 29.07,
+          "message": "鱼钩 收回鱼钩，本次未命中"
+        },
+        {
+          "time_sec": 31.53,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -150"
+        },
+        {
+          "time_sec": 31.54,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 31.81,
+          "message": "克拉拉 史瓦罗在看着你 → 鱼钩 -180"
+        },
+        {
+          "time_sec": 34.71,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -150"
+        },
+        {
+          "time_sec": 37.9,
+          "message": "克拉拉 史瓦罗在看着你 → 鱼钩 -180"
+        },
+        {
+          "time_sec": 41.09,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -150"
+        },
+        {
+          "time_sec": 44.32,
+          "message": "克拉拉 史瓦罗在看着你 → 鱼钩 -180"
+        },
+        {
+          "time_sec": 44.33,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 52.95,
+          "message": "鱼钩 释放深海长线（第3次，8秒）"
+        },
+        {
+          "time_sec": 54.03,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -150"
+        },
+        {
+          "time_sec": 54.82,
+          "message": "克拉拉 史瓦罗在看着你 → 鱼钩 -180"
+        },
+        {
+          "time_sec": 56.87,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -150"
+        },
+        {
+          "time_sec": 60.95,
+          "message": "鱼钩 放线超时，开始空钩回收"
+        },
+        {
+          "time_sec": 67.12,
+          "message": "克拉拉 史瓦罗在看着你 → 鱼钩 -180"
+        },
+        {
+          "time_sec": 67.51,
+          "message": "鱼钩 收回鱼钩，本次未命中"
+        },
+        {
+          "time_sec": 67.51,
+          "message": "鱼钩 甩钩 → 克拉拉 -109"
+        },
+        {
+          "time_sec": 67.51,
+          "message": "克拉拉 强化反击 → 鱼钩 -240"
+        },
+        {
+          "time_sec": 67.53,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 67.54,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 鱼钩 -360"
+        },
+        {
+          "time_sec": 67.68,
+          "message": "鱼钩 释放弹跳鱼线（第4次，4秒）"
+        },
+        {
+          "time_sec": 70.13,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -150"
+        },
+        {
+          "time_sec": 70.68,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -150"
+        },
+        {
+          "time_sec": 71.69,
+          "message": "鱼钩 放线超时，开始空钩回收"
+        },
+        {
+          "time_sec": 73.67,
+          "message": "鱼钩 回收途中勾住 克拉拉"
+        },
+        {
+          "time_sec": 75.06,
+          "message": "鱼钩 鱼钩回收 → 克拉拉 -197"
+        },
+        {
+          "time_sec": 75.06,
+          "message": "克拉拉 强化反击 → 鱼钩 -240"
+        },
+        {
+          "time_sec": 77.32,
+          "message": "鱼钩 释放深海长线（第5次，8秒）"
+        },
+        {
+          "time_sec": 77.32,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 鱼钩 -360"
+        },
+        {
+          "time_sec": 77.33,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 77.36,
+          "message": "克拉拉 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T14:04:03+08:00",
+      "duration_sec": 77.36,
+      "reason": "completed",
+      "winner": "克拉拉",
+      "final": [
+        {
+          "name": "鱼钩",
+          "hp": 0.0,
+          "max_hp": 4200.0,
+          "skill_points": 0,
+          "energy": 10.0,
+          "stage": "永不空军",
+          "hook_releases": 5
+        },
+        {
+          "name": "克拉拉",
+          "hp": 3877.6,
+          "max_hp": 4560.0,
+          "skill_points": 2,
+          "energy": 0.0,
+          "stage": "家人守望",
+          "hook_releases": 0
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T14:04:28+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650,
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "景元",
+          "tag": "jingyuan",
+          "base_hp": 3400.0,
+          "base_atk": 720.0,
+          "move_speed": 153.0
+        },
+        {
+          "name": "鱼钩",
+          "tag": "hook",
+          "base_hp": 3500.0,
+          "base_atk": 680.0,
+          "move_speed": 147.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "景元 VS 鱼钩 开战"
+        },
+        {
+          "time_sec": 7.26,
+          "message": "景元 石火流光 → 鱼钩 -108"
+        },
+        {
+          "time_sec": 7.26,
+          "message": "鱼钩 甩钩 → 景元 -102"
+        },
+        {
+          "time_sec": 8.02,
+          "message": "景元 神君·3段 → 鱼钩 -90"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "景元 进化为「神君蓄势」"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "鱼钩 进化为「熟练抛线」"
+        },
+        {
+          "time_sec": 13.75,
+          "message": "鱼钩 释放弹跳鱼线（第1次，4秒）"
+        },
+        {
+          "time_sec": 13.75,
+          "message": "景元 紫霄震曜 → 鱼钩 -142"
+        },
+        {
+          "time_sec": 14.03,
+          "message": "鱼钩 的鱼钩勾住 景元，开始回收"
+        },
+        {
+          "time_sec": 14.43,
+          "message": "鱼钩 鱼钩回收 → 景元 -201"
+        },
+        {
+          "time_sec": 15.83,
+          "message": "景元 神君·5段 → 鱼钩 -166"
+        },
+        {
+          "time_sec": 20.1,
+          "message": "景元 石火流光 → 鱼钩 -118"
+        },
+        {
+          "time_sec": 20.1,
+          "message": "鱼钩 甩钩 → 景元 -112"
+        },
+        {
+          "time_sec": 20.1,
+          "message": "景元 进化为「雷霆将临」"
+        },
+        {
+          "time_sec": 20.1,
+          "message": "鱼钩 进化为「深水猎手」"
+        },
+        {
+          "time_sec": 23.2,
+          "message": "景元 紫霄震曜 → 鱼钩 -158"
+        },
+        {
+          "time_sec": 23.8,
+          "message": "景元 神君·5段 → 鱼钩 -184"
+        },
+        {
+          "time_sec": 26.56,
+          "message": "景元 吾身光明 → 鱼钩 -316"
+        },
+        {
+          "time_sec": 26.97,
+          "message": "景元 石火流光 → 鱼钩 -131"
+        },
+        {
+          "time_sec": 26.97,
+          "message": "景元 进化为「神君完全体」"
+        },
+        {
+          "time_sec": 26.97,
+          "message": "鱼钩 进化为「永不空军」"
+        },
+        {
+          "time_sec": 29.76,
+          "message": "鱼钩 释放深海长线（第2次，8秒）"
+        },
+        {
+          "time_sec": 29.76,
+          "message": "景元 紫霄震曜 → 鱼钩 -199"
+        },
+        {
+          "time_sec": 30.16,
+          "message": "景元 石火流光 → 鱼钩 -166"
+        },
+        {
+          "time_sec": 30.99,
+          "message": "景元 神君·8段 → 鱼钩 -372"
+        },
+        {
+          "time_sec": 37.11,
+          "message": "景元 紫霄震曜 → 鱼钩 -199"
+        },
+        {
+          "time_sec": 37.44,
+          "message": "鱼钩 的鱼钩勾住 景元，开始回收"
+        },
+        {
+          "time_sec": 38.83,
+          "message": "景元 神君·5段 → 鱼钩 -232"
+        },
+        {
+          "time_sec": 43.75,
+          "message": "鱼钩 鱼钩回收 → 景元 -282"
+        },
+        {
+          "time_sec": 46.17,
+          "message": "鱼钩 释放弹跳鱼线（第3次，4秒）"
+        },
+        {
+          "time_sec": 46.17,
+          "message": "景元 吾身光明 → 鱼钩 -399"
+        },
+        {
+          "time_sec": 46.59,
+          "message": "景元 石火流光 → 鱼钩 -166"
+        },
+        {
+          "time_sec": 46.75,
+          "message": "景元 神君·6段 → 鱼钩 -279"
+        },
+        {
+          "time_sec": 48.16,
+          "message": "景元 紫霄震曜 → 鱼钩 -199"
+        },
+        {
+          "time_sec": 50.22,
+          "message": "鱼钩 放线超时，开始空钩回收"
+        },
+        {
+          "time_sec": 53.52,
+          "message": "景元 石火流光 → 鱼钩 -166"
+        },
+        {
+          "time_sec": 53.6,
+          "message": "鱼钩 收回鱼钩，本次未命中"
+        },
+        {
+          "time_sec": 54.2,
+          "message": "景元 神君·5段 → 鱼钩 -232"
+        },
+        {
+          "time_sec": 56.83,
+          "message": "景元 紫霄震曜 → 鱼钩 -199"
+        },
+        {
+          "time_sec": 56.85,
+          "message": "景元 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T14:05:28+08:00",
+      "duration_sec": 56.85,
+      "reason": "completed",
+      "winner": "景元",
+      "final": [
+        {
+          "name": "景元",
+          "hp": 3381.1,
+          "max_hp": 4080.0,
+          "skill_points": 0,
+          "energy": 100.0,
+          "stage": "神君完全体",
+          "hook_releases": 0
+        },
+        {
+          "name": "鱼钩",
+          "hp": 0.0,
+          "max_hp": 4200.0,
+          "skill_points": 0,
+          "energy": 110.0,
+          "stage": "永不空军",
+          "hook_releases": 3
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T14:28:04+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650,
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "希儿",
+          "tag": "seele",
+          "base_hp": 3200.0,
+          "base_atk": 780.0,
+          "move_speed": 185.0
+        },
+        {
+          "name": "鱼钩",
+          "tag": "hook",
+          "base_hp": 3500.0,
+          "base_atk": 680.0,
+          "move_speed": 147.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "希儿 VS 鱼钩 开战"
+        },
+        {
+          "time_sec": 6.57,
+          "message": "希儿 强袭 → 鱼钩 -117"
+        },
+        {
+          "time_sec": 6.57,
+          "message": "鱼钩 甩钩 → 希儿 -102"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "希儿 进化为「增幅疾行」"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "鱼钩 进化为「熟练抛线」"
+        },
+        {
+          "time_sec": 11.92,
+          "message": "希儿 归刃 → 鱼钩 -283"
+        },
+        {
+          "time_sec": 21.37,
+          "message": "希儿 强袭 → 鱼钩 -128"
+        },
+        {
+          "time_sec": 21.37,
+          "message": "希儿 进化为「乱蝶觉醒」"
+        },
+        {
+          "time_sec": 21.37,
+          "message": "鱼钩 进化为「深水猎手」"
+        },
+        {
+          "time_sec": 21.92,
+          "message": "希儿 乱蝶 → 鱼钩 -849"
+        },
+        {
+          "time_sec": 22.97,
+          "message": "鱼钩 释放弹跳鱼线（第1次，4秒）"
+        },
+        {
+          "time_sec": 26.97,
+          "message": "鱼钩 放线超时，开始空钩回收"
+        },
+        {
+          "time_sec": 28.61,
+          "message": "希儿 归刃 → 鱼钩 -439"
+        },
+        {
+          "time_sec": 28.61,
+          "message": "希儿 进化为「量子终境」"
+        },
+        {
+          "time_sec": 28.61,
+          "message": "鱼钩 进化为「永不空军」"
+        },
+        {
+          "time_sec": 30.36,
+          "message": "鱼钩 收回鱼钩，本次未命中"
+        },
+        {
+          "time_sec": 30.36,
+          "message": "鱼钩 释放深海长线（第2次，8秒）"
+        },
+        {
+          "time_sec": 33.51,
+          "message": "希儿 强袭 → 鱼钩 -252"
+        },
+        {
+          "time_sec": 38.37,
+          "message": "鱼钩 放线超时，开始空钩回收"
+        },
+        {
+          "time_sec": 38.41,
+          "message": "希儿 归刃 → 鱼钩 -396"
+        },
+        {
+          "time_sec": 43.32,
+          "message": "希儿 乱蝶 → 鱼钩 -1072"
+        },
+        {
+          "time_sec": 43.32,
+          "message": "希儿 触发再现 → 鱼钩 -90"
+        },
+        {
+          "time_sec": 44.94,
+          "message": "鱼钩 收回鱼钩，本次未命中"
+        },
+        {
+          "time_sec": 44.94,
+          "message": "鱼钩 甩钩 → 希儿 -157"
+        },
+        {
+          "time_sec": 45.48,
+          "message": "鱼钩 释放弹跳鱼线（第3次，4秒）"
+        },
+        {
+          "time_sec": 47.86,
+          "message": "希儿 强袭 → 鱼钩 -252"
+        },
+        {
+          "time_sec": 48.4,
+          "message": "希儿 归刃 → 鱼钩 -554"
+        },
+        {
+          "time_sec": 48.42,
+          "message": "希儿 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T14:28:54+08:00",
+      "duration_sec": 48.42,
+      "reason": "completed",
+      "winner": "希儿",
+      "final": [
+        {
+          "name": "希儿",
+          "hp": 3580.9,
+          "max_hp": 3840.0,
+          "skill_points": 0,
+          "energy": 60.0,
+          "stage": "量子终境",
+          "hook_releases": 0
+        },
+        {
+          "name": "鱼钩",
+          "hp": 0.0,
+          "max_hp": 4200.0,
+          "skill_points": 0,
+          "energy": 100.0,
+          "stage": "永不空军",
+          "hook_releases": 3
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T14:29:02+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650,
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "克拉拉",
+          "tag": "clara",
+          "base_hp": 3800.0,
+          "base_atk": 650.0,
+          "move_speed": 135.0
+        },
+        {
+          "name": "鱼钩",
+          "tag": "hook",
+          "base_hp": 3500.0,
+          "base_atk": 680.0,
+          "move_speed": 147.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "克拉拉 VS 鱼钩 开战"
+        },
+        {
+          "time_sec": 7.73,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -97"
+        },
+        {
+          "time_sec": 7.73,
+          "message": "鱼钩 甩钩 → 克拉拉 -91"
+        },
+        {
+          "time_sec": 7.73,
+          "message": "克拉拉 史瓦罗反击 → 鱼钩 -58"
+        },
+        {
+          "time_sec": 10.02,
+          "message": "克拉拉 进化为「反击标记」"
+        },
+        {
+          "time_sec": 10.02,
+          "message": "鱼钩 进化为「熟练抛线」"
+        },
+        {
+          "time_sec": 14.56,
+          "message": "鱼钩 释放弹跳鱼线（第1次，4秒）"
+        },
+        {
+          "time_sec": 14.56,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 鱼钩 -257"
+        },
+        {
+          "time_sec": 14.87,
+          "message": "鱼钩 的鱼钩勾住 克拉拉，开始回收"
+        },
+        {
+          "time_sec": 15.29,
+          "message": "鱼钩 鱼钩回收 → 克拉拉 -181"
+        },
+        {
+          "time_sec": 15.29,
+          "message": "克拉拉 史瓦罗反击 → 鱼钩 -64"
+        },
+        {
+          "time_sec": 21.28,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -107"
+        },
+        {
+          "time_sec": 21.28,
+          "message": "鱼钩 甩钩 → 克拉拉 -100"
+        },
+        {
+          "time_sec": 21.28,
+          "message": "克拉拉 史瓦罗反击 → 鱼钩 -64"
+        },
+        {
+          "time_sec": 21.28,
+          "message": "克拉拉 进化为「史瓦罗强化」"
+        },
+        {
+          "time_sec": 21.28,
+          "message": "鱼钩 进化为「深水猎手」"
+        },
+        {
+          "time_sec": 21.3,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 21.6,
+          "message": "鱼钩 释放弹跳鱼线（第2次，4秒）"
+        },
+        {
+          "time_sec": 21.6,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 鱼钩 -285"
+        },
+        {
+          "time_sec": 25.61,
+          "message": "鱼钩 放线超时，开始空钩回收"
+        },
+        {
+          "time_sec": 27.85,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -118"
+        },
+        {
+          "time_sec": 28.4,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -118"
+        },
+        {
+          "time_sec": 28.4,
+          "message": "克拉拉 进化为「家人守望」"
+        },
+        {
+          "time_sec": 28.4,
+          "message": "鱼钩 进化为「永不空军」"
+        },
+        {
+          "time_sec": 28.99,
+          "message": "鱼钩 收回鱼钩，本次未命中"
+        },
+        {
+          "time_sec": 31.45,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -150"
+        },
+        {
+          "time_sec": 31.47,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 31.75,
+          "message": "克拉拉 史瓦罗在看着你 → 鱼钩 -180"
+        },
+        {
+          "time_sec": 34.64,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -150"
+        },
+        {
+          "time_sec": 37.82,
+          "message": "克拉拉 史瓦罗在看着你 → 鱼钩 -180"
+        },
+        {
+          "time_sec": 41.03,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -150"
+        },
+        {
+          "time_sec": 44.24,
+          "message": "克拉拉 史瓦罗在看着你 → 鱼钩 -180"
+        },
+        {
+          "time_sec": 44.3,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 53.47,
+          "message": "鱼钩 释放深海长线（第3次，8秒）"
+        },
+        {
+          "time_sec": 53.47,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -150"
+        },
+        {
+          "time_sec": 57.36,
+          "message": "克拉拉 史瓦罗在看着你 → 鱼钩 -180"
+        },
+        {
+          "time_sec": 61.47,
+          "message": "鱼钩 放线超时，开始空钩回收"
+        },
+        {
+          "time_sec": 64.49,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -150"
+        },
+        {
+          "time_sec": 66.56,
+          "message": "克拉拉 史瓦罗在看着你 → 鱼钩 -180"
+        },
+        {
+          "time_sec": 67.11,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -150"
+        },
+        {
+          "time_sec": 67.14,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 68.05,
+          "message": "鱼钩 收回鱼钩，本次未命中"
+        },
+        {
+          "time_sec": 73.69,
+          "message": "克拉拉 史瓦罗在看着你 → 鱼钩 -180"
+        },
+        {
+          "time_sec": 73.69,
+          "message": "鱼钩 甩钩 → 克拉拉 -109"
+        },
+        {
+          "time_sec": 73.69,
+          "message": "克拉拉 强化反击 → 鱼钩 -240"
+        },
+        {
+          "time_sec": 90.55,
+          "message": "鱼钩 释放弹跳鱼线（第4次，4秒）"
+        },
+        {
+          "time_sec": 90.55,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 鱼钩 -360"
+        },
+        {
+          "time_sec": 90.8,
+          "message": "鱼钩 的鱼钩勾住 克拉拉，开始回收"
+        },
+        {
+          "time_sec": 91.19,
+          "message": "鱼钩 鱼钩回收 → 克拉拉 -197"
+        },
+        {
+          "time_sec": 91.19,
+          "message": "克拉拉 强化反击 → 鱼钩 -240"
+        },
+        {
+          "time_sec": 107.69,
+          "message": "鱼钩 释放深海长线（第5次，8秒）"
+        },
+        {
+          "time_sec": 107.69,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 鱼钩 -360"
+        },
+        {
+          "time_sec": 107.71,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 107.73,
+          "message": "克拉拉 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T14:30:53+08:00",
+      "duration_sec": 107.73,
+      "reason": "completed",
+      "winner": "克拉拉",
+      "final": [
+        {
+          "name": "克拉拉",
+          "hp": 3877.6,
+          "max_hp": 4560.0,
+          "skill_points": 0,
+          "energy": 0.0,
+          "stage": "家人守望",
+          "hook_releases": 0
+        },
+        {
+          "name": "鱼钩",
+          "hp": 0.0,
+          "max_hp": 4200.0,
+          "skill_points": 0,
+          "energy": 10.0,
+          "stage": "永不空军",
+          "hook_releases": 5
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T14:32:51+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650,
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "鱼钩",
+          "tag": "hook",
+          "base_hp": 3500.0,
+          "base_atk": 680.0,
+          "move_speed": 147.0
+        },
+        {
+          "name": "景元",
+          "tag": "jingyuan",
+          "base_hp": 3400.0,
+          "base_atk": 720.0,
+          "move_speed": 153.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "鱼钩 VS 景元 开战"
+        },
+        {
+          "time_sec": 7.27,
+          "message": "鱼钩 甩钩 → 景元 -102"
+        },
+        {
+          "time_sec": 7.27,
+          "message": "景元 石火流光 → 鱼钩 -108"
+        },
+        {
+          "time_sec": 8.01,
+          "message": "景元 神君·3段 → 鱼钩 -90"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "鱼钩 进化为「熟练抛线」"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "景元 进化为「神君蓄势」"
+        },
+        {
+          "time_sec": 13.75,
+          "message": "鱼钩 释放弹跳鱼线（第1次，4秒）"
+        },
+        {
+          "time_sec": 13.75,
+          "message": "景元 紫霄震曜 → 鱼钩 -142"
+        },
+        {
+          "time_sec": 14.05,
+          "message": "鱼钩 的鱼钩勾住 景元，开始回收"
+        },
+        {
+          "time_sec": 14.05,
+          "message": "鱼钩 鱼钩拖拽 → 景元 -50"
+        },
+        {
+          "time_sec": 14.31,
+          "message": "鱼钩 鱼钩拖拽 → 景元 -50"
+        },
+        {
+          "time_sec": 14.46,
+          "message": "鱼钩 完成鱼钩回收，拖拽累计造成 100 伤害"
+        },
+        {
+          "time_sec": 15.82,
+          "message": "景元 神君·5段 → 鱼钩 -166"
+        },
+        {
+          "time_sec": 20.12,
+          "message": "鱼钩 甩钩 → 景元 -112"
+        },
+        {
+          "time_sec": 20.12,
+          "message": "景元 石火流光 → 鱼钩 -118"
+        },
+        {
+          "time_sec": 20.12,
+          "message": "鱼钩 进化为「深水猎手」"
+        },
+        {
+          "time_sec": 20.12,
+          "message": "景元 进化为「雷霆将临」"
+        },
+        {
+          "time_sec": 23.34,
+          "message": "景元 紫霄震曜 → 鱼钩 -158"
+        },
+        {
+          "time_sec": 23.79,
+          "message": "景元 神君·5段 → 鱼钩 -184"
+        },
+        {
+          "time_sec": 23.82,
+          "message": "景元 吾身光明 → 鱼钩 -316"
+        },
+        {
+          "time_sec": 26.84,
+          "message": "景元 石火流光 → 鱼钩 -131"
+        },
+        {
+          "time_sec": 26.84,
+          "message": "鱼钩 进化为「永不空军」"
+        },
+        {
+          "time_sec": 26.84,
+          "message": "景元 进化为「神君完全体」"
+        },
+        {
+          "time_sec": 27.38,
+          "message": "景元 紫霄震曜 → 鱼钩 -199"
+        },
+        {
+          "time_sec": 30.24,
+          "message": "景元 石火流光 → 鱼钩 -166"
+        },
+        {
+          "time_sec": 30.42,
+          "message": "景元 神君·8段 → 鱼钩 -372"
+        },
+        {
+          "time_sec": 30.65,
+          "message": "景元 紫霄震曜 → 鱼钩 -199"
+        },
+        {
+          "time_sec": 33.91,
+          "message": "景元 石火流光 → 鱼钩 -166"
+        },
+        {
+          "time_sec": 34.44,
+          "message": "景元 吾身光明 → 鱼钩 -399"
+        },
+        {
+          "time_sec": 34.62,
+          "message": "鱼钩 释放深海长线（第2次，8秒）"
+        },
+        {
+          "time_sec": 34.64,
+          "message": "鱼钩 的鱼钩勾住 景元，开始回收"
+        },
+        {
+          "time_sec": 34.64,
+          "message": "鱼钩 鱼钩拖拽 → 景元 -70"
+        },
+        {
+          "time_sec": 34.84,
+          "message": "鱼钩 完成鱼钩回收，拖拽累计造成 70 伤害"
+        },
+        {
+          "time_sec": 34.84,
+          "message": "景元 紫霄震曜 → 鱼钩 -199"
+        },
+        {
+          "time_sec": 35.92,
+          "message": "景元 石火流光 → 鱼钩 -166"
+        },
+        {
+          "time_sec": 37.01,
+          "message": "景元 神君·10段 → 鱼钩 -465"
+        },
+        {
+          "time_sec": 37.45,
+          "message": "鱼钩 释放弹跳鱼线（第3次，4秒）"
+        },
+        {
+          "time_sec": 41.47,
+          "message": "鱼钩 放线超时，开始空钩回收"
+        },
+        {
+          "time_sec": 44.07,
+          "message": "鱼钩 回收途中勾住 景元"
+        },
+        {
+          "time_sec": 44.07,
+          "message": "鱼钩 鱼钩拖拽 → 景元 -70"
+        },
+        {
+          "time_sec": 44.3,
+          "message": "鱼钩 鱼钩拖拽 → 景元 -70"
+        },
+        {
+          "time_sec": 44.56,
+          "message": "鱼钩 鱼钩拖拽 → 景元 -70"
+        },
+        {
+          "time_sec": 44.81,
+          "message": "鱼钩 鱼钩拖拽 → 景元 -70"
+        },
+        {
+          "time_sec": 44.86,
+          "message": "鱼钩 完成鱼钩回收，拖拽累计造成 282 伤害"
+        },
+        {
+          "time_sec": 45.02,
+          "message": "景元 神君·3段 → 鱼钩 -139"
+        },
+        {
+          "time_sec": 53.03,
+          "message": "景元 神君·3段 → 鱼钩 -139"
+        },
+        {
+          "time_sec": 54.01,
+          "message": "鱼钩 甩钩 → 景元 -157"
+        },
+        {
+          "time_sec": 54.01,
+          "message": "景元 紫霄震曜 → 鱼钩 -199"
+        },
+        {
+          "time_sec": 54.03,
+          "message": "景元 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T14:33:48+08:00",
+      "duration_sec": 54.03,
+      "reason": "completed",
+      "winner": "景元",
+      "final": [
+        {
+          "name": "鱼钩",
+          "hp": 0.0,
+          "max_hp": 4200.0,
+          "skill_points": 1,
+          "energy": 80.0,
+          "stage": "永不空军",
+          "hook_releases": 3
+        },
+        {
+          "name": "景元",
+          "hp": 3254.3,
+          "max_hp": 4080.0,
+          "skill_points": 0,
+          "energy": 110.0,
+          "stage": "神君完全体",
+          "hook_releases": 0
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T14:38:27+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650,
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "景元",
+          "tag": "jingyuan",
+          "base_hp": 3400.0,
+          "base_atk": 720.0,
+          "move_speed": 153.0
+        },
+        {
+          "name": "希儿",
+          "tag": "seele",
+          "base_hp": 3200.0,
+          "base_atk": 780.0,
+          "move_speed": 185.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "景元 VS 希儿 开战"
+        },
+        {
+          "time_sec": 6.47,
+          "message": "景元 石火流光 → 希儿 -108"
+        },
+        {
+          "time_sec": 6.47,
+          "message": "希儿 强袭 → 景元 -117"
+        },
+        {
+          "time_sec": 8.01,
+          "message": "景元 神君·3段 → 希儿 -90"
+        },
+        {
+          "time_sec": 10.0,
+          "message": "景元 进化为「神君蓄势」"
+        },
+        {
+          "time_sec": 10.0,
+          "message": "希儿 进化为「增幅疾行」"
+        },
+        {
+          "time_sec": 11.57,
+          "message": "希儿 归刃 → 景元 -283"
+        },
+        {
+          "time_sec": 12.11,
+          "message": "希儿 强袭 → 景元 -128"
+        },
+        {
+          "time_sec": 12.53,
+          "message": "景元 紫霄震曜 → 希儿 -142"
+        },
+        {
+          "time_sec": 12.53,
+          "message": "景元 进化为「雷霆将临」"
+        },
+        {
+          "time_sec": 12.53,
+          "message": "希儿 进化为「乱蝶觉醒」"
+        },
+        {
+          "time_sec": 13.0,
+          "message": "希儿 乱蝶 → 景元 -849"
+        },
+        {
+          "time_sec": 13.41,
+          "message": "希儿 归刃 → 景元 -439"
+        },
+        {
+          "time_sec": 13.94,
+          "message": "希儿 强袭 → 景元 -199"
+        },
+        {
+          "time_sec": 15.02,
+          "message": "景元 进化为「神君完全体」"
+        },
+        {
+          "time_sec": 15.02,
+          "message": "希儿 进化为「量子终境」"
+        },
+        {
+          "time_sec": 15.71,
+          "message": "景元 神君·5段 → 希儿 -232"
+        },
+        {
+          "time_sec": 23.73,
+          "message": "景元 神君·3段 → 希儿 -139"
+        },
+        {
+          "time_sec": 25.28,
+          "message": "景元 吾身光明 → 希儿 -399"
+        },
+        {
+          "time_sec": 25.68,
+          "message": "景元 石火流光 → 希儿 -166"
+        },
+        {
+          "time_sec": 26.23,
+          "message": "景元 紫霄震曜 → 希儿 -199"
+        },
+        {
+          "time_sec": 27.19,
+          "message": "景元 石火流光 → 希儿 -166"
+        },
+        {
+          "time_sec": 27.19,
+          "message": "希儿 乱蝶 → 景元 -1072"
+        },
+        {
+          "time_sec": 27.19,
+          "message": "希儿 触发再现 → 景元 -90"
+        },
+        {
+          "time_sec": 30.43,
+          "message": "景元 神君·8段 → 希儿 -372"
+        },
+        {
+          "time_sec": 32.32,
+          "message": "景元 紫霄震曜 → 希儿 -199"
+        },
+        {
+          "time_sec": 34.66,
+          "message": "景元 石火流光 → 希儿 -166"
+        },
+        {
+          "time_sec": 34.66,
+          "message": "希儿 归刃 → 景元 -554"
+        },
+        {
+          "time_sec": 36.35,
+          "message": "景元 吾身光明 → 希儿 -399"
+        },
+        {
+          "time_sec": 36.75,
+          "message": "景元 紫霄震曜 → 希儿 -199"
+        },
+        {
+          "time_sec": 36.75,
+          "message": "希儿 强袭 → 景元 -252"
+        },
+        {
+          "time_sec": 37.59,
+          "message": "景元 神君·10段 → 希儿 -465"
+        },
+        {
+          "time_sec": 38.97,
+          "message": "希儿 乱蝶 → 景元 -1072"
+        },
+        {
+          "time_sec": 38.99,
+          "message": "希儿 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T14:39:09+08:00",
+      "duration_sec": 38.99,
+      "reason": "completed",
+      "winner": "希儿",
+      "final": [
+        {
+          "name": "景元",
+          "hp": 0.0,
+          "max_hp": 4080.0,
+          "skill_points": 0,
+          "energy": 50.0,
+          "stage": "神君完全体",
+          "hook_releases": 0
+        },
+        {
+          "name": "希儿",
+          "hp": 391.9,
+          "max_hp": 3840.0,
+          "skill_points": 1,
+          "energy": 0.0,
+          "stage": "量子终境",
+          "hook_releases": 0
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T14:54:42+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650,
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "钟离",
+          "tag": "zhongli",
+          "base_hp": 4200.0,
+          "base_atk": 620.0,
+          "move_speed": 139.0
+        },
+        {
+          "name": "雷电将军",
+          "tag": "raiden",
+          "base_hp": 3450.0,
+          "base_atk": 730.0,
+          "move_speed": 163.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "钟离 VS 雷电将军 开战"
+        },
+        {
+          "time_sec": 7.23,
+          "message": "钟离 岩雨 → 雷电将军 -93"
+        },
+        {
+          "time_sec": 7.23,
+          "message": "雷电将军 源流 → 钟离 -109"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "钟离 进化为「玉璋护体」"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "雷电将军 进化为「愿力汇聚」"
+        },
+        {
+          "time_sec": 13.18,
+          "message": "雷电将军 神变·恶曜开眼 → 钟离 -144"
+        },
+        {
+          "time_sec": 13.73,
+          "message": "雷电将军 源流+雷眼 → 钟离 -174"
+        },
+        {
+          "time_sec": 13.78,
+          "message": "钟离 地心·玉璋护盾 → 雷电将军 -90"
+        },
+        {
+          "time_sec": 13.78,
+          "message": "钟离 进化为「天星将临」"
+        },
+        {
+          "time_sec": 13.78,
+          "message": "雷电将军 进化为「梦想真说」"
+        },
+        {
+          "time_sec": 16.76,
+          "message": "钟离 岩雨 → 雷电将军 -124"
+        },
+        {
+          "time_sec": 18.14,
+          "message": "雷电将军 奥义·梦想真说+雷眼 → 钟离 -0"
+        },
+        {
+          "time_sec": 18.57,
+          "message": "雷电将军 源流+雷眼+梦想一心 → 钟离 -0"
+        },
+        {
+          "time_sec": 18.57,
+          "message": "钟离 进化为「尘世闲游」"
+        },
+        {
+          "time_sec": 18.57,
+          "message": "雷电将军 进化为「此世最胜」"
+        },
+        {
+          "time_sec": 20.21,
+          "message": "钟离 天星 → 雷电将军 -519"
+        },
+        {
+          "time_sec": 30.39,
+          "message": "雷电将军 神变·恶曜开眼+雷眼+梦想一心 → 钟离 -0"
+        },
+        {
+          "time_sec": 30.44,
+          "message": "钟离 地心·玉璋护盾 → 雷电将军 -126"
+        },
+        {
+          "time_sec": 30.91,
+          "message": "雷电将军 奥义·梦想真说+雷眼 → 钟离 -0"
+        },
+        {
+          "time_sec": 31.35,
+          "message": "雷电将军 源流+雷眼+梦想一心 → 钟离 -0"
+        },
+        {
+          "time_sec": 31.88,
+          "message": "雷电将军 神变·恶曜开眼+雷眼+梦想一心 → 钟离 -0"
+        },
+        {
+          "time_sec": 37.63,
+          "message": "雷电将军 源流+雷眼+梦想一心 → 钟离 -0"
+        },
+        {
+          "time_sec": 40.58,
+          "message": "雷电将军 源流+雷眼 → 钟离 -23"
+        },
+        {
+          "time_sec": 45.8,
+          "message": "钟离 岩雨 → 雷电将军 -143"
+        },
+        {
+          "time_sec": 46.35,
+          "message": "钟离 天星 → 雷电将军 -519"
+        },
+        {
+          "time_sec": 46.77,
+          "message": "钟离 地心·玉璋护盾 → 雷电将军 -126"
+        },
+        {
+          "time_sec": 47.31,
+          "message": "钟离 岩雨 → 雷电将军 -157"
+        },
+        {
+          "time_sec": 47.95,
+          "message": "雷电将军 奥义·梦想真说+雷眼 → 钟离 -0"
+        },
+        {
+          "time_sec": 51.63,
+          "message": "钟离 地心·玉璋护盾 → 雷电将军 -126"
+        },
+        {
+          "time_sec": 54.57,
+          "message": "钟离 岩雨 → 雷电将军 -157"
+        },
+        {
+          "time_sec": 57.1,
+          "message": "钟离 天星 → 雷电将军 -519"
+        },
+        {
+          "time_sec": 57.1,
+          "message": "雷电将军 神变·恶曜开眼+梦想一心 → 钟离 -0"
+        },
+        {
+          "time_sec": 57.52,
+          "message": "钟离 地心·玉璋护盾 → 雷电将军 -126"
+        },
+        {
+          "time_sec": 60.64,
+          "message": "钟离 岩雨 → 雷电将军 -157"
+        },
+        {
+          "time_sec": 60.64,
+          "message": "雷电将军 源流+雷眼+梦想一心 → 钟离 -0"
+        },
+        {
+          "time_sec": 63.19,
+          "message": "雷电将军 奥义·梦想真说+雷眼 → 钟离 -0"
+        },
+        {
+          "time_sec": 84.45,
+          "message": "钟离 地心·玉璋护盾 → 雷电将军 -126"
+        },
+        {
+          "time_sec": 86.94,
+          "message": "钟离 天星 → 雷电将军 -519"
+        },
+        {
+          "time_sec": 86.94,
+          "message": "雷电将军 源流+雷眼+梦想一心 → 钟离 -0"
+        },
+        {
+          "time_sec": 87.35,
+          "message": "钟离 岩雨 → 雷电将军 -157"
+        },
+        {
+          "time_sec": 88.22,
+          "message": "雷电将军 神变·恶曜开眼+雷眼+梦想一心 → 钟离 -0"
+        },
+        {
+          "time_sec": 88.75,
+          "message": "雷电将军 源流+雷眼+梦想一心 → 钟离 -0"
+        },
+        {
+          "time_sec": 89.28,
+          "message": "雷电将军 奥义·梦想真说+雷眼 → 钟离 -0"
+        },
+        {
+          "time_sec": 89.69,
+          "message": "雷电将军 神变·恶曜开眼+雷眼+梦想一心 → 钟离 -146"
+        },
+        {
+          "time_sec": 90.23,
+          "message": "钟离 地心·玉璋护盾 → 雷电将军 -126"
+        },
+        {
+          "time_sec": 90.23,
+          "message": "雷电将军 源流+雷眼+梦想一心 → 钟离 -0"
+        },
+        {
+          "time_sec": 92.33,
+          "message": "钟离 天星 → 雷电将军 -519"
+        },
+        {
+          "time_sec": 92.33,
+          "message": "雷电将军 源流+雷眼+梦想一心 → 钟离 -0"
+        },
+        {
+          "time_sec": 92.36,
+          "message": "钟离 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T14:56:20+08:00",
+      "duration_sec": 92.36,
+      "reason": "completed",
+      "winner": "钟离",
+      "final": [
+        {
+          "name": "钟离",
+          "hp": 4441.1,
+          "max_hp": 5040.0,
+          "skill_points": 0,
+          "energy": 10.0,
+          "stage": "尘世闲游",
+          "hook_releases": 0,
+          "shield_hp": 1456.1,
+          "raiden_resolve": 0.0
+        },
+        {
+          "name": "雷电将军",
+          "hp": 0.0,
+          "max_hp": 4140.0,
+          "skill_points": 3,
+          "energy": 110.0,
+          "stage": "此世最胜",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 3.0
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T14:56:31+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650,
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "景元",
+          "tag": "jingyuan",
+          "base_hp": 3400.0,
+          "base_atk": 720.0,
+          "move_speed": 153.0
+        },
+        {
+          "name": "雷电将军",
+          "tag": "raiden",
+          "base_hp": 3450.0,
+          "base_atk": 730.0,
+          "move_speed": 163.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "景元 VS 雷电将军 开战"
+        },
+        {
+          "time_sec": 6.89,
+          "message": "景元 石火流光 → 雷电将军 -108"
+        },
+        {
+          "time_sec": 6.89,
+          "message": "雷电将军 源流 → 景元 -109"
+        },
+        {
+          "time_sec": 8.01,
+          "message": "景元 神君·3段 → 雷电将军 -90"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "景元 进化为「神君蓄势」"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "雷电将军 进化为「愿力汇聚」"
+        },
+        {
+          "time_sec": 13.08,
+          "message": "景元 紫霄震曜 → 雷电将军 -142"
+        },
+        {
+          "time_sec": 13.08,
+          "message": "雷电将军 神变·恶曜开眼 → 景元 -144"
+        },
+        {
+          "time_sec": 15.76,
+          "message": "景元 神君·5段 → 雷电将军 -166"
+        },
+        {
+          "time_sec": 22.76,
+          "message": "雷电将军 源流+雷眼 → 景元 -174"
+        },
+        {
+          "time_sec": 22.76,
+          "message": "景元 进化为「雷霆将临」"
+        },
+        {
+          "time_sec": 22.76,
+          "message": "雷电将军 进化为「梦想真说」"
+        },
+        {
+          "time_sec": 23.79,
+          "message": "景元 神君·3段 → 雷电将军 -110"
+        },
+        {
+          "time_sec": 26.37,
+          "message": "景元 石火流光 → 雷电将军 -131"
+        },
+        {
+          "time_sec": 26.37,
+          "message": "雷电将军 源流+雷眼 → 景元 -193"
+        },
+        {
+          "time_sec": 31.11,
+          "message": "雷电将军 奥义·梦想真说+雷眼 → 景元 -559"
+        },
+        {
+          "time_sec": 31.52,
+          "message": "雷电将军 神变·恶曜开眼+雷眼+梦想一心 → 景元 -300"
+        },
+        {
+          "time_sec": 31.52,
+          "message": "景元 进化为「神君完全体」"
+        },
+        {
+          "time_sec": 31.52,
+          "message": "雷电将军 进化为「此世最胜」"
+        },
+        {
+          "time_sec": 31.8,
+          "message": "景元 神君·3段 → 雷电将军 -139"
+        },
+        {
+          "time_sec": 35.33,
+          "message": "雷电将军 源流+雷眼+梦想一心 → 景元 -345"
+        },
+        {
+          "time_sec": 35.86,
+          "message": "雷电将军 源流+雷眼+梦想一心 → 景元 -345"
+        },
+        {
+          "time_sec": 35.99,
+          "message": "景元 吾身光明 → 雷电将军 -399"
+        },
+        {
+          "time_sec": 39.31,
+          "message": "景元 神君·6段 → 雷电将军 -279"
+        },
+        {
+          "time_sec": 47.32,
+          "message": "景元 神君·3段 → 雷电将军 -139"
+        },
+        {
+          "time_sec": 48.11,
+          "message": "景元 紫霄震曜 → 雷电将军 -199"
+        },
+        {
+          "time_sec": 48.11,
+          "message": "雷电将军 奥义·梦想真说+雷眼 → 景元 -674"
+        },
+        {
+          "time_sec": 51.47,
+          "message": "景元 石火流光 → 雷电将军 -166"
+        },
+        {
+          "time_sec": 51.47,
+          "message": "雷电将军 神变·恶曜开眼+梦想一心 → 景元 -303"
+        },
+        {
+          "time_sec": 54.7,
+          "message": "景元 神君·5段 → 雷电将军 -232"
+        },
+        {
+          "time_sec": 54.89,
+          "message": "雷电将军 源流+雷眼+梦想一心 → 景元 -345"
+        },
+        {
+          "time_sec": 57.99,
+          "message": "雷电将军 源流+雷眼+梦想一心 → 景元 -345"
+        },
+        {
+          "time_sec": 58.54,
+          "message": "雷电将军 奥义·梦想真说+雷眼 → 景元 -674"
+        },
+        {
+          "time_sec": 58.56,
+          "message": "雷电将军 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T14:57:32+08:00",
+      "duration_sec": 58.56,
+      "reason": "completed",
+      "winner": "雷电将军",
+      "final": [
+        {
+          "name": "景元",
+          "hp": 0.0,
+          "max_hp": 4080.0,
+          "skill_points": 1,
+          "energy": 100.0,
+          "stage": "神君完全体",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0
+        },
+        {
+          "name": "雷电将军",
+          "hp": 1833.2,
+          "max_hp": 4140.0,
+          "skill_points": 3,
+          "energy": 0.0,
+          "stage": "此世最胜",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T14:58:32+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650,
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "希儿",
+          "tag": "seele",
+          "base_hp": 3200.0,
+          "base_atk": 780.0,
+          "move_speed": 185.0
+        },
+        {
+          "name": "雷电将军",
+          "tag": "raiden",
+          "base_hp": 3450.0,
+          "base_atk": 730.0,
+          "move_speed": 163.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "希儿 VS 雷电将军 开战"
+        },
+        {
+          "time_sec": 6.27,
+          "message": "希儿 强袭 → 雷电将军 -117"
+        },
+        {
+          "time_sec": 6.27,
+          "message": "雷电将军 源流 → 希儿 -109"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "希儿 进化为「增幅疾行」"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "雷电将军 进化为「愿力汇聚」"
+        },
+        {
+          "time_sec": 11.91,
+          "message": "希儿 归刃 → 雷电将军 -283"
+        },
+        {
+          "time_sec": 11.91,
+          "message": "雷电将军 神变·恶曜开眼 → 希儿 -144"
+        },
+        {
+          "time_sec": 14.57,
+          "message": "雷电将军 源流+雷眼 → 希儿 -174"
+        },
+        {
+          "time_sec": 17.35,
+          "message": "希儿 强袭 → 雷电将军 -128"
+        },
+        {
+          "time_sec": 17.35,
+          "message": "希儿 进化为「乱蝶觉醒」"
+        },
+        {
+          "time_sec": 17.35,
+          "message": "雷电将军 进化为「梦想真说」"
+        },
+        {
+          "time_sec": 21.79,
+          "message": "希儿 乱蝶 → 雷电将军 -849"
+        },
+        {
+          "time_sec": 21.79,
+          "message": "雷电将军 奥义·梦想真说+雷眼 → 希儿 -534"
+        },
+        {
+          "time_sec": 23.98,
+          "message": "希儿 归刃 → 雷电将军 -439"
+        },
+        {
+          "time_sec": 23.98,
+          "message": "雷电将军 源流+雷眼+梦想一心 → 希儿 -273"
+        },
+        {
+          "time_sec": 25.01,
+          "message": "希儿 进化为「量子终境」"
+        },
+        {
+          "time_sec": 25.01,
+          "message": "雷电将军 进化为「此世最胜」"
+        },
+        {
+          "time_sec": 28.68,
+          "message": "希儿 强袭 → 雷电将军 -252"
+        },
+        {
+          "time_sec": 29.26,
+          "message": "希儿 乱蝶 → 雷电将军 -1072"
+        },
+        {
+          "time_sec": 29.26,
+          "message": "希儿 触发再现 → 雷电将军 -90"
+        },
+        {
+          "time_sec": 29.67,
+          "message": "希儿 归刃 → 雷电将军 -554"
+        },
+        {
+          "time_sec": 30.68,
+          "message": "希儿 强袭 → 雷电将军 -252"
+        },
+        {
+          "time_sec": 31.33,
+          "message": "希儿 归刃 → 雷电将军 -554"
+        },
+        {
+          "time_sec": 31.36,
+          "message": "希儿 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T14:59:05+08:00",
+      "duration_sec": 31.36,
+      "reason": "completed",
+      "winner": "希儿",
+      "final": [
+        {
+          "name": "希儿",
+          "hp": 2603.1,
+          "max_hp": 3840.0,
+          "skill_points": 0,
+          "energy": 80.0,
+          "stage": "量子终境",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0
+        },
+        {
+          "name": "雷电将军",
+          "hp": 0.0,
+          "max_hp": 4140.0,
+          "skill_points": 2,
+          "energy": 110.0,
+          "stage": "此世最胜",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.8
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T15:34:34+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650,
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "艾莲",
+          "tag": "ellen",
+          "base_hp": 3300.0,
+          "base_atk": 760.0,
+          "move_speed": 179.0
+        },
+        {
+          "name": "简",
+          "tag": "jane",
+          "base_hp": 3550.0,
+          "base_atk": 700.0,
+          "move_speed": 171.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "艾莲 VS 简 开战"
+        },
+        {
+          "time_sec": 6.22,
+          "message": "艾莲 利齿修剪法 → 简 -114"
+        },
+        {
+          "time_sec": 6.22,
+          "message": "简 跳步刃舞 → 艾莲 -105"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "艾莲 进化为「急冻修剪」"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "简 进化为「心流升温」"
+        },
+        {
+          "time_sec": 11.84,
+          "message": "艾莲 强化特殊技·鲨卷风 → 简 -219"
+        },
+        {
+          "time_sec": 11.84,
+          "message": "简 强化特殊技·空翻 → 艾莲 -184"
+        },
+        {
+          "time_sec": 14.94,
+          "message": "简 跳步刃舞 → 艾莲 -115"
+        },
+        {
+          "time_sec": 18.94,
+          "message": "艾莲 急冻修剪法 → 简 -181"
+        },
+        {
+          "time_sec": 18.94,
+          "message": "艾莲 进化为「鲨卷风暴」"
+        },
+        {
+          "time_sec": 18.94,
+          "message": "简 进化为「狂热刃舞」"
+        },
+        {
+          "time_sec": 19.49,
+          "message": "艾莲 永冬狂宴 → 简 -556"
+        },
+        {
+          "time_sec": 22.48,
+          "message": "简 终幕演出 → 艾莲 -461"
+        },
+        {
+          "time_sec": 22.88,
+          "message": "简 萨霍夫跳 → 艾莲 -352"
+        },
+        {
+          "time_sec": 22.88,
+          "message": "艾莲 进化为「永冬狂宴」"
+        },
+        {
+          "time_sec": 22.88,
+          "message": "简 进化为「终幕演出」"
+        },
+        {
+          "time_sec": 24.82,
+          "message": "艾莲 急冻修剪法 → 简 -254"
+        },
+        {
+          "time_sec": 24.82,
+          "message": "简 强化特殊技·空翻 → 艾莲 -323"
+        },
+        {
+          "time_sec": 25.36,
+          "message": "艾莲 急冻修剪法 → 简 -254"
+        },
+        {
+          "time_sec": 25.9,
+          "message": "艾莲 急冻修剪法 → 简 -254"
+        },
+        {
+          "time_sec": 26.43,
+          "message": "艾莲 永冬狂宴 → 简 -702"
+        },
+        {
+          "time_sec": 26.84,
+          "message": "艾莲 急冻修剪法 → 简 -254"
+        },
+        {
+          "time_sec": 26.84,
+          "message": "简 跳步刃舞 → 艾莲 -202"
+        },
+        {
+          "time_sec": 28.55,
+          "message": "简 终幕演出 → 艾莲 -582"
+        },
+        {
+          "time_sec": 31.06,
+          "message": "艾莲 急冻修剪法 → 简 -254"
+        },
+        {
+          "time_sec": 37.76,
+          "message": "艾莲 急冻修剪法 → 简 -254"
+        },
+        {
+          "time_sec": 38.91,
+          "message": "简 萨霍夫跳 → 艾莲 -444"
+        },
+        {
+          "time_sec": 39.45,
+          "message": "简 强化特殊技·空翻 → 艾莲 -323"
+        },
+        {
+          "time_sec": 40.63,
+          "message": "艾莲 强化特殊技·鲨卷风 → 简 -307"
+        },
+        {
+          "time_sec": 46.12,
+          "message": "艾莲 永冬狂宴 → 简 -702"
+        },
+        {
+          "time_sec": 46.13,
+          "message": "艾莲 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T15:35:23+08:00",
+      "duration_sec": 46.13,
+      "reason": "completed",
+      "winner": "艾莲",
+      "final": [
+        {
+          "name": "艾莲",
+          "hp": 865.5,
+          "max_hp": 3960.0,
+          "skill_points": 2,
+          "energy": 0.0,
+          "stage": "永冬狂宴",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 6,
+          "jane_passion": 0.0
+        },
+        {
+          "name": "简",
+          "hp": 0.0,
+          "max_hp": 4260.0,
+          "skill_points": 0,
+          "energy": 70.0,
+          "stage": "终幕演出",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 0,
+          "jane_passion": 50.0
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T15:35:34+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650,
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "景元",
+          "tag": "jingyuan",
+          "base_hp": 3400.0,
+          "base_atk": 720.0,
+          "move_speed": 153.0
+        },
+        {
+          "name": "简",
+          "tag": "jane",
+          "base_hp": 3550.0,
+          "base_atk": 700.0,
+          "move_speed": 171.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "景元 VS 简 开战"
+        },
+        {
+          "time_sec": 6.73,
+          "message": "景元 石火流光 → 简 -108"
+        },
+        {
+          "time_sec": 6.73,
+          "message": "简 跳步刃舞 → 景元 -105"
+        },
+        {
+          "time_sec": 8.01,
+          "message": "景元 神君·3段 → 简 -90"
+        },
+        {
+          "time_sec": 10.0,
+          "message": "景元 进化为「神君蓄势」"
+        },
+        {
+          "time_sec": 10.0,
+          "message": "简 进化为「心流升温」"
+        },
+        {
+          "time_sec": 12.79,
+          "message": "景元 紫霄震曜 → 简 -142"
+        },
+        {
+          "time_sec": 12.79,
+          "message": "简 强化特殊技·空翻 → 景元 -184"
+        },
+        {
+          "time_sec": 15.75,
+          "message": "景元 神君·5段 → 简 -166"
+        },
+        {
+          "time_sec": 21.62,
+          "message": "简 跳步刃舞 → 景元 -115"
+        },
+        {
+          "time_sec": 21.62,
+          "message": "景元 进化为「雷霆将临」"
+        },
+        {
+          "time_sec": 21.62,
+          "message": "简 进化为「狂热刃舞」"
+        },
+        {
+          "time_sec": 22.18,
+          "message": "简 强化特殊技·空翻 → 景元 -204"
+        },
+        {
+          "time_sec": 23.75,
+          "message": "景元 神君·3段 → 简 -110"
+        },
+        {
+          "time_sec": 25.82,
+          "message": "景元 石火流光 → 简 -131"
+        },
+        {
+          "time_sec": 26.36,
+          "message": "景元 紫霄震曜 → 简 -158"
+        },
+        {
+          "time_sec": 26.36,
+          "message": "景元 进化为「神君完全体」"
+        },
+        {
+          "time_sec": 26.36,
+          "message": "简 进化为「终幕演出」"
+        },
+        {
+          "time_sec": 30.51,
+          "message": "景元 吾身光明 → 简 -399"
+        },
+        {
+          "time_sec": 30.51,
+          "message": "简 终幕演出 → 景元 -582"
+        },
+        {
+          "time_sec": 31.17,
+          "message": "景元 神君·8段 → 简 -372"
+        },
+        {
+          "time_sec": 38.1,
+          "message": "简 萨霍夫跳 → 景元 -444"
+        },
+        {
+          "time_sec": 38.64,
+          "message": "简 跳步刃舞 → 景元 -202"
+        },
+        {
+          "time_sec": 39.19,
+          "message": "景元 神君·3段 → 简 -139"
+        },
+        {
+          "time_sec": 42.39,
+          "message": "景元 石火流光 → 简 -166"
+        },
+        {
+          "time_sec": 46.91,
+          "message": "景元 紫霄震曜 → 简 -199"
+        },
+        {
+          "time_sec": 46.91,
+          "message": "简 强化特殊技·空翻 → 景元 -323"
+        },
+        {
+          "time_sec": 47.17,
+          "message": "景元 神君·5段 → 简 -232"
+        },
+        {
+          "time_sec": 50.15,
+          "message": "景元 石火流光 → 简 -166"
+        },
+        {
+          "time_sec": 54.33,
+          "message": "简 跳步刃舞 → 景元 -202"
+        },
+        {
+          "time_sec": 54.88,
+          "message": "简 强化特殊技·空翻 → 景元 -258"
+        },
+        {
+          "time_sec": 55.19,
+          "message": "景元 神君·3段 → 简 -139"
+        },
+        {
+          "time_sec": 58.74,
+          "message": "景元 吾身光明 → 简 -399"
+        },
+        {
+          "time_sec": 59.14,
+          "message": "景元 紫霄震曜 → 简 -199"
+        },
+        {
+          "time_sec": 62.26,
+          "message": "景元 神君·8段 → 简 -372"
+        },
+        {
+          "time_sec": 63.76,
+          "message": "景元 石火流光 → 简 -166"
+        },
+        {
+          "time_sec": 63.76,
+          "message": "简 终幕演出 → 景元 -582"
+        },
+        {
+          "time_sec": 66.28,
+          "message": "景元 紫霄震曜 → 简 -199"
+        },
+        {
+          "time_sec": 69.91,
+          "message": "景元 神君·5段 → 简 -232"
+        },
+        {
+          "time_sec": 69.94,
+          "message": "景元 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T15:36:48+08:00",
+      "duration_sec": 69.94,
+      "reason": "completed",
+      "winner": "景元",
+      "final": [
+        {
+          "name": "景元",
+          "hp": 874.5,
+          "max_hp": 4080.0,
+          "skill_points": 0,
+          "energy": 90.0,
+          "stage": "神君完全体",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 0,
+          "jane_passion": 0.0
+        },
+        {
+          "name": "简",
+          "hp": 0.0,
+          "max_hp": 4260.0,
+          "skill_points": 0,
+          "energy": 20.0,
+          "stage": "终幕演出",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 0,
+          "jane_passion": 100.0
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T16:37:32+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650,
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "愈生佑翎",
+          "tag": "panacea_seele",
+          "base_hp": 3500.0,
+          "base_atk": 730.0,
+          "move_speed": 159.0
+        },
+        {
+          "name": "镇×偃月叩晓",
+          "tag": "xentinel_mei",
+          "base_hp": 3700.0,
+          "base_atk": 740.0,
+          "move_speed": 155.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "愈生佑翎 VS 镇×偃月叩晓 开战"
+        },
+        {
+          "time_sec": 6.95,
+          "message": "愈生佑翎 澈羽连击 → 镇×偃月叩晓 -109"
+        },
+        {
+          "time_sec": 6.95,
+          "message": "镇×偃月叩晓 偃月三连 → 愈生佑翎 -111"
+        },
+        {
+          "time_sec": 10.0,
+          "message": "愈生佑翎 进化为「羽集盈怀」"
+        },
+        {
+          "time_sec": 10.0,
+          "message": "镇×偃月叩晓 进化为「恒佑长明」"
+        },
+        {
+          "time_sec": 13.13,
+          "message": "愈生佑翎 羽落云坠 → 镇×偃月叩晓 -204"
+        },
+        {
+          "time_sec": 13.13,
+          "message": "镇×偃月叩晓 晦夜麟光 → 愈生佑翎 -177"
+        },
+        {
+          "time_sec": 22.83,
+          "message": "愈生佑翎 澈羽连击 → 镇×偃月叩晓 -120"
+        },
+        {
+          "time_sec": 22.83,
+          "message": "镇×偃月叩晓 偃月三连 → 愈生佑翎 -122"
+        },
+        {
+          "time_sec": 22.83,
+          "message": "愈生佑翎 进化为「三翎流转」"
+        },
+        {
+          "time_sec": 22.83,
+          "message": "镇×偃月叩晓 进化为「逐光破晓」"
+        },
+        {
+          "time_sec": 26.49,
+          "message": "愈生佑翎 翩落流影 → 镇×偃月叩晓 -153"
+        },
+        {
+          "time_sec": 26.49,
+          "message": "镇×偃月叩晓 恒佑之刃 → 愈生佑翎 -297"
+        },
+        {
+          "time_sec": 35.96,
+          "message": "愈生佑翎 蕊海新生 → 镇×偃月叩晓 -480"
+        },
+        {
+          "time_sec": 35.96,
+          "message": "镇×偃月叩晓 晦夜麟光 → 愈生佑翎 -196"
+        },
+        {
+          "time_sec": 35.96,
+          "message": "愈生佑翎 进化为「羽落万生」"
+        },
+        {
+          "time_sec": 35.96,
+          "message": "镇×偃月叩晓 进化为「镇岁天明」"
+        },
+        {
+          "time_sec": 48.66,
+          "message": "愈生佑翎 抚羽归巢 → 镇×偃月叩晓 -227"
+        },
+        {
+          "time_sec": 48.66,
+          "message": "镇×偃月叩晓 偃月三连 → 愈生佑翎 -170"
+        },
+        {
+          "time_sec": 54.05,
+          "message": "愈生佑翎 飞漾涤痕 → 镇×偃月叩晓 -278"
+        },
+        {
+          "time_sec": 54.05,
+          "message": "镇×偃月叩晓 逐光之刃 → 愈生佑翎 -478"
+        },
+        {
+          "time_sec": 79.61,
+          "message": "愈生佑翎 羽落云坠 → 镇×偃月叩晓 -286"
+        },
+        {
+          "time_sec": 79.61,
+          "message": "镇×偃月叩晓 镇岁斩 → 愈生佑翎 -598"
+        },
+        {
+          "time_sec": 82.92,
+          "message": "愈生佑翎 翩落流影 → 镇×偃月叩晓 -193"
+        },
+        {
+          "time_sec": 82.92,
+          "message": "镇×偃月叩晓 晦夜麟光 → 愈生佑翎 -247"
+        },
+        {
+          "time_sec": 95.67,
+          "message": "愈生佑翎 抚羽归巢 → 镇×偃月叩晓 -227"
+        },
+        {
+          "time_sec": 95.67,
+          "message": "镇×偃月叩晓 偃月三连 → 愈生佑翎 -170"
+        },
+        {
+          "time_sec": 99.16,
+          "message": "愈生佑翎 飞漾涤痕 → 镇×偃月叩晓 -278"
+        },
+        {
+          "time_sec": 99.16,
+          "message": "镇×偃月叩晓 恒佑之刃 → 愈生佑翎 -376"
+        },
+        {
+          "time_sec": 102.41,
+          "message": "愈生佑翎 蕊海新生 → 镇×偃月叩晓 -607"
+        },
+        {
+          "time_sec": 102.41,
+          "message": "镇×偃月叩晓 晦夜麟光 → 愈生佑翎 -247"
+        },
+        {
+          "time_sec": 120.01,
+          "message": "进入决胜阶段：双方造成伤害提高 50%"
+        },
+        {
+          "time_sec": 122.24,
+          "message": "愈生佑翎 澈羽连击 → 镇×偃月叩晓 -252"
+        },
+        {
+          "time_sec": 122.24,
+          "message": "镇×偃月叩晓 偃月三连 → 愈生佑翎 -256"
+        },
+        {
+          "time_sec": 125.75,
+          "message": "愈生佑翎 羽落云坠 → 镇×偃月叩晓 -430"
+        },
+        {
+          "time_sec": 125.75,
+          "message": "镇×偃月叩晓 晦夜麟光 → 愈生佑翎 -371"
+        },
+        {
+          "time_sec": 143.4,
+          "message": "愈生佑翎 翩落流影 → 镇×偃月叩晓 -290"
+        },
+        {
+          "time_sec": 143.4,
+          "message": "镇×偃月叩晓 逐光之刃 → 愈生佑翎 -717"
+        },
+        {
+          "time_sec": 155.93,
+          "message": "愈生佑翎 抚羽归巢 → 镇×偃月叩晓 -341"
+        },
+        {
+          "time_sec": 155.93,
+          "message": "镇×偃月叩晓 镇岁斩 → 愈生佑翎 -897"
+        },
+        {
+          "time_sec": 155.95,
+          "message": "同归于尽"
+        }
+      ],
+      "ended_at": "2026-09-11T16:40:11+08:00",
+      "duration_sec": 155.95,
+      "reason": "completed",
+      "winner": "同归于尽",
+      "final": [
+        {
+          "name": "愈生佑翎",
+          "hp": 0.0,
+          "max_hp": 4200.0,
+          "skill_points": 0,
+          "energy": 100.0,
+          "stage": "羽落万生",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 0,
+          "jane_passion": 0.0,
+          "panacea_feather": 0,
+          "panacea_weapon_hits_left": 1,
+          "xentinel_spirit": 0
+        },
+        {
+          "name": "镇×偃月叩晓",
+          "hp": 0.0,
+          "max_hp": 4440.0,
+          "skill_points": 0,
+          "energy": 20.0,
+          "stage": "镇岁天明",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 0,
+          "jane_passion": 0.0,
+          "panacea_feather": 0,
+          "panacea_weapon_hits_left": 0,
+          "xentinel_spirit": 0
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T17:41:16+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 650,
+        "attack_pose_ms": 2000,
+        "initiative_rule": "smaller_center_offset_then_alternate_tie",
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "希儿",
+          "tag": "seele",
+          "base_hp": 3200.0,
+          "base_atk": 780.0,
+          "move_speed": 185.0
+        },
+        {
+          "name": "镇×偃月叩晓",
+          "tag": "xentinel_mei",
+          "base_hp": 3700.0,
+          "base_atk": 740.0,
+          "move_speed": 155.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "希儿 VS 镇×偃月叩晓 开战"
+        },
+        {
+          "time_sec": 6.42,
+          "message": "镇×偃月叩晓 抢先手（中心偏角 32.6°），希儿 延后攻击"
+        },
+        {
+          "time_sec": 6.42,
+          "message": "镇×偃月叩晓 偃月三连 → 希儿 -111"
+        },
+        {
+          "time_sec": 6.42,
+          "message": "希儿 强袭 → 镇×偃月叩晓 -117"
+        },
+        {
+          "time_sec": 6.43,
+          "message": "希儿 抢先手（中心偏角 33.6°），镇×偃月叩晓 延后攻击"
+        },
+        {
+          "time_sec": 6.43,
+          "message": "希儿 归刃 → 镇×偃月叩晓 -257"
+        },
+        {
+          "time_sec": 6.43,
+          "message": "希儿 进化为「增幅疾行」"
+        },
+        {
+          "time_sec": 6.43,
+          "message": "镇×偃月叩晓 进化为「恒佑长明」"
+        },
+        {
+          "time_sec": 6.43,
+          "message": "镇×偃月叩晓 晦夜麟光 → 希儿 -177"
+        },
+        {
+          "time_sec": 6.46,
+          "message": "镇×偃月叩晓 抢先手（中心偏角 35.1°），希儿 延后攻击"
+        },
+        {
+          "time_sec": 6.46,
+          "message": "镇×偃月叩晓 偃月三连 → 希儿 -122"
+        },
+        {
+          "time_sec": 6.46,
+          "message": "希儿 强袭 → 镇×偃月叩晓 -128"
+        },
+        {
+          "time_sec": 6.47,
+          "message": "希儿 抢先手（中心偏角 36.4°），镇×偃月叩晓 延后攻击"
+        },
+        {
+          "time_sec": 6.47,
+          "message": "希儿 乱蝶 → 镇×偃月叩晓 -765"
+        },
+        {
+          "time_sec": 6.47,
+          "message": "镇×偃月叩晓 恒佑之刃 → 希儿 -268"
+        },
+        {
+          "time_sec": 6.49,
+          "message": "镇×偃月叩晓 抢先手（中心偏角 38.0°），希儿 延后攻击"
+        },
+        {
+          "time_sec": 6.49,
+          "message": "镇×偃月叩晓 晦夜麟光 → 希儿 -177"
+        },
+        {
+          "time_sec": 6.49,
+          "message": "希儿 进化为「乱蝶觉醒」"
+        },
+        {
+          "time_sec": 6.49,
+          "message": "镇×偃月叩晓 进化为「逐光破晓」"
+        },
+        {
+          "time_sec": 6.49,
+          "message": "希儿 归刃 → 镇×偃月叩晓 -439"
+        },
+        {
+          "time_sec": 6.51,
+          "message": "希儿 抢先手（中心偏角 39.4°），镇×偃月叩晓 延后攻击"
+        },
+        {
+          "time_sec": 6.51,
+          "message": "希儿 强袭 → 镇×偃月叩晓 -199"
+        },
+        {
+          "time_sec": 6.51,
+          "message": "镇×偃月叩晓 偃月三连 → 希儿 -135"
+        },
+        {
+          "time_sec": 6.52,
+          "message": "镇×偃月叩晓 抢先手（中心偏角 41.1°），希儿 延后攻击"
+        },
+        {
+          "time_sec": 6.52,
+          "message": "镇×偃月叩晓 逐光之刃 → 希儿 -379"
+        },
+        {
+          "time_sec": 6.52,
+          "message": "希儿 乱蝶 → 镇×偃月叩晓 -849"
+        },
+        {
+          "time_sec": 6.54,
+          "message": "希儿 抢先手（中心偏角 43.2°），镇×偃月叩晓 延后攻击"
+        },
+        {
+          "time_sec": 6.54,
+          "message": "希儿 归刃 → 镇×偃月叩晓 -439"
+        },
+        {
+          "time_sec": 6.54,
+          "message": "希儿 触发再现 → 镇×偃月叩晓 -71"
+        },
+        {
+          "time_sec": 6.54,
+          "message": "希儿 进化为「量子终境」"
+        },
+        {
+          "time_sec": 6.54,
+          "message": "镇×偃月叩晓 进化为「镇岁天明」"
+        },
+        {
+          "time_sec": 6.54,
+          "message": "镇×偃月叩晓 镇岁斩 → 希儿 -598"
+        },
+        {
+          "time_sec": 6.56,
+          "message": "镇×偃月叩晓 抢先手（中心偏角 44.9°），希儿 延后攻击"
+        },
+        {
+          "time_sec": 6.56,
+          "message": "镇×偃月叩晓 晦夜麟光 → 希儿 -247"
+        },
+        {
+          "time_sec": 6.56,
+          "message": "希儿 强袭 → 镇×偃月叩晓 -252"
+        },
+        {
+          "time_sec": 10.62,
+          "message": "镇×偃月叩晓 偃月三连 → 希儿 -170"
+        },
+        {
+          "time_sec": 10.63,
+          "message": "镇×偃月叩晓 恒佑之刃 → 希儿 -376"
+        },
+        {
+          "time_sec": 10.65,
+          "message": "镇×偃月叩晓 晦夜麟光 → 希儿 -247"
+        },
+        {
+          "time_sec": 10.67,
+          "message": "镇×偃月叩晓 偃月三连 → 希儿 -170"
+        },
+        {
+          "time_sec": 10.69,
+          "message": "镇×偃月叩晓 晦夜麟光 → 希儿 -247"
+        },
+        {
+          "time_sec": 10.71,
+          "message": "镇×偃月叩晓 逐光之刃 → 希儿 -478"
+        },
+        {
+          "time_sec": 10.73,
+          "message": "镇×偃月叩晓 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T17:42:15+08:00",
+      "duration_sec": 10.73,
+      "reason": "completed",
+      "winner": "镇×偃月叩晓",
+      "final": [
+        {
+          "name": "希儿",
+          "hp": 0.0,
+          "max_hp": 3840.0,
+          "skill_points": 1,
+          "energy": 90.0,
+          "stage": "量子终境",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 0,
+          "jane_passion": 0.0,
+          "panacea_feather": 0,
+          "panacea_weapon_hits_left": 0,
+          "xentinel_spirit": 0
+        },
+        {
+          "name": "镇×偃月叩晓",
+          "hp": 919.1,
+          "max_hp": 4440.0,
+          "skill_points": 0,
+          "energy": 0.0,
+          "stage": "镇岁天明",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 0,
+          "jane_passion": 0.0,
+          "panacea_feather": 0,
+          "panacea_weapon_hits_left": 0,
+          "xentinel_spirit": 2
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T17:52:57+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 1000,
+        "attack_pose_ms": 2000,
+        "initiative_rule": "smaller_center_offset_then_alternate_tie",
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "希儿",
+          "tag": "seele",
+          "base_hp": 3200.0,
+          "base_atk": 780.0,
+          "move_speed": 185.0
+        },
+        {
+          "name": "克拉拉",
+          "tag": "clara",
+          "base_hp": 3800.0,
+          "base_atk": 650.0,
+          "move_speed": 135.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "希儿 VS 克拉拉 开战"
+        },
+        {
+          "time_sec": 6.13,
+          "message": "希儿 强袭 → 克拉拉 -105"
+        },
+        {
+          "time_sec": 6.13,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -58"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "希儿 进化为「增幅疾行」"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "克拉拉 进化为「反击标记」"
+        },
+        {
+          "time_sec": 12.01,
+          "message": "克拉拉 我也想帮上忙 → 希儿 -107"
+        },
+        {
+          "time_sec": 13.02,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 希儿 -257"
+        },
+        {
+          "time_sec": 14.59,
+          "message": "希儿 归刃 → 克拉拉 -254"
+        },
+        {
+          "time_sec": 14.59,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -64"
+        },
+        {
+          "time_sec": 14.59,
+          "message": "希儿 进化为「乱蝶觉醒」"
+        },
+        {
+          "time_sec": 14.59,
+          "message": "克拉拉 进化为「史瓦罗强化」"
+        },
+        {
+          "time_sec": 15.9,
+          "message": "希儿 强袭 → 克拉拉 -128"
+        },
+        {
+          "time_sec": 15.9,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -71"
+        },
+        {
+          "time_sec": 18.49,
+          "message": "希儿 乱蝶 → 克拉拉 -764"
+        },
+        {
+          "time_sec": 18.49,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -71"
+        },
+        {
+          "time_sec": 21.57,
+          "message": "克拉拉 抢先手（中心偏角 6.3°），希儿 延后攻击"
+        },
+        {
+          "time_sec": 21.57,
+          "message": "克拉拉 我也想帮上忙 → 希儿 -118"
+        },
+        {
+          "time_sec": 21.57,
+          "message": "希儿 进化为「量子终境」"
+        },
+        {
+          "time_sec": 21.57,
+          "message": "克拉拉 进化为「家人守望」"
+        },
+        {
+          "time_sec": 21.57,
+          "message": "希儿 归刃 → 克拉拉 -499"
+        },
+        {
+          "time_sec": 21.57,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -90"
+        },
+        {
+          "time_sec": 21.59,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 21.61,
+          "message": "克拉拉 抢先手（中心偏角 6.8°），希儿 延后攻击"
+        },
+        {
+          "time_sec": 21.61,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 希儿 -360"
+        },
+        {
+          "time_sec": 21.61,
+          "message": "希儿 强袭 → 克拉拉 -176"
+        },
+        {
+          "time_sec": 21.61,
+          "message": "克拉拉 强化反击 → 希儿 -240"
+        },
+        {
+          "time_sec": 24.2,
+          "message": "克拉拉 我也想帮上忙 → 希儿 -150"
+        },
+        {
+          "time_sec": 27.82,
+          "message": "希儿 乱蝶 → 克拉拉 -750"
+        },
+        {
+          "time_sec": 27.82,
+          "message": "克拉拉 强化反击 → 希儿 -240"
+        },
+        {
+          "time_sec": 30.67,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 希儿 -360"
+        },
+        {
+          "time_sec": 40.29,
+          "message": "希儿 归刃 → 克拉拉 -499"
+        },
+        {
+          "time_sec": 40.29,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -90"
+        },
+        {
+          "time_sec": 40.31,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 40.32,
+          "message": "希儿 强袭 → 克拉拉 -176"
+        },
+        {
+          "time_sec": 40.32,
+          "message": "克拉拉 强化反击 → 希儿 -240"
+        },
+        {
+          "time_sec": 40.32,
+          "message": "希儿 触发再现 → 克拉拉 -90"
+        },
+        {
+          "time_sec": 46.09,
+          "message": "克拉拉 抢先手（中心偏角 3.4°），希儿 延后攻击"
+        },
+        {
+          "time_sec": 46.09,
+          "message": "克拉拉 我也想帮上忙 → 希儿 -150"
+        },
+        {
+          "time_sec": 46.09,
+          "message": "希儿 归刃 → 克拉拉 -388"
+        },
+        {
+          "time_sec": 46.09,
+          "message": "克拉拉 强化反击 → 希儿 -240"
+        },
+        {
+          "time_sec": 48.95,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 希儿 -360"
+        },
+        {
+          "time_sec": 49.97,
+          "message": "克拉拉 我也想帮上忙 → 希儿 -150"
+        },
+        {
+          "time_sec": 51.15,
+          "message": "希儿 抢先手（中心偏角 22.8°），克拉拉 延后攻击"
+        },
+        {
+          "time_sec": 51.15,
+          "message": "希儿 乱蝶 → 克拉拉 -964"
+        },
+        {
+          "time_sec": 51.15,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -90"
+        },
+        {
+          "time_sec": 51.17,
+          "message": "希儿 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T17:54:32+08:00",
+      "duration_sec": 51.17,
+      "reason": "completed",
+      "winner": "希儿",
+      "final": [
+        {
+          "name": "希儿",
+          "hp": 328.1,
+          "max_hp": 3840.0,
+          "skill_points": 0,
+          "energy": 0.0,
+          "stage": "量子终境",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 0,
+          "jane_passion": 0.0,
+          "panacea_feather": 0,
+          "panacea_weapon_hits_left": 0,
+          "xentinel_spirit": 0
+        },
+        {
+          "name": "克拉拉",
+          "hp": 0.0,
+          "max_hp": 4560.0,
+          "skill_points": 1,
+          "energy": 100.0,
+          "stage": "家人守望",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 0,
+          "jane_passion": 0.0,
+          "panacea_feather": 0,
+          "panacea_weapon_hits_left": 0,
+          "xentinel_spirit": 0
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T18:01:10+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 1000,
+        "attack_pose_ms": 2000,
+        "initiative_rule": "smaller_center_offset_then_alternate_tie",
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "景元",
+          "tag": "jingyuan",
+          "base_hp": 3400.0,
+          "base_atk": 720.0,
+          "move_speed": 153.0
+        },
+        {
+          "name": "艾莲",
+          "tag": "ellen",
+          "base_hp": 3300.0,
+          "base_atk": 760.0,
+          "move_speed": 179.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "message": "景元 VS 艾莲 开战"
+        },
+        {
+          "time_sec": 6.56,
+          "message": "景元 抢先手（中心偏角 32.1°），艾莲 延后攻击"
+        },
+        {
+          "time_sec": 6.56,
+          "message": "景元 石火流光 → 艾莲 -108"
+        },
+        {
+          "time_sec": 6.56,
+          "message": "艾莲 利齿修剪法 → 景元 -114"
+        },
+        {
+          "time_sec": 8.01,
+          "message": "景元 神君·3段 → 艾莲 -90"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "景元 进化为「神君蓄势」"
+        },
+        {
+          "time_sec": 10.01,
+          "message": "艾莲 进化为「急冻修剪」"
+        },
+        {
+          "time_sec": 12.1,
+          "message": "艾莲 强化特殊技·鲨卷风 → 景元 -219"
+        },
+        {
+          "time_sec": 15.38,
+          "message": "景元 紫霄震曜 → 艾莲 -142"
+        },
+        {
+          "time_sec": 15.97,
+          "message": "景元 神君·5段 → 艾莲 -166"
+        },
+        {
+          "time_sec": 16.09,
+          "message": "艾莲 急冻修剪法 → 景元 -181"
+        },
+        {
+          "time_sec": 16.09,
+          "message": "景元 进化为「雷霆将临」"
+        },
+        {
+          "time_sec": 16.09,
+          "message": "艾莲 进化为「鲨卷风暴」"
+        },
+        {
+          "time_sec": 20.26,
+          "message": "景元 石火流光 → 艾莲 -131"
+        },
+        {
+          "time_sec": 22.67,
+          "message": "艾莲 抢先手（中心偏角 18.7°），景元 延后攻击"
+        },
+        {
+          "time_sec": 22.67,
+          "message": "艾莲 永冬狂宴 → 景元 -556"
+        },
+        {
+          "time_sec": 22.67,
+          "message": "景元 紫霄震曜 → 艾莲 -158"
+        },
+        {
+          "time_sec": 23.87,
+          "message": "景元 神君·5段 → 艾莲 -184"
+        },
+        {
+          "time_sec": 25.01,
+          "message": "景元 进化为「神君完全体」"
+        },
+        {
+          "time_sec": 25.01,
+          "message": "艾莲 进化为「永冬狂宴」"
+        },
+        {
+          "time_sec": 25.08,
+          "message": "艾莲 抢先手（中心偏角 16.5°），景元 延后攻击"
+        },
+        {
+          "time_sec": 25.08,
+          "message": "艾莲 急冻修剪法 → 景元 -254"
+        },
+        {
+          "time_sec": 25.08,
+          "message": "景元 吾身光明 → 艾莲 -399"
+        },
+        {
+          "time_sec": 27.37,
+          "message": "艾莲 抢先手（中心偏角 14.0°），景元 延后攻击"
+        },
+        {
+          "time_sec": 27.37,
+          "message": "艾莲 急冻修剪法 → 景元 -254"
+        },
+        {
+          "time_sec": 27.37,
+          "message": "景元 石火流光 → 艾莲 -166"
+        },
+        {
+          "time_sec": 29.81,
+          "message": "艾莲 抢先手（中心偏角 4.4°），景元 延后攻击"
+        },
+        {
+          "time_sec": 29.81,
+          "message": "艾莲 急冻修剪法 → 景元 -254"
+        },
+        {
+          "time_sec": 29.81,
+          "message": "景元 紫霄震曜 → 艾莲 -199"
+        },
+        {
+          "time_sec": 30.87,
+          "message": "景元 神君·8段 → 艾莲 -372"
+        },
+        {
+          "time_sec": 32.02,
+          "message": "景元 抢先手（中心偏角 17.0°），艾莲 延后攻击"
+        },
+        {
+          "time_sec": 32.02,
+          "message": "景元 石火流光 → 艾莲 -166"
+        },
+        {
+          "time_sec": 32.02,
+          "message": "艾莲 永冬狂宴 → 景元 -702"
+        },
+        {
+          "time_sec": 33.73,
+          "message": "艾莲 急冻修剪法 → 景元 -254"
+        },
+        {
+          "time_sec": 34.74,
+          "message": "景元 紫霄震曜 → 艾莲 -199"
+        },
+        {
+          "time_sec": 38.44,
+          "message": "景元 吾身光明 → 艾莲 -399"
+        },
+        {
+          "time_sec": 38.5,
+          "message": "景元 神君·8段 → 艾莲 -372"
+        },
+        {
+          "time_sec": 38.52,
+          "message": "景元 石火流光 → 艾莲 -166"
+        },
+        {
+          "time_sec": 39.62,
+          "message": "艾莲 急冻修剪法 → 景元 -254"
+        },
+        {
+          "time_sec": 46.51,
+          "message": "景元 神君·3段 → 艾莲 -139"
+        },
+        {
+          "time_sec": 48.2,
+          "message": "艾莲 抢先手（中心偏角 12.3°），景元 延后攻击"
+        },
+        {
+          "time_sec": 48.2,
+          "message": "艾莲 急冻修剪法 → 景元 -254"
+        },
+        {
+          "time_sec": 48.2,
+          "message": "景元 紫霄震曜 → 艾莲 -199"
+        },
+        {
+          "time_sec": 50.41,
+          "message": "景元 石火流光 → 艾莲 -166"
+        },
+        {
+          "time_sec": 52.83,
+          "message": "艾莲 永冬狂宴 → 景元 -702"
+        },
+        {
+          "time_sec": 53.97,
+          "message": "景元 神君·5段 → 艾莲 -232"
+        },
+        {
+          "time_sec": 53.98,
+          "message": "景元 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T18:03:08+08:00",
+      "duration_sec": 53.98,
+      "reason": "completed",
+      "winner": "景元",
+      "final": [
+        {
+          "name": "景元",
+          "hp": 76.5,
+          "max_hp": 4080.0,
+          "skill_points": 1,
+          "energy": 100.0,
+          "stage": "神君完全体",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 0,
+          "jane_passion": 0.0,
+          "panacea_feather": 0,
+          "panacea_weapon_hits_left": 0,
+          "xentinel_spirit": 0
+        },
+        {
+          "name": "艾莲",
+          "hp": 0.0,
+          "max_hp": 3960.0,
+          "skill_points": 3,
+          "energy": 0.0,
+          "stage": "永冬狂宴",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 6,
+          "jane_passion": 0.0,
+          "panacea_feather": 0,
+          "panacea_weapon_hits_left": 0,
+          "xentinel_spirit": 0
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T18:17:10+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 1000,
+        "attack_pose_ms": 2000,
+        "initiative_rule": "smaller_center_offset_then_alternate_tie",
+        "timing_model": "wall_and_active_v2",
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "希儿",
+          "tag": "seele",
+          "base_hp": 3200.0,
+          "base_atk": 780.0,
+          "move_speed": 185.0
+        },
+        {
+          "name": "克拉拉",
+          "tag": "clara",
+          "base_hp": 3800.0,
+          "base_atk": 650.0,
+          "move_speed": 135.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "active_time_sec": 0.0,
+          "message": "希儿 VS 克拉拉 开战"
+        },
+        {
+          "time_sec": 6.14,
+          "active_time_sec": 6.14,
+          "message": "希儿 强袭 → 克拉拉 -105"
+        },
+        {
+          "time_sec": 6.14,
+          "active_time_sec": 6.14,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -58"
+        },
+        {
+          "time_sec": 12.0,
+          "active_time_sec": 10.01,
+          "message": "希儿 进化为「增幅疾行」"
+        },
+        {
+          "time_sec": 12.0,
+          "active_time_sec": 10.01,
+          "message": "克拉拉 进化为「反击标记」"
+        },
+        {
+          "time_sec": 14.03,
+          "active_time_sec": 12.03,
+          "message": "克拉拉 我也想帮上忙 → 希儿 -107"
+        },
+        {
+          "time_sec": 17.03,
+          "active_time_sec": 13.05,
+          "message": "克拉拉 抢先手（中心偏角 18.7°），希儿 延后攻击"
+        },
+        {
+          "time_sec": 17.03,
+          "active_time_sec": 13.05,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 希儿 -257"
+        },
+        {
+          "time_sec": 19.05,
+          "active_time_sec": 13.05,
+          "message": "希儿 归刃 → 克拉拉 -254"
+        },
+        {
+          "time_sec": 19.05,
+          "active_time_sec": 13.05,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -64"
+        },
+        {
+          "time_sec": 24.15,
+          "active_time_sec": 16.16,
+          "message": "克拉拉 我也想帮上忙 → 希儿 -107"
+        },
+        {
+          "time_sec": 24.15,
+          "active_time_sec": 16.16,
+          "message": "希儿 进化为「乱蝶觉醒」"
+        },
+        {
+          "time_sec": 24.15,
+          "active_time_sec": 16.16,
+          "message": "克拉拉 进化为「史瓦罗强化」"
+        },
+        {
+          "time_sec": 30.25,
+          "active_time_sec": 20.25,
+          "message": "希儿 乱蝶 → 克拉拉 -764"
+        },
+        {
+          "time_sec": 30.25,
+          "active_time_sec": 20.25,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -71"
+        },
+        {
+          "time_sec": 32.25,
+          "active_time_sec": 20.27,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 34.27,
+          "active_time_sec": 20.29,
+          "message": "希儿 强袭 → 克拉拉 -139"
+        },
+        {
+          "time_sec": 34.27,
+          "active_time_sec": 20.29,
+          "message": "克拉拉 强化反击 → 希儿 -190"
+        },
+        {
+          "time_sec": 40.97,
+          "active_time_sec": 25.0,
+          "message": "希儿 进化为「量子终境」"
+        },
+        {
+          "time_sec": 40.97,
+          "active_time_sec": 25.0,
+          "message": "克拉拉 进化为「家人守望」"
+        },
+        {
+          "time_sec": 45.36,
+          "active_time_sec": 29.4,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 希儿 -360"
+        },
+        {
+          "time_sec": 50.03,
+          "active_time_sec": 32.07,
+          "message": "克拉拉 我也想帮上忙 → 希儿 -150"
+        },
+        {
+          "time_sec": 58.83,
+          "active_time_sec": 38.87,
+          "message": "克拉拉 抢先手（中心偏角 27.2°），希儿 延后攻击"
+        },
+        {
+          "time_sec": 58.83,
+          "active_time_sec": 38.87,
+          "message": "克拉拉 我也想帮上忙 → 希儿 -150"
+        },
+        {
+          "time_sec": 60.83,
+          "active_time_sec": 38.87,
+          "message": "希儿 归刃 → 克拉拉 -388"
+        },
+        {
+          "time_sec": 60.83,
+          "active_time_sec": 38.87,
+          "message": "克拉拉 强化反击 → 希儿 -240"
+        },
+        {
+          "time_sec": 62.84,
+          "active_time_sec": 38.89,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 64.84,
+          "active_time_sec": 38.9,
+          "message": "克拉拉 抢先手（中心偏角 27.0°），希儿 延后攻击"
+        },
+        {
+          "time_sec": 64.84,
+          "active_time_sec": 38.9,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 希儿 -360"
+        },
+        {
+          "time_sec": 66.85,
+          "active_time_sec": 38.9,
+          "message": "希儿 乱蝶 → 克拉拉 -750"
+        },
+        {
+          "time_sec": 66.85,
+          "active_time_sec": 38.9,
+          "message": "克拉拉 强化反击 → 希儿 -240"
+        },
+        {
+          "time_sec": 71.19,
+          "active_time_sec": 41.24,
+          "message": "希儿 抢先手（中心偏角 7.5°），克拉拉 延后攻击"
+        },
+        {
+          "time_sec": 71.19,
+          "active_time_sec": 41.24,
+          "message": "希儿 强袭 → 克拉拉 -176"
+        },
+        {
+          "time_sec": 71.19,
+          "active_time_sec": 41.24,
+          "message": "克拉拉 强化反击 → 希儿 -240"
+        },
+        {
+          "time_sec": 73.2,
+          "active_time_sec": 41.24,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 希儿 -360"
+        },
+        {
+          "time_sec": 76.29,
+          "active_time_sec": 42.33,
+          "message": "希儿 归刃 → 克拉拉 -499"
+        },
+        {
+          "time_sec": 76.29,
+          "active_time_sec": 42.33,
+          "message": "克拉拉 史瓦罗反击 → 希儿 -90"
+        },
+        {
+          "time_sec": 81.36,
+          "active_time_sec": 45.41,
+          "message": "克拉拉 我也想帮上忙 → 希儿 -150"
+        },
+        {
+          "time_sec": 83.37,
+          "active_time_sec": 45.43,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 85.38,
+          "active_time_sec": 45.44,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 希儿 -360"
+        },
+        {
+          "time_sec": 92.26,
+          "active_time_sec": 50.34,
+          "message": "希儿 抢先手（中心偏角 11.1°），克拉拉 延后攻击"
+        },
+        {
+          "time_sec": 92.26,
+          "active_time_sec": 50.34,
+          "message": "希儿 强袭 → 克拉拉 -126"
+        },
+        {
+          "time_sec": 92.26,
+          "active_time_sec": 50.34,
+          "message": "克拉拉 强化反击 → 希儿 -240"
+        },
+        {
+          "time_sec": 92.26,
+          "active_time_sec": 50.34,
+          "message": "希儿 触发再现 → 克拉拉 -90"
+        },
+        {
+          "time_sec": 94.28,
+          "active_time_sec": 50.34,
+          "message": "克拉拉 我也想帮上忙 → 希儿 -150"
+        },
+        {
+          "time_sec": 96.29,
+          "active_time_sec": 50.35,
+          "message": "克拉拉 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T18:18:46+08:00",
+      "duration_sec": 96.29,
+      "active_duration_sec": 50.35,
+      "reason": "completed",
+      "winner": "克拉拉",
+      "final": [
+        {
+          "name": "希儿",
+          "hp": 0.0,
+          "max_hp": 3840.0,
+          "skill_points": 1,
+          "energy": 90.0,
+          "stage": "量子终境",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 0,
+          "jane_passion": 0.0,
+          "panacea_feather": 0,
+          "panacea_weapon_hits_left": 0,
+          "xentinel_spirit": 0,
+          "damage_dealt": 3295.6,
+          "damage_taken": 3949.5,
+          "action_counts": {
+            "basic": 4,
+            "skill": 3,
+            "ultimate": 2,
+            "passive": 1
+          }
+        },
+        {
+          "name": "克拉拉",
+          "hp": 1264.4,
+          "max_hp": 4560.0,
+          "skill_points": 1,
+          "energy": 60.0,
+          "stage": "家人守望",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 0,
+          "jane_passion": 0.0,
+          "panacea_feather": 0,
+          "panacea_weapon_hits_left": 0,
+          "xentinel_spirit": 0,
+          "damage_dealt": 3949.5,
+          "damage_taken": 3295.6,
+          "action_counts": {
+            "basic": 6,
+            "skill": 5,
+            "ultimate": 3
+          }
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T18:28:29+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 1000,
+        "attack_pose_ms": 2000,
+        "initiative_rule": "smaller_center_offset_then_alternate_tie",
+        "timing_model": "wall_and_active_v2",
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "鱼钩",
+          "tag": "hook",
+          "base_hp": 3500.0,
+          "base_atk": 680.0,
+          "move_speed": 147.0
+        },
+        {
+          "name": "克拉拉",
+          "tag": "clara",
+          "base_hp": 3800.0,
+          "base_atk": 650.0,
+          "move_speed": 135.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "active_time_sec": 0.0,
+          "message": "鱼钩 VS 克拉拉 开战"
+        },
+        {
+          "time_sec": 0.41,
+          "active_time_sec": 0.41,
+          "message": "鱼钩 抢先手（中心偏角 40.4°），克拉拉 延后攻击"
+        },
+        {
+          "time_sec": 0.41,
+          "active_time_sec": 0.41,
+          "message": "鱼钩 甩钩 → 克拉拉 -91"
+        },
+        {
+          "time_sec": 0.41,
+          "active_time_sec": 0.41,
+          "message": "克拉拉 史瓦罗反击 → 鱼钩 -58"
+        },
+        {
+          "time_sec": 2.42,
+          "active_time_sec": 0.41,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -97"
+        },
+        {
+          "time_sec": 10.19,
+          "active_time_sec": 6.19,
+          "message": "克拉拉 抢先手（中心偏角 24.9°），鱼钩 延后攻击"
+        },
+        {
+          "time_sec": 10.19,
+          "active_time_sec": 6.19,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 鱼钩 -234"
+        },
+        {
+          "time_sec": 10.19,
+          "active_time_sec": 6.19,
+          "message": "鱼钩 进化为「熟练抛线」"
+        },
+        {
+          "time_sec": 10.19,
+          "active_time_sec": 6.19,
+          "message": "克拉拉 进化为「反击标记」"
+        },
+        {
+          "time_sec": 12.2,
+          "active_time_sec": 6.19,
+          "message": "鱼钩 释放弹跳鱼线（第1次，4秒）"
+        },
+        {
+          "time_sec": 18.2,
+          "active_time_sec": 10.2,
+          "message": "鱼钩 放线超时，开始空钩回收"
+        },
+        {
+          "time_sec": 20.0,
+          "active_time_sec": 12.0,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -107"
+        },
+        {
+          "time_sec": 23.01,
+          "active_time_sec": 13.03,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -107"
+        },
+        {
+          "time_sec": 23.01,
+          "active_time_sec": 13.03,
+          "message": "鱼钩 进化为「深水猎手」"
+        },
+        {
+          "time_sec": 23.01,
+          "active_time_sec": 13.03,
+          "message": "克拉拉 进化为「史瓦罗强化」"
+        },
+        {
+          "time_sec": 25.01,
+          "active_time_sec": 13.04,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 27.02,
+          "active_time_sec": 13.06,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -118"
+        },
+        {
+          "time_sec": 29.37,
+          "active_time_sec": 13.42,
+          "message": "鱼钩 回收途中勾住 克拉拉"
+        },
+        {
+          "time_sec": 29.37,
+          "active_time_sec": 13.42,
+          "message": "鱼钩 鱼钩拖拽 → 克拉拉 -39"
+        },
+        {
+          "time_sec": 29.37,
+          "active_time_sec": 13.42,
+          "message": "克拉拉 强化反击 → 鱼钩 -190"
+        },
+        {
+          "time_sec": 31.54,
+          "active_time_sec": 13.6,
+          "message": "鱼钩 完成鱼钩回收，拖拽累计造成 39 伤害"
+        },
+        {
+          "time_sec": 33.27,
+          "active_time_sec": 15.33,
+          "message": "克拉拉 抢先手（中心偏角 21.6°），鱼钩 延后攻击"
+        },
+        {
+          "time_sec": 33.27,
+          "active_time_sec": 15.33,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 鱼钩 -285"
+        },
+        {
+          "time_sec": 35.28,
+          "active_time_sec": 15.33,
+          "message": "鱼钩 释放深海长线（第2次，8秒）"
+        },
+        {
+          "time_sec": 38.28,
+          "active_time_sec": 16.36,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -118"
+        },
+        {
+          "time_sec": 38.28,
+          "active_time_sec": 16.36,
+          "message": "鱼钩 进化为「永不空军」"
+        },
+        {
+          "time_sec": 38.28,
+          "active_time_sec": 16.36,
+          "message": "克拉拉 进化为「家人守望」"
+        },
+        {
+          "time_sec": 47.26,
+          "active_time_sec": 23.34,
+          "message": "鱼钩 放线超时，开始空钩回收"
+        },
+        {
+          "time_sec": 50.13,
+          "active_time_sec": 26.21,
+          "message": "克拉拉 史瓦罗在看着你 → 鱼钩 -180"
+        },
+        {
+          "time_sec": 52.14,
+          "active_time_sec": 26.23,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 54.15,
+          "active_time_sec": 26.25,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -150"
+        },
+        {
+          "time_sec": 57.16,
+          "active_time_sec": 27.27,
+          "message": "克拉拉 史瓦罗在看着你 → 鱼钩 -180"
+        },
+        {
+          "time_sec": 61.8,
+          "active_time_sec": 29.92,
+          "message": "鱼钩 收回鱼钩，本次未命中"
+        },
+        {
+          "time_sec": 62.99,
+          "active_time_sec": 31.11,
+          "message": "鱼钩 甩钩 → 克拉拉 -109"
+        },
+        {
+          "time_sec": 62.99,
+          "active_time_sec": 31.11,
+          "message": "克拉拉 强化反击 → 鱼钩 -240"
+        },
+        {
+          "time_sec": 67.46,
+          "active_time_sec": 33.58,
+          "message": "鱼钩 释放无限鱼钩（第3次，不限时）"
+        },
+        {
+          "time_sec": 72.1,
+          "active_time_sec": 36.23,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 鱼钩 -360"
+        },
+        {
+          "time_sec": 76.06,
+          "active_time_sec": 38.19,
+          "message": "鱼钩 的鱼钩勾住 克拉拉，开始回收"
+        },
+        {
+          "time_sec": 76.06,
+          "active_time_sec": 38.19,
+          "message": "鱼钩 鱼钩拖拽 → 克拉拉 -49"
+        },
+        {
+          "time_sec": 76.06,
+          "active_time_sec": 38.19,
+          "message": "克拉拉 强化反击 → 鱼钩 -240"
+        },
+        {
+          "time_sec": 78.3,
+          "active_time_sec": 38.45,
+          "message": "鱼钩 鱼钩拖拽 → 克拉拉 -49"
+        },
+        {
+          "time_sec": 78.57,
+          "active_time_sec": 38.72,
+          "message": "鱼钩 鱼钩拖拽 → 克拉拉 -49"
+        },
+        {
+          "time_sec": 78.8,
+          "active_time_sec": 38.95,
+          "message": "鱼钩 鱼钩拖拽 → 克拉拉 -49"
+        },
+        {
+          "time_sec": 79.05,
+          "active_time_sec": 39.2,
+          "message": "鱼钩 鱼钩拖拽 → 克拉拉 -49"
+        },
+        {
+          "time_sec": 79.3,
+          "active_time_sec": 39.45,
+          "message": "鱼钩 鱼钩拖拽 → 克拉拉 -49"
+        },
+        {
+          "time_sec": 79.56,
+          "active_time_sec": 39.71,
+          "message": "鱼钩 鱼钩拖拽 → 克拉拉 -49"
+        },
+        {
+          "time_sec": 79.82,
+          "active_time_sec": 39.96,
+          "message": "鱼钩 鱼钩拖拽 → 克拉拉 -49"
+        },
+        {
+          "time_sec": 80.05,
+          "active_time_sec": 40.2,
+          "message": "鱼钩 鱼钩拖拽 → 克拉拉 -49"
+        },
+        {
+          "time_sec": 80.3,
+          "active_time_sec": 40.45,
+          "message": "鱼钩 鱼钩拖拽 → 克拉拉 -49"
+        },
+        {
+          "time_sec": 80.55,
+          "active_time_sec": 40.7,
+          "message": "鱼钩 鱼钩拖拽 → 克拉拉 -49"
+        },
+        {
+          "time_sec": 80.81,
+          "active_time_sec": 40.95,
+          "message": "鱼钩 鱼钩拖拽 → 克拉拉 -49"
+        },
+        {
+          "time_sec": 81.05,
+          "active_time_sec": 41.2,
+          "message": "鱼钩 鱼钩拖拽 → 克拉拉 -49"
+        },
+        {
+          "time_sec": 81.3,
+          "active_time_sec": 41.45,
+          "message": "鱼钩 鱼钩拖拽 → 克拉拉 -49"
+        },
+        {
+          "time_sec": 81.55,
+          "active_time_sec": 41.7,
+          "message": "鱼钩 鱼钩拖拽 → 克拉拉 -49"
+        },
+        {
+          "time_sec": 81.8,
+          "active_time_sec": 41.95,
+          "message": "鱼钩 鱼钩拖拽 → 克拉拉 -49"
+        },
+        {
+          "time_sec": 81.9,
+          "active_time_sec": 42.05,
+          "message": "鱼钩 完成鱼钩回收，拖拽累计造成 791 伤害"
+        },
+        {
+          "time_sec": 85.78,
+          "active_time_sec": 45.92,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 鱼钩 -360"
+        },
+        {
+          "time_sec": 87.78,
+          "active_time_sec": 45.94,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 89.78,
+          "active_time_sec": 45.96,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -150"
+        },
+        {
+          "time_sec": 92.8,
+          "active_time_sec": 46.97,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -150"
+        },
+        {
+          "time_sec": 97.52,
+          "active_time_sec": 49.71,
+          "message": "鱼钩 释放深海长线（第4次，8秒）"
+        },
+        {
+          "time_sec": 107.51,
+          "active_time_sec": 57.72,
+          "message": "鱼钩 放线超时，开始空钩回收"
+        },
+        {
+          "time_sec": 114.06,
+          "active_time_sec": 64.28,
+          "message": "鱼钩 收回鱼钩，本次未命中"
+        },
+        {
+          "time_sec": 116.44,
+          "active_time_sec": 66.65,
+          "message": "克拉拉 抢先手（中心偏角 16.8°），鱼钩 延后攻击"
+        },
+        {
+          "time_sec": 116.44,
+          "active_time_sec": 66.65,
+          "message": "克拉拉 我也想帮上忙 → 鱼钩 -150"
+        },
+        {
+          "time_sec": 118.45,
+          "active_time_sec": 66.65,
+          "message": "鱼钩 甩钩 → 克拉拉 -109"
+        },
+        {
+          "time_sec": 118.45,
+          "active_time_sec": 66.65,
+          "message": "克拉拉 强化反击 → 鱼钩 -240"
+        },
+        {
+          "time_sec": 124.15,
+          "active_time_sec": 70.35,
+          "message": "鱼钩 释放弹跳鱼线（第5次，4秒）"
+        },
+        {
+          "time_sec": 130.14,
+          "active_time_sec": 74.36,
+          "message": "鱼钩 放线超时，开始空钩回收"
+        },
+        {
+          "time_sec": 130.34,
+          "active_time_sec": 74.57,
+          "message": "克拉拉 史瓦罗在看着你+反击标记 → 鱼钩 -360"
+        },
+        {
+          "time_sec": 134.78,
+          "active_time_sec": 77.02,
+          "message": "鱼钩 回收途中勾住 克拉拉"
+        },
+        {
+          "time_sec": 134.78,
+          "active_time_sec": 77.02,
+          "message": "鱼钩 鱼钩拖拽 → 克拉拉 -49"
+        },
+        {
+          "time_sec": 134.78,
+          "active_time_sec": 77.02,
+          "message": "克拉拉 强化反击 → 鱼钩 -240"
+        },
+        {
+          "time_sec": 136.79,
+          "active_time_sec": 77.03,
+          "message": "克拉拉 发动终结技，获得 2 次强化反击"
+        },
+        {
+          "time_sec": 138.79,
+          "active_time_sec": 77.05,
+          "message": "克拉拉 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T18:30:48+08:00",
+      "duration_sec": 138.79,
+      "active_duration_sec": 77.05,
+      "reason": "completed",
+      "winner": "克拉拉",
+      "final": [
+        {
+          "name": "鱼钩",
+          "hp": 0.0,
+          "max_hp": 4200.0,
+          "skill_points": 0,
+          "energy": 70.0,
+          "stage": "永不空军",
+          "hook_releases": 5,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 0,
+          "jane_passion": 0.0,
+          "panacea_feather": 0,
+          "panacea_weapon_hits_left": 0,
+          "xentinel_spirit": 0,
+          "damage_dealt": 1192.1,
+          "damage_taken": 4321.2,
+          "action_counts": {
+            "basic": 3,
+            "skill": 3,
+            "ultimate": 2
+          }
+        },
+        {
+          "name": "克拉拉",
+          "hp": 3367.9,
+          "max_hp": 4560.0,
+          "skill_points": 2,
+          "energy": 0.0,
+          "stage": "家人守望",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 0,
+          "jane_passion": 0.0,
+          "panacea_feather": 0,
+          "panacea_weapon_hits_left": 0,
+          "xentinel_spirit": 0,
+          "damage_dealt": 4321.2,
+          "damage_taken": 1192.1,
+          "action_counts": {
+            "basic": 9,
+            "skill": 7,
+            "ultimate": 4
+          }
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T20:34:18+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 1000,
+        "attack_pose_ms": 2000,
+        "initiative_rule": "smaller_center_offset_then_alternate_tie",
+        "timing_model": "wall_and_active_v2",
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "艾莲",
+          "tag": "ellen",
+          "base_hp": 3300.0,
+          "base_atk": 760.0,
+          "move_speed": 179.0
+        },
+        {
+          "name": "景元",
+          "tag": "jingyuan",
+          "base_hp": 3400.0,
+          "base_atk": 720.0,
+          "move_speed": 153.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "active_time_sec": 0.0,
+          "message": "艾莲 VS 景元 开战"
+        },
+        {
+          "time_sec": 0.34,
+          "active_time_sec": 0.34,
+          "message": "艾莲 抢先手（中心偏角 39.9°），景元 延后攻击"
+        },
+        {
+          "time_sec": 0.34,
+          "active_time_sec": 0.34,
+          "message": "艾莲 利齿修剪法 → 景元 -114"
+        },
+        {
+          "time_sec": 2.34,
+          "active_time_sec": 0.34,
+          "message": "景元 石火流光 → 艾莲 -108"
+        },
+        {
+          "time_sec": 9.23,
+          "active_time_sec": 5.24,
+          "message": "景元 抢先手（中心偏角 24.1°），艾莲 延后攻击"
+        },
+        {
+          "time_sec": 9.23,
+          "active_time_sec": 5.24,
+          "message": "景元 紫霄震曜 → 艾莲 -129"
+        },
+        {
+          "time_sec": 9.23,
+          "active_time_sec": 5.24,
+          "message": "艾莲 进化为「急冻修剪」"
+        },
+        {
+          "time_sec": 9.23,
+          "active_time_sec": 5.24,
+          "message": "景元 进化为「神君蓄势」"
+        },
+        {
+          "time_sec": 11.24,
+          "active_time_sec": 5.24,
+          "message": "艾莲 强化特殊技·鲨卷风 → 景元 -219"
+        },
+        {
+          "time_sec": 15.76,
+          "active_time_sec": 7.77,
+          "message": "景元 神君·5段 → 艾莲 -166"
+        },
+        {
+          "time_sec": 18.95,
+          "active_time_sec": 8.97,
+          "message": "艾莲 急冻修剪法 → 景元 -181"
+        },
+        {
+          "time_sec": 27.76,
+          "active_time_sec": 15.78,
+          "message": "景元 神君·3段 → 艾莲 -99"
+        },
+        {
+          "time_sec": 33.96,
+          "active_time_sec": 20.0,
+          "message": "艾莲 进化为「鲨卷风暴」"
+        },
+        {
+          "time_sec": 33.96,
+          "active_time_sec": 20.0,
+          "message": "景元 进化为「雷霆将临」"
+        },
+        {
+          "time_sec": 35.8,
+          "active_time_sec": 21.84,
+          "message": "景元 抢先手（中心偏角 13.3°），艾莲 延后攻击"
+        },
+        {
+          "time_sec": 35.8,
+          "active_time_sec": 21.84,
+          "message": "景元 石火流光 → 艾莲 -131"
+        },
+        {
+          "time_sec": 37.81,
+          "active_time_sec": 21.84,
+          "message": "艾莲 永冬狂宴 → 景元 -556"
+        },
+        {
+          "time_sec": 40.96,
+          "active_time_sec": 23.01,
+          "message": "艾莲 急冻修剪法 → 景元 -201"
+        },
+        {
+          "time_sec": 43.74,
+          "active_time_sec": 23.79,
+          "message": "景元 神君·3段 → 艾莲 -110"
+        },
+        {
+          "time_sec": 45.74,
+          "active_time_sec": 23.81,
+          "message": "景元 抢先手（中心偏角 1.1°），艾莲 延后攻击"
+        },
+        {
+          "time_sec": 45.74,
+          "active_time_sec": 23.81,
+          "message": "景元 吾身光明 → 艾莲 -316"
+        },
+        {
+          "time_sec": 47.74,
+          "active_time_sec": 23.81,
+          "message": "艾莲 急冻修剪法 → 景元 -201"
+        },
+        {
+          "time_sec": 50.75,
+          "active_time_sec": 24.84,
+          "message": "景元 紫霄震曜 → 艾莲 -158"
+        },
+        {
+          "time_sec": 50.75,
+          "active_time_sec": 24.84,
+          "message": "艾莲 进化为「永冬狂宴」"
+        },
+        {
+          "time_sec": 50.75,
+          "active_time_sec": 24.84,
+          "message": "景元 进化为「神君完全体」"
+        },
+        {
+          "time_sec": 58.06,
+          "active_time_sec": 30.17,
+          "message": "景元 神君·8段 → 艾莲 -372"
+        },
+        {
+          "time_sec": 68.06,
+          "active_time_sec": 38.17,
+          "message": "景元 神君·3段 → 艾莲 -139"
+        },
+        {
+          "time_sec": 72.17,
+          "active_time_sec": 40.29,
+          "message": "景元 抢先手（中心偏角 26.6°），艾莲 延后攻击"
+        },
+        {
+          "time_sec": 72.17,
+          "active_time_sec": 40.29,
+          "message": "景元 石火流光 → 艾莲 -166"
+        },
+        {
+          "time_sec": 74.2,
+          "active_time_sec": 40.29,
+          "message": "艾莲 急冻修剪法 → 景元 -254"
+        },
+        {
+          "time_sec": 77.96,
+          "active_time_sec": 42.06,
+          "message": "艾莲 抢先手（中心偏角 15.1°），景元 延后攻击"
+        },
+        {
+          "time_sec": 77.96,
+          "active_time_sec": 42.06,
+          "message": "艾莲 永冬狂宴 → 景元 -702"
+        },
+        {
+          "time_sec": 79.96,
+          "active_time_sec": 42.06,
+          "message": "景元 紫霄震曜 → 艾莲 -199"
+        },
+        {
+          "time_sec": 84.21,
+          "active_time_sec": 44.32,
+          "message": "艾莲 急冻修剪法 → 景元 -254"
+        },
+        {
+          "time_sec": 87.71,
+          "active_time_sec": 45.82,
+          "message": "景元 神君·5段 → 艾莲 -232"
+        },
+        {
+          "time_sec": 91.73,
+          "active_time_sec": 47.86,
+          "message": "景元 吾身光明 → 艾莲 -399"
+        },
+        {
+          "time_sec": 97.71,
+          "active_time_sec": 51.84,
+          "message": "艾莲 急冻修剪法 → 景元 -254"
+        },
+        {
+          "time_sec": 100.72,
+          "active_time_sec": 52.86,
+          "message": "景元 石火流光 → 艾莲 -166"
+        },
+        {
+          "time_sec": 102.9,
+          "active_time_sec": 53.05,
+          "message": "景元 神君·6段 → 艾莲 -279"
+        },
+        {
+          "time_sec": 104.91,
+          "active_time_sec": 53.08,
+          "message": "景元 紫霄震曜 → 艾莲 -199"
+        },
+        {
+          "time_sec": 111.69,
+          "active_time_sec": 57.86,
+          "message": "景元 抢先手（中心偏角 6.9°），艾莲 延后攻击"
+        },
+        {
+          "time_sec": 111.69,
+          "active_time_sec": 57.86,
+          "message": "景元 石火流光 → 艾莲 -166"
+        },
+        {
+          "time_sec": 113.7,
+          "active_time_sec": 57.86,
+          "message": "艾莲 急冻修剪法 → 景元 -254"
+        },
+        {
+          "time_sec": 117.36,
+          "active_time_sec": 59.52,
+          "message": "景元 抢先手（中心偏角 0.5°），艾莲 延后攻击"
+        },
+        {
+          "time_sec": 117.36,
+          "active_time_sec": 59.52,
+          "message": "景元 紫霄震曜 → 艾莲 -199"
+        },
+        {
+          "time_sec": 119.36,
+          "active_time_sec": 59.52,
+          "message": "艾莲 永冬狂宴 → 景元 -702"
+        },
+        {
+          "time_sec": 122.1,
+          "active_time_sec": 60.29,
+          "message": "景元 神君·7段 → 艾莲 -325"
+        },
+        {
+          "time_sec": 124.12,
+          "active_time_sec": 60.31,
+          "message": "景元 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T20:36:22+08:00",
+      "duration_sec": 124.12,
+      "active_duration_sec": 60.31,
+      "reason": "completed",
+      "winner": "景元",
+      "final": [
+        {
+          "name": "艾莲",
+          "hp": 0.0,
+          "max_hp": 3960.0,
+          "skill_points": 3,
+          "energy": 0.0,
+          "stage": "永冬狂宴",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 6,
+          "jane_passion": 0.0,
+          "panacea_feather": 0,
+          "panacea_weapon_hits_left": 0,
+          "xentinel_spirit": 0,
+          "damage_dealt": 3897.7,
+          "damage_taken": 4067.9,
+          "action_counts": {
+            "basic": 8,
+            "skill": 1,
+            "ultimate": 3
+          }
+        },
+        {
+          "name": "景元",
+          "hp": 182.3,
+          "max_hp": 4080.0,
+          "skill_points": 0,
+          "energy": 130.0,
+          "stage": "神君完全体",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 0,
+          "jane_passion": 0.0,
+          "panacea_feather": 0,
+          "panacea_weapon_hits_left": 0,
+          "xentinel_spirit": 0,
+          "damage_dealt": 4067.9,
+          "damage_taken": 3897.7,
+          "action_counts": {
+            "basic": 5,
+            "skill": 5,
+            "passive": 8,
+            "ultimate": 2
+          }
+        }
+      ]
+    },
+    {
+      "started_at": "2026-09-11T21:00:11+08:00",
+      "settings": {
+        "damage_scale": 0.15,
+        "attack_angle_deg": 90.0,
+        "attack_range": 150,
+        "attack_cooldown_ms": 1000,
+        "attack_pose_ms": 2000,
+        "initiative_rule": "smaller_center_offset_then_alternate_tie",
+        "timing_model": "wall_and_active_v2",
+        "hook_skill_sec": 4.0,
+        "hook_ult_sec": 8.0,
+        "hook_infinite_chance": 0.02
+      },
+      "fighters": [
+        {
+          "name": "雷电将军",
+          "tag": "raiden",
+          "base_hp": 3450.0,
+          "base_atk": 730.0,
+          "move_speed": 163.0
+        },
+        {
+          "name": "简",
+          "tag": "jane",
+          "base_hp": 3550.0,
+          "base_atk": 700.0,
+          "move_speed": 171.0
+        }
+      ],
+      "events": [
+        {
+          "time_sec": 0.0,
+          "active_time_sec": 0.0,
+          "message": "雷电将军 VS 简 开战"
+        },
+        {
+          "time_sec": 0.34,
+          "active_time_sec": 0.34,
+          "message": "简 抢先手（中心偏角 40.2°），雷电将军 延后攻击"
+        },
+        {
+          "time_sec": 0.34,
+          "active_time_sec": 0.34,
+          "message": "简 跳步刃舞 → 雷电将军 -105"
+        },
+        {
+          "time_sec": 2.36,
+          "active_time_sec": 0.34,
+          "message": "雷电将军 源流 → 简 -109"
+        },
+        {
+          "time_sec": 9.2,
+          "active_time_sec": 5.2,
+          "message": "雷电将军 抢先手（中心偏角 24.0°），简 延后攻击"
+        },
+        {
+          "time_sec": 9.2,
+          "active_time_sec": 5.2,
+          "message": "雷电将军 神变·恶曜开眼 → 简 -131"
+        },
+        {
+          "time_sec": 9.2,
+          "active_time_sec": 5.2,
+          "message": "雷电将军 进化为「愿力汇聚」"
+        },
+        {
+          "time_sec": 9.2,
+          "active_time_sec": 5.2,
+          "message": "简 进化为「心流升温」"
+        },
+        {
+          "time_sec": 11.22,
+          "active_time_sec": 5.2,
+          "message": "简 强化特殊技·空翻 → 雷电将军 -184"
+        },
+        {
+          "time_sec": 17.91,
+          "active_time_sec": 9.9,
+          "message": "简 抢先手（中心偏角 9.2°），雷电将军 延后攻击"
+        },
+        {
+          "time_sec": 17.91,
+          "active_time_sec": 9.9,
+          "message": "简 跳步刃舞 → 雷电将军 -115"
+        },
+        {
+          "time_sec": 19.91,
+          "active_time_sec": 9.9,
+          "message": "雷电将军 源流+雷眼 → 简 -174"
+        },
+        {
+          "time_sec": 26.3,
+          "active_time_sec": 14.32,
+          "message": "简 抢先手（中心偏角 16.5°），雷电将军 延后攻击"
+        },
+        {
+          "time_sec": 26.3,
+          "active_time_sec": 14.32,
+          "message": "简 强化特殊技·空翻 → 雷电将军 -184"
+        },
+        {
+          "time_sec": 26.3,
+          "active_time_sec": 14.32,
+          "message": "雷电将军 进化为「梦想真说」"
+        },
+        {
+          "time_sec": 26.3,
+          "active_time_sec": 14.32,
+          "message": "简 进化为「狂热刃舞」"
+        },
+        {
+          "time_sec": 28.32,
+          "active_time_sec": 14.32,
+          "message": "雷电将军 奥义·梦想真说+雷眼 → 简 -534"
+        },
+        {
+          "time_sec": 34.84,
+          "active_time_sec": 18.85,
+          "message": "简 终幕演出 → 雷电将军 -461"
+        },
+        {
+          "time_sec": 38.74,
+          "active_time_sec": 20.75,
+          "message": "简 萨霍夫跳 → 雷电将军 -352"
+        },
+        {
+          "time_sec": 42.31,
+          "active_time_sec": 22.33,
+          "message": "简 跳步刃舞 → 雷电将军 -160"
+        },
+        {
+          "time_sec": 42.31,
+          "active_time_sec": 22.33,
+          "message": "雷电将军 进化为「此世最胜」"
+        },
+        {
+          "time_sec": 42.31,
+          "active_time_sec": 22.33,
+          "message": "简 进化为「终幕演出」"
+        },
+        {
+          "time_sec": 45.32,
+          "active_time_sec": 23.35,
+          "message": "雷电将军 抢先手（中心偏角 38.4°），简 延后攻击"
+        },
+        {
+          "time_sec": 45.32,
+          "active_time_sec": 23.35,
+          "message": "雷电将军 源流+雷眼+梦想一心 → 简 -345"
+        },
+        {
+          "time_sec": 47.32,
+          "active_time_sec": 23.35,
+          "message": "简 强化特殊技·空翻 → 雷电将军 -323"
+        },
+        {
+          "time_sec": 51.02,
+          "active_time_sec": 25.07,
+          "message": "简 跳步刃舞 → 雷电将军 -202"
+        },
+        {
+          "time_sec": 60.37,
+          "active_time_sec": 32.43,
+          "message": "简 强化特殊技·空翻 → 雷电将军 -258"
+        },
+        {
+          "time_sec": 65.61,
+          "active_time_sec": 35.68,
+          "message": "简 抢先手（中心偏角 2.0°），雷电将军 延后攻击"
+        },
+        {
+          "time_sec": 65.61,
+          "active_time_sec": 35.68,
+          "message": "简 终幕演出 → 雷电将军 -582"
+        },
+        {
+          "time_sec": 67.64,
+          "active_time_sec": 35.68,
+          "message": "雷电将军 奥义·梦想真说+雷眼 → 简 -579"
+        },
+        {
+          "time_sec": 75.05,
+          "active_time_sec": 41.1,
+          "message": "雷电将军 抢先手（中心偏角 0.4°），简 延后攻击"
+        },
+        {
+          "time_sec": 75.05,
+          "active_time_sec": 41.1,
+          "message": "雷电将军 神变·恶曜开眼+梦想一心 → 简 -303"
+        },
+        {
+          "time_sec": 77.07,
+          "active_time_sec": 41.1,
+          "message": "简 萨霍夫跳 → 雷电将军 -444"
+        },
+        {
+          "time_sec": 80.59,
+          "active_time_sec": 42.63,
+          "message": "雷电将军 抢先手（中心偏角 27.6°），简 延后攻击"
+        },
+        {
+          "time_sec": 80.59,
+          "active_time_sec": 42.63,
+          "message": "雷电将军 源流+雷眼+梦想一心 → 简 -345"
+        },
+        {
+          "time_sec": 82.61,
+          "active_time_sec": 42.63,
+          "message": "简 跳步刃舞 → 雷电将军 -202"
+        },
+        {
+          "time_sec": 88.33,
+          "active_time_sec": 46.37,
+          "message": "简 抢先手（中心偏角 22.0°），雷电将军 延后攻击"
+        },
+        {
+          "time_sec": 88.33,
+          "active_time_sec": 46.37,
+          "message": "简 强化特殊技·空翻 → 雷电将军 -323"
+        },
+        {
+          "time_sec": 90.34,
+          "active_time_sec": 46.37,
+          "message": "雷电将军 源流+雷眼+梦想一心 → 简 -345"
+        },
+        {
+          "time_sec": 94.09,
+          "active_time_sec": 48.13,
+          "message": "简 抢先手（中心偏角 8.7°），雷电将军 延后攻击"
+        },
+        {
+          "time_sec": 94.09,
+          "active_time_sec": 48.13,
+          "message": "简 跳步刃舞 → 雷电将军 -202"
+        },
+        {
+          "time_sec": 96.1,
+          "active_time_sec": 48.13,
+          "message": "雷电将军 奥义·梦想真说+雷眼 → 简 -674"
+        },
+        {
+          "time_sec": 99.73,
+          "active_time_sec": 49.78,
+          "message": "简 抢先手（中心偏角 14.4°），雷电将军 延后攻击"
+        },
+        {
+          "time_sec": 99.73,
+          "active_time_sec": 49.78,
+          "message": "简 终幕演出 → 雷电将军 -582"
+        },
+        {
+          "time_sec": 101.74,
+          "active_time_sec": 49.81,
+          "message": "简 获胜！"
+        }
+      ],
+      "ended_at": "2026-09-11T21:01:53+08:00",
+      "duration_sec": 101.74,
+      "active_duration_sec": 49.81,
+      "reason": "completed",
+      "winner": "简",
+      "final": [
+        {
+          "name": "雷电将军",
+          "hp": 0.0,
+          "max_hp": 4140.0,
+          "skill_points": 3,
+          "energy": 10.0,
+          "stage": "此世最胜",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 0,
+          "jane_passion": 0.0,
+          "panacea_feather": 0,
+          "panacea_weapon_hits_left": 0,
+          "xentinel_spirit": 0,
+          "damage_dealt": 3544.7,
+          "damage_taken": 4684.5,
+          "action_counts": {
+            "basic": 5,
+            "skill": 2,
+            "ultimate": 3
+          }
+        },
+        {
+          "name": "简",
+          "hp": 715.3,
+          "max_hp": 4260.0,
+          "skill_points": 1,
+          "energy": 0.0,
+          "stage": "终幕演出",
+          "hook_releases": 0,
+          "shield_hp": 0.0,
+          "raiden_resolve": 0.0,
+          "ellen_flash_freeze": 0,
+          "jane_passion": 100.0,
+          "panacea_feather": 0,
+          "panacea_weapon_hits_left": 0,
+          "xentinel_spirit": 0,
+          "damage_dealt": 4684.5,
+          "damage_taken": 3544.7,
+          "action_counts": {
+            "basic": 6,
+            "skill": 5,
+            "ultimate": 3,
+            "passive": 2
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+[
+  {
+    "_comment": "复制为 links.json。常用网址收藏仅本机使用，勿提交真实业务链接。",
+    "id": "demo-link",
+    "name": "示例链接",
+    "url": "https://example.com",
+    "category": "示例",
+    "subcategory": "默认",
+    "problem": "",
+    "tags": ["示例"],
+    "icon": ""
+  }
+]

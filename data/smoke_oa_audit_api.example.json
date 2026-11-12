@@ -1,0 +1,84 @@
+{
+
+  "_comment": "OA 绑定审核（新商务冒烟 S8/S9）。复制为 smoke_oa_audit_api.json；账号可留空，自动回落 oa_promote_config.json。",
+
+  "enabled": true,
+
+  "baseUrl": "http://oa.example.com",
+
+  "defaultSourceDb": "lx",
+
+  "defaultRejectReason": "smoke-reject",
+
+  "login": {
+
+    "path": "/api/base/login",
+
+    "usernameEnv": "SMOKE_OA_USER",
+
+    "passwordEnv": "SMOKE_OA_PASS",
+
+    "username": "",
+
+    "password": ""
+
+  },
+
+  "listPending": {
+
+    "method": "GET",
+
+    "path": "/api/sysUserBindPlatform/getAuditList",
+
+    "query": {
+
+      "page": 1,
+
+      "pageSize": 50
+
+    }
+
+  },
+
+  "approve": {
+
+    "method": "POST",
+
+    "path": "/api/sysUserBindPlatform/approveAudit",
+
+    "body": {
+
+      "platformBusierId": "{{platformBusierId}}",
+
+      "sourceDb": "{{sourceDb}}",
+
+      "userId": "{{userId}}"
+
+    }
+
+  },
+
+  "reject": {
+
+    "method": "POST",
+
+    "path": "/api/sysUserBindPlatform/rejectAudit",
+
+    "body": {
+
+      "platformBusierId": "{{platformBusierId}}",
+
+      "sourceDb": "{{sourceDb}}",
+
+      "userId": "{{userId}}",
+
+      "rejectReason": "{{rejectReason}}"
+
+    }
+
+  },
+
+  "notes": "HAR: oa审核通过和驳回.txt。待审 status=0，通过=1，驳回=2。造数库 sw6.sys_user 等见 smoke_db_config.notes。"
+
+}
+

@@ -1,0 +1,56 @@
+pipeline {
+  agent any
+  
+  // 如果 Jenkins 中配置了 Node.js 工具，取消下面的注释并修改工具名称
+  // tools {
+  //   nodejs "NodeJS-18"  // 修改为你在 Jenkins 中配置的 Node.js 工具名称
+  // }
+  
+  stages {
+    stage('Install Apifox CLI') {
+      steps {
+        script {
+          echo '正在安装 Apifox CLI...'
+          // Windows 使用 bat，Linux/Mac 使用 sh
+          bat 'npm install -g apifox-cli'  // Windows
+          // sh 'npm install -g apifox-cli'  // Linux/Mac
+          bat 'apifox --version'  // Windows
+          // sh 'apifox --version'  // Linux/Mac
+        }
+      }
+    }
+    
+    stage('Running Test Scenario') {
+      steps {
+        script {
+          echo '开始执行接口自动化测试...'
+          // Windows 使用 bat，Linux/Mac 使用 sh
+          bat 'apifox run https://api.apifox.com/api/v1/projects/7042956/api-test/ci-config/507917/detail?token=xr1NaF2Dt6LEVP7Eac0cNT -r html,cli'  // Windows
+          // sh 'apifox run https://api.apifox.com/api/v1/projects/7042956/api-test/ci-config/507917/detail?token=xr1NaF2Dt6LEVP7Eac0cNT -r html,cli'  // Linux/Mac
+        }
+      }
+    }
+  }
+  
+  post {
+    always {
+      // 发布测试报告（需要安装 HTML Publisher 插件）
+      // publishHTML([
+      //   reportName: 'Apifox Test Report',
+      //   reportDir: '.',
+      //   reportFiles: 'apifox-report.html',
+      //   reportTitles: '接口自动化测试报告'
+      // ])
+      
+      echo '测试执行完成'
+    }
+    
+    success {
+      echo '✅ 测试执行成功！'
+    }
+    
+    failure {
+      echo '❌ 测试执行失败！'
+    }
+  }
+}

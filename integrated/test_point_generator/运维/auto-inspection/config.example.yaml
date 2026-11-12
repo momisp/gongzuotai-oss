@@ -1,0 +1,47 @@
+# 复制为 config.yaml 后按需修改
+
+# 巡检周期（scheduler.py 使用）：HH:MM 24小时制，多个时间点
+schedule:
+  daily_times:
+    - "09:30"
+    - "18:00"
+  # 单次额外巡检可命令行指定，见 README
+
+# 账号：可配置多个（多台账号下 ECS 分账号巡检）
+accounts:
+  - name: main
+    access_key_id_env: ALIBABA_CLOUD_ACCESS_KEY_ID
+    access_key_secret_env: ALIBABA_CLOUD_ACCESS_KEY_SECRET
+    regions:
+      - cn-hangzhou
+      # - cn-shanghai
+
+# ECS 巡检
+ecs:
+  enabled: true
+  # 只查名称包含以下任一关键词的实例；留空数组表示该账号下全部实例
+  instance_name_filters:
+    - 大派对
+    - 宙包
+  # Excel《报告基础信息》中「巡检范围」展示；可写应用分组说明
+  report_scope: '应用分组「大派对 --ffe8」下 ECS 实例（台数由巡检自动统计）'
+  application_group_hint: "大派对 · ffe8"
+
+# 云监控：CPU / 内存 / 磁盘 最近一次采样（需云监控 Agent + RAM 权限 DescribeMetricLast）
+cloud_monitor:
+  enabled: true
+  cpu_warn: 85.0
+  cpu_critical: 95.0
+  memory_warn: 80.0
+  memory_critical: 90.0
+  disk_warn: 90.0
+
+# 到期与状态风险阈值（天）
+risk:
+  expire_warn_days: 30
+  expire_critical_days: 7
+
+# 钉钉：只推送「有风险」时是否也发摘要？true=每次巡检都发完整报告
+notify:
+  dingtalk_on_every_run: true
+  dingtalk_only_on_risk: false

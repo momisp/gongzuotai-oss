@@ -1,0 +1,190 @@
+        <div class="page-header">
+          <h1>视频替换任务</h1>
+          <div class="page-header-actions">
+            <button class="btn primary" type="button" onclick="vsShowManual()" title="界面怎么用（S1～S4）">使用说明书</button>
+            <button class="btn" type="button" onclick="vsShowGuide(true)" title="定妆→切段→送方舟等业务长流程">流程说明</button>
+            <button class="btn vs-btn-standalone" type="button" onclick="vsOpenStandalone()" title="新浏览器标签打开（更大工作区）">另起页面</button>
+            <button class="btn" type="button" onclick="vsCreateProject()">新建项目</button>
+            <button class="btn" type="button" onclick="vsRefresh()">刷新</button>
+            <button class="btn" type="button" onclick="vsOpenFolder()">打开目录</button>
+          </div>
+        </div>
+        <p class="subtitle">按标准流程换角：定妆 → 切段+分镜对照审核 → 提示词 → 送方舟视频审核 → 生成 → 拼轨 → 对照锁基线 · 进行中可看进度与日志</p>
+
+        <div id="vs-guide-banner" class="vs-guide-banner">
+          <div class="vs-guide-banner-text">
+            <strong>不会用？</strong>
+            <span class="hint">先看「使用说明书」了解两栏怎么点；「流程说明」是业务长流程。</span>
+          </div>
+          <div class="vs-guide-banner-actions">
+            <button class="btn primary" type="button" onclick="vsShowManual()">使用说明书</button>
+            <button class="btn" type="button" onclick="vsShowGuide(true)">流程说明</button>
+            <button class="btn vs-btn-standalone" type="button" onclick="vsOpenStandalone()">另起页面</button>
+          </div>
+        </div>
+
+        <div class="vs-layout" id="vs-layout">
+          <aside class="vs-sidebar">
+            <div class="vs-sidebar-head">
+              <strong>项目</strong>
+              <span id="vs-proj-count" class="hint"></span>
+            </div>
+            <div id="vs-project-list" class="vs-project-list"></div>
+          </aside>
+
+          <div class="vs-main">
+            <div id="vs-empty" class="vs-empty hint">选择左侧项目查看素材与成片</div>
+
+            <div id="vs-detail" class="vs-detail hidden">
+              <div class="vs-detail-head">
+                <div>
+                  <h2 id="vs-title">—</h2>
+                  <p id="vs-subtitle" class="hint"></p>
+                </div>
+                <div class="vs-head-right">
+                  <div id="vs-status-pill" class="vs-status-pill">空闲</div>
+                  <div class="vs-head-actions">
+                    <button class="btn btn-sm" type="button" onclick="vsMarkJob('start')">标记开始</button>
+                    <button class="btn btn-sm" type="button" onclick="vsRunDemo()">演示进度</button>
+                    <button class="btn btn-sm" type="button" onclick="vsBuildCompare()">生成对照</button>
+                    <button class="btn btn-sm primary" type="button" onclick="vsSetBaseline()">设为基线</button>
+                  </div>
+                </div>
+              </div>
+
+              <div id="vs-progress-card" class="vs-progress-card">
+                <div class="vs-progress-top">
+                  <strong id="vs-step-label">流程待命</strong>
+                  <span id="vs-progress-pct">0%</span>
+                </div>
+                <div class="vs-progress-bar"><div id="vs-progress-fill"></div></div>
+                <p id="vs-progress-msg" class="hint"></p>
+                <button id="vs-job-reset" class="btn btn-sm vs-job-reset hidden" type="button" onclick="vsResetStuckJob()" title="把卡住的任务复位为「空闲」，日志与错误码保留">任务卡住了？点此复位</button>
+                <p id="vs-error-box" class="vs-error-box hidden"></p>
+                <div id="vs-flow" class="vs-flow"></div>
+              </div>
+
+              <!-- 顶部一条场景 Stepper：①分镜对照审核 ②送方舟包复查 ③全片对照验收 ④素材浏览 -->
+              <div class="vs-stepper" id="vs-stepper">
+                <button type="button" class="vs-step is-active" data-scene="s1" onclick="vsSetScene('s1')"><i>1</i>分镜对照审核<em>闸门1</em></button>
+                <button type="button" class="vs-step" data-scene="s2" onclick="vsSetScene('s2')"><i>2</i>送方舟包复查<em>闸门2</em></button>
+                <button type="button" class="vs-step" data-scene="s3" onclick="vsSetScene('s3')"><i>3</i>全片对照验收<em>锁基线</em></button>
+                <button type="button" class="vs-step" data-scene="s4" onclick="vsSetScene('s4')"><i>4</i>素材浏览<em>定妆/原片/成片</em></button>
+                <span class="vs-stepper-gap"></span>
+                <div class="vs-layout-modes" id="vs-layout-modes">
+                  <button type="button" class="vs-lm is-active" data-mode="balanced" onclick="vsSetLayoutMode('balanced')" title="均衡：视频 ~58% / 面板 ~42%">均衡</button>
+                  <button type="button" class="vs-lm" data-mode="video" onclick="vsSetLayoutMode('video')" title="视频最大化（快捷键 \）">视频最大化</button>
+                  <button type="button" class="vs-lm" data-mode="panel" onclick="vsSetLayoutMode('panel')" title="面板优先（快捷键 Shift+\）">面板优先</button>
+                </div>
+                <button type="button" class="btn btn-sm" id="vs-sidebar-toggle" onclick="vsToggleSidebar()" title="收起/展开项目栏（快捷键 Ctrl/Cmd+B）">项目栏</button>
+              </div>
+
+              <!-- 工作台两栏：左 STAGE 视频常驻 / 右 CONTEXT 材料随场景 -->
+              <div class="vs-workbench" id="vs-workbench">
+                <section class="vs-stage" id="vs-stage">
+                  <div id="vs-stage-banner" class="vs-stage-banner"></div>
+                  <div class="vs-stage-head">
+                    <strong id="vs-stage-title">—</strong>
+                    <span id="vs-stage-sub" class="hint"></span>
+                  </div>
+                  <div class="vs-duoview" id="vs-duoview">
+                    <div class="vs-video-cell" id="vs-cell-left">
+                      <h4 id="vs-left-title">参考</h4>
+                      <div class="vs-video-frame"><video id="vs-video-left" controls preload="metadata" playsinline></video></div>
+                    </div>
+                    <div class="vs-video-cell" id="vs-cell-right">
+                      <h4 id="vs-right-title">生成</h4>
+                      <div class="vs-video-frame"><video id="vs-video-right" controls preload="metadata" playsinline></video></div>
+                    </div>
+                  </div>
+                  <div class="vs-controlbar">
+                    <button type="button" class="btn btn-sm" id="vs-ctl-prev" onclick="vsSegStep(-1)" title="上一段">◀◀ 上一段</button>
+                    <button type="button" class="btn btn-sm primary" id="vs-ctl-play" onclick="vsPlayToggle()">▶ 播放</button>
+                    <button type="button" class="btn btn-sm" id="vs-ctl-next" onclick="vsSegStep(1)" title="下一段">下一段 ▶▶</button>
+                    <span class="vs-ctl-time" id="vs-ctl-time">0:00.0 / 0:00.0</span>
+                    <label class="vs-ctl-item">倍速
+                      <select id="vs-ctl-rate" class="adb-input" onchange="vsSetRate(this.value)">
+                        <option value="0.5">0.5x</option>
+                        <option value="1" selected>1x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="2">2x</option>
+                      </select>
+                    </label>
+                    <button type="button" class="btn btn-sm" id="vs-ctl-ab" onclick="vsToggleAB()" title="点一次设 A 点，再点一次设 B 点，循环播放；第三次清除">A-B 循环</button>
+                    <label class="vs-ctl-check"><input type="checkbox" id="vs-ctl-sync" checked onchange="vsToggleSync(this.checked)"> 左右同步</label>
+                    <label class="vs-ctl-check"><input type="checkbox" id="vs-ctl-autonext" onchange="vsToggleAutoNext(this.checked)"> 自动续播</label>
+                    <span class="hint" id="vs-ctl-seg">—</span>
+                  </div>
+                  <div class="vs-timeline" id="vs-timeline"></div>
+                </section>
+
+                <div class="vs-splitter" id="vs-splitter" title="拖动调整左右比例（双击回到均衡）"></div>
+
+                <aside class="vs-context" id="vs-context"></aside>
+              </div>
+
+              <!-- 旧 8 个主 Tab 中与场景不重合的功能收进「更多」区，功能不丢 -->
+              <details class="vs-more" id="vs-more">
+                <summary>更多（总览 / 流程说明 / 定妆照 / 原片 / 成片 / 报告 / 日志）</summary>
+                <div class="vs-tabs">
+                  <button type="button" class="vs-tab active" data-tab="overview" onclick="vsSwitchTab('overview')">总览</button>
+                  <button type="button" class="vs-tab" data-tab="guide" onclick="vsSwitchTab('guide')">流程说明</button>
+                  <button type="button" class="vs-tab" data-tab="costumes" onclick="vsSwitchTab('costumes')">定妆照</button>
+                  <button type="button" class="vs-tab" data-tab="sources" onclick="vsSwitchTab('sources')">原片</button>
+                  <button type="button" class="vs-tab" data-tab="outputs" onclick="vsSwitchTab('outputs')">成片版本</button>
+                  <button type="button" class="vs-tab" data-tab="reports" onclick="vsSwitchTab('reports')">生成报告</button>
+                  <button type="button" class="vs-tab" data-tab="logs" onclick="vsSwitchTab('logs')">日志</button>
+                </div>
+
+                <div id="vs-tab-overview" class="vs-tab-panel">
+                  <div id="vs-overview" class="vs-overview"></div>
+                </div>
+                <div id="vs-tab-guide" class="vs-tab-panel hidden">
+                  <div id="vs-guide-toc" class="vs-guide-toc"></div>
+                  <article id="vs-guide-body" class="vs-guide-body"></article>
+                </div>
+                <div id="vs-tab-costumes" class="vs-tab-panel hidden">
+                  <div id="vs-costumes" class="vs-costumes"></div>
+                </div>
+                <div id="vs-tab-sources" class="vs-tab-panel hidden">
+                  <div id="vs-sources" class="vs-media-list"></div>
+                </div>
+                <div id="vs-tab-outputs" class="vs-tab-panel hidden">
+                  <div id="vs-outputs" class="vs-media-list"></div>
+                </div>
+                <div id="vs-tab-reports" class="vs-tab-panel hidden">
+                  <div id="vs-reports" class="vs-reports"></div>
+                </div>
+                <div id="vs-tab-logs" class="vs-tab-panel hidden">
+                  <div class="vs-log-panel">
+                    <div class="vs-log-title">运行日志（任务事件 + 文件尾部）</div>
+                    <pre id="vs-log" class="adb-log" aria-live="polite"></pre>
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+
+        <div id="vs-preview-modal" class="vs-modal hidden" onclick="vsClosePreview(event)">
+          <div class="vs-modal-card" onclick="event.stopPropagation()">
+            <div class="vs-modal-head">
+              <strong id="vs-preview-title">预览</strong>
+              <button type="button" class="btn" onclick="vsClosePreview()">关闭</button>
+            </div>
+            <div id="vs-preview-body" class="vs-preview-body"></div>
+          </div>
+        </div>
+
+        <div id="vs-manual-modal" class="vs-modal hidden" onclick="vsCloseManual(event)">
+          <div class="vs-modal-card vs-manual-card" onclick="event.stopPropagation()">
+            <div class="vs-modal-head">
+              <strong>使用说明书</strong>
+              <div class="vs-manual-head-actions">
+                <button type="button" class="btn btn-sm" onclick="vsShowGuide(true);vsCloseManual()">打开业务流程说明</button>
+                <button type="button" class="btn" onclick="vsCloseManual()">关闭</button>
+              </div>
+            </div>
+            <article id="vs-manual-body" class="vs-manual-body vs-guide-body"></article>
+          </div>
+        </div>

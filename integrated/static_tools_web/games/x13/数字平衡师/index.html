@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>数字平衡师</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            height: 100%;
+            touch-action: manipulation;
+            background: #f0f4f8;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            background-image: linear-gradient(0deg, #f0f0f0 1px, transparent 1px);
+            background-size: 100% 24px;
+            z-index: 0;
+        }
+
+        /* 顶部UI */
+        .top-ui {
+            flex-shrink: 0;
+            padding: max(14px, env(safe-area-inset-top)) 20px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            z-index: 50;
+            position: relative;
+        }
+
+        .top-ui-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .back-btn {
+            flex-shrink: 0;
+            height: 48px;
+            padding: 0 20px 0 16px;
+            border-radius: 24px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            color: #3182ce;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .back-btn:active {
+            transform: scale(0.96);
+            background: #f7fafc;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .back-btn .back-label {
+            color: #2d3748;
+        }
+
+        .level-badge {
+            height: 48px;
+            padding: 0 22px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            font-size: 15px;
+            color: #718096;
+            font-weight: 500;
+        }
+
+        .level-badge .stat-value {
+            color: #2d3748;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .top-ui-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 14px 18px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .stat-label {
+            color: #718096;
+            font-weight: 500;
+            font-size: 13px;
+            letter-spacing: 0.02em;
+        }
+
+        .stat-card .stat-value {
+            color: #3182ce;
+            font-weight: 700;
+            font-size: 28px;
+            line-height: 1;
+        }
+
+        .attempts-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .attempt-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            flex-shrink: 0;
+            transition: background 0.2s ease;
+        }
+
+        .attempt-dot.used {
+            background: #fc8181;
+            box-shadow: 0 0 0 2px rgba(252, 129, 129, 0.25);
+        }
+
+        /* 可滚动主内容区 */
+        .game-scroll {
+            flex: 1;
+            min-height: 0;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: contain;
+            touch-action: pan-y;
+            padding: 0 16px 16px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* 星星标记 */
+        .stars-container {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .star {
+            width: 28px;
+            height: 28px;
+            opacity: 0.25;
+            transition: opacity 0.5s;
+            background: url('data:image/svg+xml,%3Csvg width="28" height="28" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M14 2 L17 10 L26 10 L18.5 15.5 L21 24 L14 19 L7 24 L9.5 15.5 L2 10 L11 10 Z" fill="%23ecc94b"/%3E%3C/svg%3E') no-repeat center;
+        }
+
+        .star.earned {
+            opacity: 1;
+        }
+
+        /* 题目卡片 */
+        .problem-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .given-numbers {
+            font-size: 28px;
+            margin-bottom: 8px;
+            letter-spacing: 3px;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .target-label {
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 4px;
+        }
+
+        .target-number {
+            font-size: 42px;
+            font-weight: 700;
+            color: #3182ce;
+            line-height: 1;
+        }
+
+        /* 输入区域 */
+        .input-area {
+            margin-bottom: 12px;
+        }
+
+        .expression-input {
+            width: 100%;
+            height: 64px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            color: #2d3748;
+            font-size: 28px;
+            font-family: inherit;
+            text-align: center;
+            outline: none;
+            padding: 0 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            transition: all 0.2s ease;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .expression-input:focus {
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.15);
+        }
+
+        .expression-input::placeholder {
+            color: #a0aec0;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .input-hint {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 13px;
+            color: #718096;
+        }
+
+        /* 反馈信息 */
+        .feedback {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            min-height: 24px;
+            margin-bottom: 16px;
+        }
+
+        .feedback.correct {
+            color: #38a169;
+        }
+
+        .feedback.error {
+            color: #e53e3e;
+        }
+
+        /* 数字键盘 */
+        .numpad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 14px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .numpad-btn {
+            height: 56px;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            color: #2d3748;
+            font-size: 24px;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .numpad-btn:active {
+            transform: scale(0.95);
+            background: #edf2f7;
+        }
+
+        .numpad-btn.operator {
+            color: #3182ce;
+            border-color: rgba(49, 130, 206, 0.35);
+            background: rgba(49, 130, 206, 0.08);
+        }
+
+        .numpad-btn.bracket {
+            color: #805ad5;
+            border-color: rgba(128, 90, 213, 0.35);
+            background: rgba(128, 90, 213, 0.08);
+        }
+
+        /* 底部按钮 */
+        .button-area {
+            flex-shrink: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 12px 16px max(16px, env(safe-area-inset-bottom));
+            background: linear-gradient(to top, rgba(240, 244, 248, 0.98) 70%, transparent);
+            border-top: 1px solid rgba(226, 232, 240, 0.6);
+            z-index: 50;
+            position: relative;
+        }
+
+        .game-btn {
+            flex: 1;
+            max-width: 160px;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
+            font-family: inherit;
+        }
+
+        .game-btn:active {
+            transform: scale(0.95);
+        }
+
+        .game-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 胜利界面 */
+        .win-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(240, 244, 248, 0.92);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            gap: 24px;
+            padding: 20px;
+        }
+
+        .certificate {
+            width: min(300px, calc(100vw - 48px));
+            padding: 36px 24px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            text-align: center;
+            color: #2d3748;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        .certificate-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 16px;
+            color: #3182ce;
+        }
+
+        .certificate-text {
+            font-size: 17px;
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .certificate-seal {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 16px;
+            border: 3px solid #38a169;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #38a169;
+            font-weight: bold;
+            font-size: 12px;
+            transform: rotate(-12deg);
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(56, 161, 105, 0.35);
+            font-family: inherit;
+        }
+
+        .restart-btn:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 480px) {
+            .top-ui {
+                padding: max(12px, env(safe-area-inset-top)) 16px 14px;
+                gap: 12px;
+            }
+
+            .back-btn,
+            .level-badge {
+                height: 44px;
+                border-radius: 22px;
+            }
+
+            .back-btn {
+                padding: 0 14px 0 12px;
+                font-size: 15px;
+            }
+
+            .back-btn .back-label {
+                display: none;
+            }
+
+            .level-badge {
+                padding: 0 16px;
+                font-size: 14px;
+            }
+
+            .top-ui-stats {
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 12px 14px;
+                gap: 8px;
+                border-radius: 14px;
+            }
+
+            .stat-card .stat-value {
+                font-size: 24px;
+            }
+
+            .attempt-dot {
+                width: 12px;
+                height: 12px;
+            }
+
+            .given-numbers {
+                font-size: 22px;
+            }
+
+            .target-number {
+                font-size: 36px;
+            }
+
+            .expression-input {
+                height: 56px;
+                font-size: 24px;
+            }
+
+            .numpad-btn {
+                height: 50px;
+                font-size: 22px;
+            }
+
+            .numpad {
+                gap: 8px;
+                padding: 12px;
+            }
+
+            .game-btn {
+                max-width: none;
+                padding: 14px 16px;
+                font-size: 16px;
+            }
+
+            .button-area {
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="background"></div>
+
+        <div class="top-ui">
+            <div class="top-ui-head">
+                <button class="back-btn" id="backBtn" type="button" aria-label="返回">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+                    <span class="back-label">返回</span>
+                </button>
+                <div class="level-badge">
+                    <span>关卡</span>
+                    <span class="stat-value"><span id="levelDisplay">1</span> / 3</span>
+                </div>
+            </div>
+            <div class="top-ui-stats">
+                <div class="stat-card">
+                    <span class="stat-label">目标数字</span>
+                    <span class="stat-value" id="targetNumber">10</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">剩余机会</span>
+                    <div class="attempts-display" id="attemptsDisplay">
+                        <span class="attempt-dot"></span>
+                        <span class="attempt-dot"></span>
+                        <span class="attempt-dot"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-scroll">
+            <div class="stars-container" id="starsContainer">
+                <div class="star"></div>
+                <div class="star"></div>
+                <div class="star"></div>
+            </div>
+
+            <div class="problem-card">
+                <div class="given-numbers" id="givenNumbers">2, 3, 5, 8</div>
+                <div class="target-label">可用数字</div>
+            </div>
+
+            <div class="input-area">
+                <input type="text" class="expression-input" id="expressionInput" placeholder="输入算式" inputmode="none" readonly>
+                <div class="input-hint">使用给出的数字各一次，构造等式</div>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="numpad" id="numpad">
+                <button class="numpad-btn" data-value="1">1</button>
+                <button class="numpad-btn" data-value="2">2</button>
+                <button class="numpad-btn" data-value="3">3</button>
+                <button class="numpad-btn operator" data-value="+">+</button>
+                <button class="numpad-btn" data-value="4">4</button>
+                <button class="numpad-btn" data-value="5">5</button>
+                <button class="numpad-btn" data-value="6">6</button>
+                <button class="numpad-btn operator" data-value="-">-</button>
+                <button class="numpad-btn" data-value="7">7</button>
+                <button class="numpad-btn" data-value="8">8</button>
+                <button class="numpad-btn" data-value="9">9</button>
+                <button class="numpad-btn operator" data-value="×">×</button>
+                <button class="numpad-btn bracket" data-value="(">(</button>
+                <button class="numpad-btn" data-value="0">0</button>
+                <button class="numpad-btn bracket" data-value=")">)</button>
+                <button class="numpad-btn operator" data-value="÷">÷</button>
+            </div>
+        </div>
+
+        <div class="button-area">
+            <button class="game-btn" id="resetBtn">重置</button>
+            <button class="game-btn" id="checkBtn">检查</button>
+        </div>
+
+        <div class="win-screen" id="winScreen">
+            <div class="certificate">
+                <div class="certificate-title">算术大师</div>
+                <div class="certificate-seal">通过认证</div>
+                <div class="certificate-text">恭喜你完成所有关卡！<br>你是真正的数字平衡师</div>
+            </div>
+            <button class="restart-btn" id="restartBtn">重新开始</button>
+        </div>
+    </div>
+
+    <script>
+        // 游戏配置
+        const levels = [
+            {
+                numbers: [1, 2, 3, 4],
+                target: 10
+            },
+            {
+                numbers: [2, 3, 5, 8],
+                target: 10
+            },
+            {
+                numbers: [3, 4, 6, 8, 10],
+                target: 24
+            }
+        ];
+
+        // 游戏状态
+        let gameState = {
+            currentLevel: 0,
+            attemptsLeft: 3,
+            usedNumbers: [],
+            starsEarned: 0
+        };
+
+        // DOM元素
+        const elements = {
+            levelDisplay: document.getElementById('levelDisplay'),
+            attemptsDisplay: document.getElementById('attemptsDisplay'),
+            starsContainer: document.getElementById('starsContainer'),
+            givenNumbers: document.getElementById('givenNumbers'),
+            targetNumber: document.getElementById('targetNumber'),
+            expressionInput: document.getElementById('expressionInput'),
+            feedback: document.getElementById('feedback'),
+            resetBtn: document.getElementById('resetBtn'),
+            checkBtn: document.getElementById('checkBtn'),
+            numpad: document.getElementById('numpad'),
+            winScreen: document.getElementById('winScreen'),
+            restartBtn: document.getElementById('restartBtn'),
+            backBtn: document.getElementById('backBtn')
+        };
+
+        // 初始化游戏
+        function initGame() {
+            gameState.currentLevel = 0;
+            gameState.starsEarned = 0;
+            updateStars();
+            loadLevel(0);
+            elements.winScreen.style.display = 'none';
+        }
+
+        // 加载关卡
+        function loadLevel(levelIndex) {
+            gameState.currentLevel = levelIndex;
+            gameState.attemptsLeft = 3;
+            gameState.usedNumbers = [];
+            
+            const level = levels[levelIndex];
+            elements.givenNumbers.textContent = level.numbers.join(', ');
+            elements.targetNumber.textContent = level.target;
+            elements.levelDisplay.textContent = levelIndex + 1;
+            
+            updateAttemptsDisplay();
+            clearInput();
+            clearFeedback();
+            elements.checkBtn.disabled = false;
+            elements.checkBtn.textContent = '检查';
+            elements.resetBtn.textContent = '重置';
+        }
+
+        // 更新尝试次数显示
+        function updateAttemptsDisplay() {
+            const dots = elements.attemptsDisplay.querySelectorAll('.attempt-dot');
+            dots.forEach((dot, index) => {
+                if (index < 3 - gameState.attemptsLeft) {
+                    dot.classList.add('used');
+                } else {
+                    dot.classList.remove('used');
+                }
+            });
+        }
+
+        // 更新星星显示
+        function updateStars() {
+            const stars = elements.starsContainer.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < gameState.starsEarned) {
+                    star.classList.add('earned');
+                } else {
+                    star.classList.remove('earned');
+                }
+            });
+        }
+
+        // 清空输入
+        function clearInput() {
+            elements.expressionInput.value = '';
+        }
+
+        // 清空反馈
+        function clearFeedback() {
+            elements.feedback.textContent = '';
+            elements.feedback.className = 'feedback';
+        }
+
+        // 数字键盘输入
+        elements.numpad.addEventListener('click', (e) => {
+            if (e.target.classList.contains('numpad-btn') && e.target.dataset.value) {
+                const value = e.target.dataset.value;
+                elements.expressionInput.value += value;
+                elements.expressionInput.focus();
+            }
+        });
+
+
+
+        // 重置按钮
+        elements.resetBtn.addEventListener('click', () => {
+            clearInput();
+            clearFeedback();
+        });
+
+        // 检查按钮
+        elements.checkBtn.addEventListener('click', checkExpression);
+
+        // 回车键检查
+        elements.expressionInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkExpression();
+            }
+        });
+
+        // 检查算式
+        function checkExpression() {
+            if (gameState.attemptsLeft <= 0) return;
+            
+            clearFeedback();
+            
+            const expression = elements.expressionInput.value.trim();
+            const level = levels[gameState.currentLevel];
+            
+            // 检查是否为空
+            if (!expression) {
+                showFeedback('请输入算式', 'error');
+                return;
+            }
+            
+            // 替换×和÷为标准运算符
+            const normalizedExpr = expression.replace(/×/g, '*').replace(/÷/g, '/');
+            
+            // 提取所有数字
+            const usedDigits = normalizedExpr.match(/\d+/g) || [];
+            const usedNumbers = usedDigits.map(d => parseInt(d, 10));
+            
+            // 检查数字使用情况
+            const sortedGiven = [...level.numbers].sort((a, b) => a - b);
+            const sortedUsed = [...usedNumbers].sort((a, b) => a - b);
+            
+            if (JSON.stringify(sortedGiven) !== JSON.stringify(sortedUsed)) {
+                showFeedback('数字使用次数不正确', 'error');
+                decreaseAttempt();
+                return;
+            }
+            
+            // 计算结果
+            try {
+                // 简单的安全检查，只允许数字和运算符
+                if (!/^[0-9+\-*/()\s]+$/.test(normalizedExpr)) {
+                    throw new Error('无效字符');
+                }
+                
+                const result = eval(normalizedExpr);
+                
+                // 处理浮点数精度问题
+                const tolerance = 0.0001;
+                if (Math.abs(result - level.target) < tolerance) {
+                    // 正确
+                    showFeedback('✓ 正确！', 'correct');
+                    gameState.starsEarned++;
+                    updateStars();
+                    
+                    setTimeout(() => {
+                        if (gameState.currentLevel < levels.length - 1) {
+                            loadLevel(gameState.currentLevel + 1);
+                        } else {
+                            // 全部完成
+                            showWinScreen();
+                        }
+                    }, 1500);
+                } else {
+                    showFeedback(`✗ 结果不正确，当前结果：${result}`, 'error');
+                    decreaseAttempt();
+                }
+            } catch (e) {
+                showFeedback('算式格式不正确', 'error');
+                decreaseAttempt();
+            }
+        }
+
+        // 减少尝试次数
+        function decreaseAttempt() {
+            gameState.attemptsLeft--;
+            updateAttemptsDisplay();
+            
+            if (gameState.attemptsLeft <= 0) {
+                elements.checkBtn.disabled = true;
+                setTimeout(() => {
+                    showFeedback('尝试次数用完，重新开始', 'error');
+                    setTimeout(() => {
+                        loadLevel(gameState.currentLevel);
+                    }, 1500);
+                }, 1000);
+            }
+        }
+
+        // 显示反馈
+        function showFeedback(text, type) {
+            elements.feedback.textContent = text;
+            elements.feedback.className = `feedback ${type}`;
+        }
+
+        // 显示胜利界面
+        function showWinScreen() {
+            elements.winScreen.style.display = 'flex';
+        }
+
+        // 重新开始按钮
+        elements.restartBtn.addEventListener('click', initGame);
+
+        // 返回按钮
+        elements.backBtn.addEventListener('click', () => {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                showFeedback('已到游戏首页', 'correct');
+            }
+        });
+
+        initGame();
+    </script>
+</body>
+</html>

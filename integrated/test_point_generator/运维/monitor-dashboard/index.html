@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>运维监控指标</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>运维监控指标</h1>
+    <p class="hint" id="headerHint">
+      <strong>命名窗口模式</strong>下左侧为<strong>真实超链接</strong>（<code>target</code>=监控窗口名），一般不当作弹窗拦截。
+      若从 <code>file://</code> 打开仍无反应，请用 <code>serve.bat</code> 启动后访问 <code>http://127.0.0.1:8765</code>。
+    </p>
+  </header>
+  <div class="layout">
+    <aside id="sidebar" aria-label="指标列表"></aside>
+    <main>
+      <div class="toolbar">
+        <span class="badge" id="modeBadge">命名窗口模式</span>
+        <span class="current-url" id="currentUrl"></span>
+        <a class="primary toolbar-btn" id="openNamed" href="#" target="">打开/切到监控窗口</a>
+        <a class="toolbar-btn" id="openTab" href="#" target="_blank" rel="noopener noreferrer">新开一个标签（独立）</a>
+        <button type="button" id="reloadFrame" class="iframe-only">重新加载嵌入</button>
+      </div>
+      <div class="frame-wrap">
+        <div class="named-pane" id="namedPane">
+          <h2>命名窗口模式（推荐）</h2>
+          <p>
+            云控制台禁止被嵌入网页，但可以在<strong>独立窗口</strong>里正常打开。
+            左侧每项是带 <code>target</code> 的链接，浏览器会把名为 <code id="winNameLabel"></code> 的窗口复用并<strong>导航</strong>到对应地址，
+            无需 <code>window.open</code>，可避免弹窗策略拦截。
+          </p>
+          <p class="tip">把本页窗口靠左、监控窗口靠右，即可接近「左导航 + 右内容」的布局。优先用下方本地 HTTP 方式打开本页。</p>
+          <p id="namedStatus" class="muted"></p>
+        </div>
+        <div class="iframe-host iframe-only" id="iframeHost">
+          <iframe
+            id="panel"
+            title="指标页"
+            sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-downloads"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+          <div class="fallback" id="fallback" role="status">
+            <h2>无法在此页内嵌入</h2>
+            <p>请改用上方「打开/切到监控窗口」或「新开一个标签」。</p>
+            <a class="primary" id="openTab2" href="#" target="_blank" rel="noopener noreferrer">新标签打开</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="metrics-config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

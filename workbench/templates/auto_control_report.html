@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}</title>
+  {# 视觉参考：Allure Report 状态色 + pytest-xhtml 卡片仪表盘 + Allure HTTP 附件卡片 #}
+  <style>
+    :root {
+      --pass: #16a34a;
+      --fail: #dc2626;
+      --broken: #d97706;
+      --skip: #9ca3af;
+      --unknown: #6b7280;
+      --bg: #f4f5f7;
+      --panel: #fff;
+      --ink: #111827;
+      --muted: #6b7280;
+      --line: #e6e8ec;
+      --accent: #0f766e;
+      --sidebar: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.45;
+    }
+    .layout { display: grid; grid-template-columns: 200px 1fr; min-height: 100vh; }
+    .side {
+      background: var(--sidebar);
+      color: var(--ink);
+      padding: 20px 14px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      border-right: 1px solid var(--line);
+    }
+    .side .brand { font-size: 11px; letter-spacing: .12em; color: var(--muted); margin-bottom: 6px; }
+    .side h1 { font-size: 20px; margin: 0 0 18px; font-weight: 650; letter-spacing: -0.02em; color: var(--ink); }
+    .side a {
+      display: block;
+      color: #374151;
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    .side a:hover, .side a.active { background: #ecfdf5; color: var(--accent); }
+    .main { padding: 24px 28px 48px; max-width: 1100px; }
+    .hero {
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr);
+      gap: 20px;
+      align-items: center;
+      background: var(--panel);
+      border-radius: 14px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      box-shadow: 0 1px 2px rgba(0,0,0,.04);
+      margin-bottom: 16px;
+    }
+    .hero-meta { min-width: 0; }
+    @media (max-width: 700px) { .hero { grid-template-columns: 1fr; } }
+    .donut-wrap { position: relative; width: 132px; height: 132px; margin: 0 auto; }
+    .donut { width: 132px; height: 132px; display: block; }
+    .donut-label {
+      position: absolute;
+      left: 28px; right: 28px; top: 36px;
+      text-align: center;
+      pointer-events: none;
+    }
+    .donut-label .pct { font-size: 22px; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+    .donut-label .sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .hero-meta h2 { margin: 0 0 8px; font-size: 20px; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 12px; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 3px 10px; border-radius: 999px; font-size: 12px;
+      background: #f3f4f6; color: #374151;
+    }
+    .pill.passed { background: color-mix(in srgb, var(--pass) 28%, white); color: #3f6212; }
+    .pill.failed, .pill.cancelled { background: color-mix(in srgb, var(--fail) 22%, white); color: #9f1239; }
+    .pill.running, .pill.queued { background: color-mix(in srgb, var(--accent) 18%, white); color: #1e3a8a; }
+    .kv { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px 16px; font-size: 13px; }
+    .kv dt { color: var(--muted); font-size: 11px; }
+    .kv dd { margin: 0; font-weight: 600; word-break: break-all; }
+    .err { margin-top: 10px; color: #9f1239; font-size: 13px; background: #fef2f2; padding: 8px 10px; border-radius: 8px; }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 800px) { .cards { grid-template-columns: 1fr 1fr; } }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .card .n { font-size: 28px; font-weight: 700; line-height: 1.15; }
+    .card .l { font-size: 12px; color: var(--muted); margin-top: 6px; }
+    .card.pass .n { color: #4d7c0f; }
+    .card.fail .n { color: #be123c; }
+    .card.skip .n { color: #6b7280; }
+    .card.total .n { color: var(--accent); }
+    section { margin-top: 22px; }
+    section > h3 {
+      margin: 0 0 10px;
+      font-size: 15px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    section > h3::before {
+      content: "";
+      width: 4px; height: 14px; border-radius: 2px;
+      background: var(--accent);
+    }
+    .hint { color: var(--muted); font-size: 12px; margin: 0 0 10px; }
+    .step {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    .step-head {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .step-head:hover { background: #fafafa; }
+    .status-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+      background: var(--skip);
+    }
+    .status-dot.passed { background: var(--pass); }
+    .status-dot.failed, .status-dot.cancelled { background: var(--fail); }
+    .status-dot.running, .status-dot.queued { background: var(--accent); }
+    .status-dot.stub, .status-dot.skipped { background: var(--broken); }
+    .step-id { font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: var(--muted); flex: 0 0 auto; }
+    .step-title { font-weight: 600; font-size: 14px; flex: 1; min-width: 0; overflow-wrap: anywhere; }
+    .step-status {
+      flex: 0 0 auto;
+      font-size: 11px; font-weight: 700;
+      padding: 2px 8px; border-radius: 6px; background: #f3f4f6;
+      white-space: nowrap;
+    }
+    .step-status.passed { background: color-mix(in srgb, var(--pass) 30%, white); color: #3f6212; }
+    .step-status.failed { background: color-mix(in srgb, var(--fail) 22%, white); color: #9f1239; }
+    .step-body { display: none; padding: 0 14px 14px; border-top: 1px solid var(--line); }
+    .step.open .step-body { display: block; }
+    .step-detail { font-size: 13px; color: #374151; margin: 10px 0; white-space: pre-wrap; }
+    .step-error { color: #9f1239; font-size: 13px; margin: 6px 0; }
+    table.data {
+      width: 100%; border-collapse: collapse; font-size: 13px;
+      background: var(--panel); border-radius: 12px; overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    table.data th, table.data td {
+      padding: 9px 10px; text-align: left; border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+    table.data th { background: #f8fafc; font-size: 12px; color: var(--muted); font-weight: 600; }
+    table.data tr:last-child td { border-bottom: 0; }
+    tr.ok td:last-child { color: #4d7c0f; font-weight: 700; }
+    tr.bad td:last-child { color: #be123c; font-weight: 700; }
+    tr.ok { background: color-mix(in srgb, var(--pass) 8%, white); }
+    tr.bad { background: color-mix(in srgb, var(--fail) 7%, white); }
+    .api-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      margin: 8px 0;
+      overflow: hidden;
+      background: #fbfcfd;
+    }
+    .api-head {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      padding: 8px 10px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+    }
+    .method {
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 11px; font-weight: 800; letter-spacing: .03em;
+      padding: 2px 7px; border-radius: 4px; color: #fff;
+    }
+    .method.GET { background: #61affe; }
+    .method.POST { background: #49cc90; }
+    .method.PUT { background: #fca130; }
+    .method.DELETE { background: #f93e3e; }
+    .method.SQL { background: #7c3aed; }
+    .method.HTTP { background: #0f766e; }
+    .api-path { font-family: ui-monospace, Consolas, monospace; font-size: 12px; word-break: break-all; flex: 1 1 160px; min-width: 0; }
+    .api-name { color: var(--muted); font-size: 12px; flex: 1 1 120px; min-width: 0; overflow-wrap: anywhere; }
+    .api-kind {
+      margin-left: auto; font-size: 11px; color: var(--muted);
+      background: #f3f4f6; padding: 2px 7px; border-radius: 999px;
+      flex: 0 0 auto;
+    }
+    .api-body { padding: 8px 10px; font-size: 12px; color: #4b5563; }
+    .api-body code { font-size: 11px; background: #f3f4f6; padding: 1px 4px; border-radius: 3px; }
+    pre.exchange {
+      margin: 4px 0 8px;
+      padding: 10px 12px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      max-height: 360px;
+      overflow: auto;
+    }
+    .legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--muted); margin-top: 8px; }
+    .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; }
+    footer { margin-top: 28px; font-size: 12px; color: var(--muted); }
+    footer a { color: var(--accent); }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .side {
+        position: static;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .side nav { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+      .side a { white-space: nowrap; margin-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <div class="brand">自动化控制</div>
+      <h1>测试报告</h1>
+      <nav>
+      <a href="#overview" class="active">总览</a>
+      <a href="#steps">执行步骤</a>
+      <a href="#assertions">断言明细</a>
+      <a href="#apis">接口清单</a>
+      <a href="#env">环境与依据</a>
+      </nav>
+    </aside>
+    <div class="main">
+      <div id="overview" class="hero">
+        <div class="donut-wrap">
+          <svg class="donut" viewBox="0 0 36 36" aria-hidden="true">
+            <circle cx="18" cy="18" r="15.9" fill="none" stroke="#e5e7eb" stroke-width="3.2"></circle>
+            <circle cx="18" cy="18" r="15.9" fill="none"
+              stroke="{{ donut_color }}" stroke-width="3.2"
+              stroke-dasharray="{{ pass_rate }} {{ 100 - pass_rate }}"
+              stroke-dashoffset="25"
+              stroke-linecap="round"></circle>
+          </svg>
+          <div class="donut-label">
+            <div class="pct">{{ pass_rate }}%</div>
+            <div class="sub">通过率</div>
+          </div>
+        </div>
+        <div class="hero-meta">
+          <h2>{{ pipeline_name }}</h2>
+          <div class="meta-row">
+            <span class="pill {{ status }}">{{ status_zh }}</span>
+            <span class="pill">档 {{ profile }}</span>
+            <span class="pill">平台 {{ target_zh }}</span>
+            <span class="pill">耗时 {{ duration }}</span>
+          </div>
+          <dl class="kv">
+            <div><dt>运行 ID</dt><dd><code>{{ run_id }}</code></dd></div>
+            <div><dt>开始时间</dt><dd>{{ started_at }}</dd></div>
+            <div><dt>结束时间</dt><dd>{{ finished_at }}</dd></div>
+            <div><dt>触发来源</dt><dd>{{ source_zh }}</dd></div>
+          </dl>
+          {% if error %}<div class="err">{{ error }}</div>{% endif %}
+        </div>
+      </div>
+
+      <section id="biz-vars" style="margin-top:8px">
+        <h3>业务参数</h3>
+        <p class="hint">本次跑次的游戏 / 会长 / 充值 / 提现 / 登录账号（密码不展示明文）</p>
+        <dl class="kv">
+          {% for v in display_vars or [] %}
+          <div><dt>{{ v.label }}</dt><dd>{{ v.value }}</dd></div>
+          {% else %}
+          <div><dt>提示</dt><dd>暂无业务参数</dd></div>
+          {% endfor %}
+        </dl>
+      </section>
+
+      <div class="cards">
+        <div class="card total"><div class="n">{{ assert_total }}</div><div class="l">断言总数</div></div>
+        <div class="card pass"><div class="n">{{ assert_pass }}</div><div class="l">断言通过</div></div>
+        <div class="card fail"><div class="n">{{ assert_fail }}</div><div class="l">断言失败</div></div>
+        <div class="card skip"><div class="n">{{ step_total }}</div><div class="l">步骤数</div></div>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--pass)"></i>通过</span>
+        <span><i style="background:var(--fail)"></i>失败</span>
+        <span><i style="background:var(--broken)"></i>未接线 / 异常</span>
+        <span><i style="background:var(--skip)"></i>已跳过</span>
+      </div>
+
+      {% if evidence %}
+      <section id="evidence">
+        <h3>证据包</h3>
+        <p class="hint">约定：{{ evidence.layout }}</p>
+        <p class="hint">
+          run.log {{ '✓' if evidence.present.runLog else '✗' }} ·
+          report.html {{ '✓' if evidence.present.reportHtml else '✗' }} ·
+          exchanges {{ '✓' if evidence.present.exchanges else '（无）' }} ·
+          shots {{ evidence.shotCount or 0 }} 张 ·
+          trace {{ '✓' if evidence.present.trace else '（P1）' }}
+        </p>
+        {% if evidence.missing %}
+        <p class="hint" style="color:#b91c1c">缺项：{{ evidence.missing | join(' · ') }}</p>
+        {% endif %}
+      </section>
+      {% endif %}
+
+      <section id="steps">
+        <h3>执行步骤</h3>
+        <p class="hint">点击步骤可展开详情与关联接口</p>
+        {% for s in steps %}
+        <div class="step {% if s.status == 'failed' or loop.first %}open{% endif %}" data-step>
+          <div class="step-head" onclick="this.parentElement.classList.toggle('open')">
+            <span class="status-dot {{ s.status }}"></span>
+            {% if not (s.title or '').startswith('场景') %}<span class="step-id">{{ s.id }}</span>{% endif %}
+            <span class="step-title">{{ s.title }}</span>
+            <span class="step-status {{ s.status }}">{{ s.status_zh }}</span>
+          </div>
+          <div class="step-body">
+            {% if s.detail %}<div class="step-detail">{{ s.detail }}</div>{% endif %}
+            {% if s.error %}<div class="step-error">{{ s.error }}</div>{% endif %}
+            {% if s.status == 'stub' %}
+            <div class="hint">说明：这是<strong>本跑次当时</strong>的执行结果（进程未加载最新接线代码时会误停）。当前 S7～S11 已接线，请回面板点「一键跑主链」重跑，勿只看旧报告。</div>
+            {% endif %}
+            {% if s.engine %}<div class="hint">执行方式：{{ s.engine_zh }} · 接线定义：{{ s.wiring_zh or '—' }}</div>{% endif %}
+            {% if s.id == 'S4' %}
+            <div class="hint">玩家段是工作台按接口实调的（注册、实名、上传角色、提交支付），和 Apifox「玩家充值」场景是同一批接口。本跑次没有另跑 Apifox CLI，所以没有单独的 Apifox HTML；各接口结果列在下面。注册若已带回 token，登录会标成「未单独请求」。</div>
+            {% endif %}
+            {% if s.shot_hint %}<div class="hint" style="color:#b91c1c">{{ s.shot_hint }}</div>{% endif %}
+            {% if s.screenshots %}
+            <div class="shots" style="display:flex;flex-wrap:wrap;gap:8px;margin:8px 0">
+              {% for sh in s.screenshots %}
+              <a href="{{ sh.url }}" target="_blank" rel="noopener" title="{{ sh.name }}" style="display:block;max-width:280px">
+                <img src="{{ sh.url }}" alt="{{ sh.name }}" style="width:100%;border:1px solid #e5e7eb;border-radius:8px;background:#fff">
+                <div class="hint">{{ sh.name }}</div>
+              </a>
+              {% endfor %}
+            </div>
+            {% endif %}
+            {% if s.apis %}
+              {% for api in s.apis %}
+              <div class="api-card">
+                <div class="api-head">
+                  <span class="method {{ api.method_class }}">{{ api.method }}</span>
+                  <span class="api-path">{{ api.path }}</span>
+                  <span class="api-name">{{ api.name }}</span>
+                  {% if api.skipped %}<span class="api-kind">未单独请求</span>
+                  {% elif api.ok is sameas true %}<span class="api-kind">本次通过</span>
+                  {% elif api.ok is sameas false %}<span class="api-kind">本次失败</span>
+                  {% elif api.kind %}<span class="api-kind">{{ api.kind }}</span>{% endif %}
+                </div>
+                {% if api.note %}<div class="api-body">{{ api.note }}</div>{% endif %}
+                {% if api.request or api.response %}
+                <div class="api-body">
+                  <div class="hint">请求（已去掉密码 / token，过长会截断）</div>
+                  <pre class="exchange">{{ (api.request or "—") | pretty_json }}</pre>
+                  <div class="hint">响应</div>
+                  <pre class="exchange">{{ (api.response or "—") | pretty_json }}</pre>
+                </div>
+                {% endif %}
+              </div>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+        {% else %}
+        <p class="hint">无步骤数据</p>
+        {% endfor %}
+      </section>
+
+      <section id="assertions">
+        <h3>断言明细</h3>
+        <table class="data">
+          <thead>
+            <tr><th>步骤</th><th>断言</th><th>期望</th><th>实际</th><th>结果</th></tr>
+          </thead>
+          <tbody>
+            {% for a in assertions %}
+            <tr class="{{ 'ok' if a.passed else 'bad' }}">
+              <td>{{ a.stepId }}{% if a.stepTitle %}<br><span class="hint">{{ a.stepTitle }}</span>{% endif %}</td>
+              <td>{{ a.name }}</td>
+              <td>{{ a.expected }}</td>
+              <td>{{ a.actual }}</td>
+              <td>{{ '通过' if a.passed else '失败' }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5">无断言明细（请再跑一档 A 生成期望/实际对照）</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+
+      <section id="apis">
+        <h3>附录 · 相关接口清单</h3>
+        <p class="hint">对齐工作台《测试报告模板（含接口附录）》；玩家侧为 SDK 真接口，总后台/会长多为 HTTP·表单（非前后端分离）。</p>
+        <table class="data">
+          <thead>
+            <tr><th>步骤</th><th>Method</th><th>Path / 资源</th><th>接口名称</th><th>类型</th></tr>
+          </thead>
+          <tbody>
+            {% for api in all_apis %}
+            <tr>
+              <td>{{ api.stepId }}</td>
+              <td><span class="method {{ api.method_class }}">{{ api.method }}</span></td>
+              <td><code>{{ api.path }}</code></td>
+              <td>{{ api.name }}</td>
+              <td>{{ api.kind }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5">本档未关联接口</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+
+      <section id="env">
+        <h3>环境与依据</h3>
+        <table class="data">
+          <tbody>
+            <tr><th style="width:160px">流水线 ID</th><td><code>{{ pipeline_id }}</code></td></tr>
+            <tr><th>依据文档</th><td>workbench/docs/接口自动化步骤-充值到提现-框架.md</td></tr>
+            <tr><th>报告风格</th><td>与自动化控制面板浅台一致：白卡片、细线、青绿强调</td></tr>
+            <tr><th>生成时间</th><td>{{ generated_at }}</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <footer>
+        自动化控制面板 · 自包含 HTML 报告 · 打开本页会按最新模板重新生成
+      </footer>
+    </div>
+  </div>
+  <script>
+    document.querySelectorAll('.side a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        document.querySelectorAll('.side a').forEach(function (x) { x.classList.remove('active'); });
+        a.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

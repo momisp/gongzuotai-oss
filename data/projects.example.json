@@ -1,0 +1,10 @@
+[
+  {
+    "_comment": "复制为 projects.json。真实项目清单与排期关联仅本机使用。",
+    "id": "demo-project",
+    "name": "示例项目",
+    "gantt_project_ids": ["p_demo"],
+    "asset_projects": ["示例项目"],
+    "note": ""
+  }
+]

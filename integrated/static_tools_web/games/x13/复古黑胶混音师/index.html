@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>复古黑胶混音师</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        .film-grain {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; opacity: 0.08; z-index: 1000;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+        
+        .neon-glow {
+            text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 20px currentColor;
+        }
+        
+        .metal-frame {
+            background: linear-gradient(135deg, #5a5a5a 0%, #3d3d3d 50%, #5a5a5a 100%);
+            border: 4px solid #2a2a2a;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.2), 0 4px 20px rgba(0,0,0,0.5);
+        }
+        
+        .vinyl {
+            background: radial-gradient(circle, #1a1a1a 0%, #0d0d0d 60%, #2a2a2a 100%);
+            box-shadow: 0 0 60px rgba(0,0,0,0.8);
+        }
+        
+        .vinyl-grooves {
+            background: repeating-radial-gradient(circle, transparent 0px, transparent 2px, rgba(50,50,50,0.3) 2px, rgba(50,50,50,0.3) 4px);
+        }
+        
+        .retro-btn {
+            background: linear-gradient(145deg, #3d3d3d, #2a2a2a);
+            border: 4px solid #1a1a1a;
+            box-shadow: 0 6px 0 #0a0a0a, 0 8px 20px rgba(0,0,0,0.5);
+            transition: all 0.1s;
+        }
+        
+        .retro-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #0a0a0a;
+        }
+        
+        .retro-btn.red { background: linear-gradient(145deg, #ff6b6b, #c92a2a); }
+        .retro-btn.blue { background: linear-gradient(145deg, #4dabf7, #1971c2); }
+        .retro-btn.green { background: linear-gradient(145deg, #69db7c, #2f9e44); }
+        
+        .marker {
+            position: absolute;
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px currentColor;
+            animation: pulse 0.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #ff6b6b 0%, #ffd43b 33%, #69db7c 66%, #4dabf7 100%);
+        }
+        
+        .score-popup {
+            animation: floatUp 1s ease-out forwards;
+            pointer-events: none;
+        }
+        
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
+        }
+        
+        .victory-glow {
+            animation: victoryGlow 2s infinite;
+        }
+        
+        @keyframes victoryGlow {
+            0%, 100% { box-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700; }
+            50% { box-shadow: 0 0 40px #ffd700, 0 0 80px #ffd700, 0 0 120px #ffd700; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-amber-950 via-stone-900 to-stone-950 min-h-screen">
+    <div class="film-grain"></div>
+    
+    <!-- 开始界面 -->
+    <div id="startScreen" class="fixed inset-0 flex items-center justify-center z-50 p-4">
+        <div class="metal-frame rounded-2xl p-6 max-w-sm w-full text-center">
+            <h1 class="text-2xl font-bold text-amber-400 neon-glow mb-1">复古黑胶混音师</h1>
+            <p class="text-amber-200/70 text-xs mb-4">VINYL MIX MASTER</p>
+            
+            <div class="bg-stone-900/80 rounded-xl p-3 mb-4 text-left text-sm">
+                <p class="text-amber-400 font-bold mb-2 text-center">🎵 游戏说明</p>
+                <p class="text-amber-100/80 mb-1">🔴 红色 → 点红色按钮</p>
+                <p class="text-amber-100/80 mb-1">🔵 蓝色 → 点蓝色按钮</p>
+                <p class="text-amber-100/80">🟢 绿色 → 点绿色按钮</p>
+            </div>
+            
+            <div class="bg-stone-900/80 rounded-xl p-3 mb-4 text-sm">
+                <p class="text-amber-400 font-bold mb-1">🎯 通关条件</p>
+                <p class="text-amber-100/80">达成目标分数 1000 分即可通关</p>
+            </div>
+            
+            <button id="startBtn" class="retro-btn w-full py-3 rounded-xl text-lg font-bold text-amber-400">
+                🎛️ 开始混音
+            </button>
+        </div>
+    </div>
+    
+    <!-- 游戏界面 -->
+    <div id="gameScreen" class="fixed inset-0 hidden flex-col p-3">
+        <!-- 状态栏 -->
+        <div class="metal-frame rounded-xl p-3 mb-3">
+            <div class="flex justify-between items-center mb-2">
+                <div class="text-amber-400">
+                    <div class="text-xs opacity-70">分数</div>
+                    <div id="scoreDisplay" class="text-xl font-bold neon-glow">0</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-xs text-amber-400/70" id="levelName">入门打碟台</div>
+                    <div id="comboDisplay" class="text-lg font-bold text-yellow-400">COMBO 0</div>
+                </div>
+                <div class="text-amber-400 text-right">
+                    <div class="text-xs opacity-70">耐久</div>
+                    <div id="durabilityDisplay" class="text-xl font-bold">❤️❤️❤️</div>
+                </div>
+            </div>
+            <div class="bg-stone-800 rounded-full h-3 overflow-hidden">
+                <div id="progressBar" class="progress-bar h-full transition-all" style="width: 0%"></div>
+            </div>
+            <div class="flex justify-between text-xs text-amber-400/60 mt-1">
+                <span>目标: <span id="targetScore">1000</span></span>
+                <span id="calibrateDisplay">校准: 🔧🔧🔧</span>
+            </div>
+        </div>
+        
+        <!-- 黑胶唱片区域 -->
+        <div class="flex-1 flex items-center justify-center">
+            <div class="relative w-60 h-60">
+                <div id="vinyl" class="vinyl w-full h-full rounded-full relative">
+                    <div class="vinyl-grooves absolute inset-0 rounded-full"></div>
+                    <div class="absolute top-1/2 left-1/2 w-16 h-16 rounded-full bg-gradient-to-br from-amber-700 to-amber-900 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
+                        <span class="text-amber-200/80 text-xs font-bold">VINYL</span>
+                    </div>
+                </div>
+                <!-- 圆点放在唱片外层，避免随唱片旋转导致判定错位 -->
+                <div id="markersContainer" class="absolute inset-0 pointer-events-none"></div>
+                <!-- 判定区 -->
+                <div class="absolute top-1/2 right-0 w-8 h-8 border-2 border-amber-400/50 rounded-full transform -translate-y-1/2 translate-x-1/2"></div>
+                <div id="scorePopups" class="absolute inset-0 pointer-events-none flex items-center justify-center"></div>
+            </div>
+        </div>
+        
+        <!-- 按钮区域 -->
+        <div class="metal-frame rounded-xl p-4">
+            <div class="text-center text-amber-400/70 text-xs mb-3">🎛️ 混音控制台</div>
+            <div class="flex justify-center gap-5">
+                <button id="btnRed" class="retro-btn red w-14 h-14 rounded-full text-2xl">🔴</button>
+                <button id="btnBlue" class="retro-btn blue w-14 h-14 rounded-full text-2xl">🔵</button>
+                <button id="btnGreen" class="retro-btn green w-14 h-14 rounded-full text-2xl">🟢</button>
+            </div>
+            <div class="flex justify-center mt-3">
+                <button id="calibrateBtn" class="retro-btn px-3 py-1 rounded text-amber-400 text-sm">
+                    🔧 校准 (<span id="calibrateCount">3</span>)
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 关卡完成界面 -->
+    <div id="levelCompleteScreen" class="fixed inset-0 hidden flex items-center justify-center z-50 bg-black/80 p-4">
+        <div class="metal-frame rounded-2xl p-6 max-w-sm w-full text-center victory-glow">
+            <div class="text-5xl mb-3">🎉</div>
+            <h2 class="text-2xl font-bold text-amber-400 neon-glow mb-2" id="completeTitle">阶段完成!</h2>
+            <p class="text-amber-200 mb-4" id="completeSubtitle">入门打碟台 通过</p>
+            
+            <div class="bg-stone-900/80 rounded-xl p-4 mb-4">
+                <div class="text-amber-400 text-sm">最终分数</div>
+                <div class="text-3xl font-bold text-yellow-400 neon-glow" id="finalScore">2500</div>
+                <div class="text-amber-400/60 text-sm mt-1">最高连击: <span id="maxCombo">15</span></div>
+            </div>
+            
+            <button id="nextLevelBtn" class="retro-btn w-full py-3 rounded-xl text-lg font-bold text-amber-400">
+                🎵 再来一局
+            </button>
+        </div>
+    </div>
+    
+    <!-- 游戏失败界面 -->
+    <div id="gameOverScreen" class="fixed inset-0 hidden flex items-center justify-center z-50 bg-black/80 p-4">
+        <div class="metal-frame rounded-2xl p-6 max-w-sm w-full text-center">
+            <div class="text-5xl mb-3">💔</div>
+            <h2 class="text-2xl font-bold text-red-400 neon-glow mb-2">唱片损坏!</h2>
+            <p class="text-amber-200 mb-4">混音失败，黑胶唱片已磨损</p>
+            
+            <div class="bg-stone-900/80 rounded-xl p-4 mb-4">
+                <div class="text-amber-400 text-sm">本次分数</div>
+                <div class="text-2xl font-bold text-amber-400" id="gameOverScore">800</div>
+            </div>
+            
+            <button id="retryBtn" class="retro-btn w-full py-3 rounded-xl text-lg font-bold text-amber-400">
+                🔄 重新打碟
+            </button>
+        </div>
+    </div>
+    
+    <!-- 全部通关界面 -->
+    <div id="victoryScreen" class="fixed inset-0 hidden flex items-center justify-center z-50 bg-black/80 p-4">
+        <div class="metal-frame rounded-2xl p-6 max-w-sm w-full text-center">
+            <div class="text-5xl mb-3">🏆</div>
+            <h2 class="text-2xl font-bold text-yellow-400 neon-glow mb-2">混音大师!</h2>
+            <p class="text-amber-200 mb-4">恭喜完成全部三个阶段!</p>
+            
+            <div class="relative w-24 h-24 mx-auto mb-4">
+                <div class="vinyl w-full h-full rounded-full victory-glow">
+                    <div class="vinyl-grooves absolute inset-0 rounded-full"></div>
+                </div>
+            </div>
+            
+            <div class="bg-stone-900/80 rounded-xl p-4 mb-4">
+                <div class="text-amber-400 text-sm">总分数</div>
+                <div class="text-3xl font-bold text-yellow-400 neon-glow" id="totalScore">8500</div>
+            </div>
+            
+            <button id="playAgainBtn" class="retro-btn w-full py-3 rounded-xl text-lg font-bold text-amber-400">
+                ✅ 完成
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const gameConfig = {
+            levels: [
+                { name: '入门打碟台', targetScore: 1000, noteInterval: 1300, rotationSpeed: 0.65 },
+                { name: '深夜电台', targetScore: 1000, noteInterval: 1200, rotationSpeed: 0.7 },
+                { name: '复古 Disco', targetScore: 1500, noteInterval: 1000, rotationSpeed: 0.9 }
+            ],
+            perfectScore: 150,
+            goodScore: 80,
+            comboBonus: 20,
+            maxCalibrations: 3,
+            maxDurability: 3,
+            vinylRadius: 120,
+            hitZoneAngle: 0,
+            perfectWindow: 25,
+            goodWindow: 50
+        };
+
+        let gameState = {
+            score: 0,
+            combo: 0,
+            maxCombo: 0,
+            currentLevel: 0,
+            calibrations: 3,
+            durability: 3,
+            isPlaying: false,
+            vinylRotation: 0,
+            activeMarkers: [],
+            lastNoteTime: 0,
+            animationId: null,
+            totalScore: 0
+        };
+
+        // 音效
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSound(frequency, type = 'sine', duration = 0.1) {
+            try {
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.frequency.value = frequency;
+                oscillator.type = type;
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+                oscillator.start(audioCtx.currentTime);
+                oscillator.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+        
+        function playHitSound(color) {
+            const freq = { red: 440, blue: 523, green: 659 };
+            playSound(freq[color], 'square', 0.15);
+        }
+        
+        function playMissSound() {
+            playSound(150, 'sawtooth', 0.3);
+        }
+
+        const el = {
+            startScreen: document.getElementById('startScreen'),
+            gameScreen: document.getElementById('gameScreen'),
+            levelCompleteScreen: document.getElementById('levelCompleteScreen'),
+            gameOverScreen: document.getElementById('gameOverScreen'),
+            victoryScreen: document.getElementById('victoryScreen'),
+            scoreDisplay: document.getElementById('scoreDisplay'),
+            comboDisplay: document.getElementById('comboDisplay'),
+            durabilityDisplay: document.getElementById('durabilityDisplay'),
+            progressBar: document.getElementById('progressBar'),
+            targetScore: document.getElementById('targetScore'),
+            levelName: document.getElementById('levelName'),
+            calibrateCount: document.getElementById('calibrateCount'),
+            vinyl: document.getElementById('vinyl'),
+            markersContainer: document.getElementById('markersContainer'),
+            scorePopups: document.getElementById('scorePopups')
+        };
+
+        function startGame() {
+            gameState = {
+                score: 0,
+                combo: 0,
+                maxCombo: 0,
+                currentLevel: 0,
+                calibrations: 3,
+                durability: 3,
+                isPlaying: true,
+                vinylRotation: 0,
+                activeMarkers: [],
+                lastNoteTime: Date.now(),
+                animationId: null,
+                totalScore: 0
+            };
+            
+            el.startScreen.classList.add('hidden');
+            el.gameScreen.classList.remove('hidden');
+            el.gameScreen.classList.add('flex');
+            el.markersContainer.innerHTML = '';
+            el.scorePopups.innerHTML = '';
+            
+            updateUI();
+            gameLoop();
+        }
+
+        function updateUI() {
+            el.scoreDisplay.textContent = gameState.score;
+            el.comboDisplay.textContent = `COMBO ${gameState.combo}`;
+            
+            let hearts = '';
+            for (let i = 0; i < gameState.durability; i++) hearts += '❤️';
+            for (let i = gameState.durability; i < 3; i++) hearts += '🖤';
+            el.durabilityDisplay.textContent = hearts;
+            
+            let wrenches = '';
+            for (let i = 0; i < gameState.calibrations; i++) wrenches += '🔧';
+            for (let i = gameState.calibrations; i < 3; i++) wrenches += '⚫';
+            document.getElementById('calibrateDisplay').textContent = `校准: ${wrenches}`;
+            el.calibrateCount.textContent = gameState.calibrations;
+            
+            const level = gameConfig.levels[gameState.currentLevel];
+            el.targetScore.textContent = level.targetScore;
+            el.levelName.textContent = level.name;
+            
+            const progress = Math.min((gameState.score / level.targetScore) * 100, 100);
+            el.progressBar.style.width = `${progress}%`;
+        }
+
+        function showScorePopup(points, type) {
+            const popup = document.createElement('div');
+            popup.className = 'score-popup text-2xl font-bold absolute';
+            
+            if (type === 'perfect') {
+                popup.textContent = `PERFECT! +${points}`;
+                popup.style.color = '#ffd700';
+            } else if (type === 'good') {
+                popup.textContent = `GOOD! +${points}`;
+                popup.style.color = '#69db7c';
+            } else {
+                popup.textContent = 'MISS!';
+                popup.style.color = '#ff6b6b';
+            }
+            
+            el.scorePopups.appendChild(popup);
+            setTimeout(() => popup.remove(), 1000);
+        }
+
+        function createMarker() {
+            const colors = ['red', 'blue', 'green'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            // 从左侧或顶部生成标记
+            const angle = -90 - Math.random() * 60; // -150 到 -90 度之间
+            const radians = (angle * Math.PI) / 180;
+            const radius = gameConfig.vinylRadius - 15;
+            
+            const x = 50 + (radius / (gameConfig.vinylRadius * 2)) * 100 * Math.cos(radians);
+            const y = 50 + (radius / (gameConfig.vinylRadius * 2)) * 100 * Math.sin(radians);
+            
+            const marker = document.createElement('div');
+            marker.className = 'marker';
+            marker.style.color = color === 'red' ? '#ff6b6b' : color === 'blue' ? '#4dabf7' : '#69db7c';
+            marker.dataset.color = color;
+            marker.dataset.angle = angle;
+            marker.dataset.id = Date.now() + Math.random();
+            marker.style.left = `${x}%`;
+            marker.style.top = `${y}%`;
+            
+            el.markersContainer.appendChild(marker);
+            
+            gameState.activeMarkers.push({
+                element: marker,
+                color: color,
+                angle: angle,
+                id: marker.dataset.id,
+                radius: radius
+            });
+        }
+
+        function updateMarkers() {
+            const level = gameConfig.levels[gameState.currentLevel];
+            const rotationAmount = level.rotationSpeed;
+            
+            gameState.activeMarkers = gameState.activeMarkers.filter(marker => {
+                marker.angle += rotationAmount;
+                
+                // 检查是否经过判定区后消失
+                if (marker.angle > 30) {
+                    // Miss
+                    gameState.combo = 0;
+                    gameState.durability--;
+                    playMissSound();
+                    showScorePopup(0, 'miss');
+                    marker.element.remove();
+                    updateUI();
+                    
+                    if (gameState.durability <= 0) {
+                        gameOver();
+                    }
+                    return false;
+                }
+                
+                const radians = (marker.angle * Math.PI) / 180;
+                const x = 50 + (marker.radius / (gameConfig.vinylRadius * 2)) * 100 * Math.cos(radians);
+                const y = 50 + (marker.radius / (gameConfig.vinylRadius * 2)) * 100 * Math.sin(radians);
+                
+                marker.element.style.left = `${x}%`;
+                marker.element.style.top = `${y}%`;
+                
+                return true;
+            });
+        }
+
+        function checkHit(color) {
+            if (!gameState.isPlaying) return;
+            
+            // 找到最接近判定区的对应颜色标记
+            let closestMarker = null;
+            let closestAngleDiff = Infinity;
+            
+            for (const marker of gameState.activeMarkers) {
+                if (marker.color === color) {
+                    const angleDiff = Math.abs(marker.angle - gameConfig.hitZoneAngle);
+                    if (angleDiff < closestAngleDiff && angleDiff < gameConfig.goodWindow) {
+                        closestAngleDiff = angleDiff;
+                        closestMarker = marker;
+                    }
+                }
+            }
+            
+            if (closestMarker) {
+                playHitSound(color);
+                
+                if (closestAngleDiff <= gameConfig.perfectWindow) {
+                    // Perfect
+                    const points = gameConfig.perfectScore + gameState.combo * gameConfig.comboBonus;
+                    gameState.score += points;
+                    gameState.combo++;
+                    if (gameState.combo > gameState.maxCombo) gameState.maxCombo = gameState.combo;
+                    showScorePopup(points, 'perfect');
+                } else {
+                    // Good
+                    const points = gameConfig.goodScore + Math.floor(gameState.combo * gameConfig.comboBonus / 2);
+                    gameState.score += points;
+                    gameState.combo++;
+                    if (gameState.combo > gameState.maxCombo) gameState.maxCombo = gameState.combo;
+                    showScorePopup(points, 'good');
+                }
+                
+                // 移除标记
+                const index = gameState.activeMarkers.indexOf(closestMarker);
+                if (index > -1) {
+                    gameState.activeMarkers.splice(index, 1);
+                    closestMarker.element.remove();
+                }
+                
+                updateUI();
+                checkLevelComplete();
+            } else {
+                // 空按
+                gameState.combo = 0;
+                updateUI();
+            }
+        }
+
+        function checkLevelComplete() {
+            const level = gameConfig.levels[gameState.currentLevel];
+            if (gameState.score >= level.targetScore) {
+                gameState.isPlaying = false;
+                cancelAnimationFrame(gameState.animationId);
+                gameState.totalScore += gameState.score;
+                
+                // 单关模式：一关即通关
+                el.victoryScreen.classList.remove('hidden');
+                el.victoryScreen.classList.add('flex');
+                document.getElementById('totalScore').textContent = gameState.score;
+            }
+        }
+
+        function nextLevel() {
+            // 单关模式：直接重新开始
+            el.levelCompleteScreen.classList.add('hidden');
+            el.levelCompleteScreen.classList.remove('flex');
+            startGame();
+        }
+
+        function gameOver() {
+            gameState.isPlaying = false;
+            cancelAnimationFrame(gameState.animationId);
+            
+            el.gameScreen.classList.add('hidden');
+            el.gameScreen.classList.remove('flex');
+            el.gameOverScreen.classList.remove('hidden');
+            el.gameOverScreen.classList.add('flex');
+            document.getElementById('gameOverScore').textContent = gameState.score;
+        }
+
+        function calibrate() {
+            if (gameState.calibrations > 0 && gameState.isPlaying) {
+                gameState.calibrations--;
+                gameState.activeMarkers.forEach(m => m.element.remove());
+                gameState.activeMarkers = [];
+                updateUI();
+            }
+        }
+
+        let lastTime = Date.now();
+
+        function gameLoop() {
+            if (!gameState.isPlaying) return;
+            
+            const now = Date.now();
+            const level = gameConfig.levels[gameState.currentLevel];
+            
+            // 旋转黑胶
+            gameState.vinylRotation += level.rotationSpeed;
+            el.vinyl.style.transform = `rotate(${gameState.vinylRotation}deg)`;
+            
+            // 更新标记位置
+            updateMarkers();
+            
+            // 生成新标记
+            if (now - gameState.lastNoteTime > level.noteInterval) {
+                createMarker();
+                gameState.lastNoteTime = now;
+            }
+            
+            gameState.animationId = requestAnimationFrame(gameLoop);
+        }
+
+        // 事件绑定
+        document.getElementById('startBtn').addEventListener('click', startGame);
+        document.getElementById('nextLevelBtn').addEventListener('click', nextLevel);
+        document.getElementById('retryBtn').addEventListener('click', () => {
+            el.gameOverScreen.classList.add('hidden');
+            el.gameOverScreen.classList.remove('flex');
+            startGame();
+        });
+        document.getElementById('playAgainBtn').addEventListener('click', () => {
+            el.victoryScreen.classList.add('hidden');
+            el.victoryScreen.classList.remove('flex');
+            startGame();
+        });
+        document.getElementById('calibrateBtn').addEventListener('click', calibrate);
+        
+        document.getElementById('btnRed').addEventListener('click', () => checkHit('red'));
+        document.getElementById('btnBlue').addEventListener('click', () => checkHit('blue'));
+        document.getElementById('btnGreen').addEventListener('click', () => checkHit('green'));
+        
+        // 键盘支持
+        document.addEventListener('keydown', (e) => {
+            if (!gameState.isPlaying) return;
+            if (e.key === 'a' || e.key === 'A') checkHit('red');
+            if (e.key === 's' || e.key === 'S') checkHit('blue');
+            if (e.key === 'd' || e.key === 'D') checkHit('green');
+        });
+    </script>
+</body>
+</html>

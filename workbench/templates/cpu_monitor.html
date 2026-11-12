@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CPU 占用监控</title>
+  <link rel="stylesheet" href="/static/style.css?v=53">
+  <link rel="stylesheet" href="/static/theme-daisy-v1.css?v=2">
+</head>
+<body class="theme-daisy-v1 cpu-page">
+  <div class="cpu-shell">
+    <header class="page-header">
+      <div>
+        <h1>CPU 占用监控</h1>
+        <p class="subtitle">实时列出本机全部进程 CPU 占用，Top 5 高亮；右侧 × 可结束进程（系统类会提示后果）</p>
+      </div>
+      <div class="page-header-actions">
+        <span class="cpu-total-badge" id="cpu-total">总 CPU —</span>
+        <span class="cpu-meta" id="cpu-meta">采样中…</span>
+        <button class="btn btn-warn" type="button" onclick="cleanupMumuOrphans()" title="双开崩溃后 MuMuVMMHeadless 僵尸进程">清理 MuMu 残留</button>
+        <button class="btn" type="button" onclick="loadCpuMonitorPage()">立即刷新</button>
+      </div>
+    </header>
+    <div class="cpu-table-wrap">
+      <table class="cpu-table" id="cpu-table">
+        <thead>
+          <tr>
+            <th class="cpu-col-rank">#</th>
+            <th class="cpu-col-name">进程</th>
+            <th class="cpu-col-pid">PID</th>
+            <th class="cpu-col-cpu">CPU %</th>
+            <th class="cpu-col-mem">内存 MB</th>
+            <th class="cpu-col-th">线程</th>
+            <th class="cpu-col-tag">类型</th>
+            <th class="cpu-col-act"></th>
+          </tr>
+        </thead>
+        <tbody id="cpu-tbody">
+          <tr><td colspan="8" class="cpu-empty">加载中…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="cpu-kill-modal" class="cpu-modal hidden" onclick="if(event.target===this)closeCpuKillModal()">
+    <div class="cpu-modal-card">
+      <div class="cpu-modal-head">
+        <h3>确认结束进程</h3>
+        <button class="btn btn-sm" type="button" onclick="closeCpuKillModal()">取消</button>
+      </div>
+      <p class="cpu-kill-target" id="cpu-kill-target"></p>
+      <div id="cpu-kill-warn" class="cpu-kill-warn hidden"></div>
+      <p class="hint" id="cpu-kill-hint"></p>
+      <div class="cpu-modal-actions">
+        <button class="btn" type="button" onclick="closeCpuKillModal()">取消</button>
+        <button class="btn btn-danger" type="button" id="cpu-kill-confirm" onclick="confirmCpuKill()">确认结束</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/cpu_monitor.js?v=2"></script>
+</body>
+</html>

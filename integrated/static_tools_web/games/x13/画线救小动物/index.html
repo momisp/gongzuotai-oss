@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>画线救小动物</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            touch-action: manipulation;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #gameContainer {
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            max-height: 800px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        #startScreen {
+            background: url('modifyImage/background.jpg') center/cover no-repeat;
+            color: #333;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        #startScreen h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+        }
+
+        #startScreen .instructions {
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: left;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        #startScreen .instructions h3 {
+            color: #4ecdc4;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        #startScreen .instructions li {
+            margin: 8px 0;
+            list-style-type: '✏️ ';
+            padding-left: 25px;
+            text-align: justify;
+            text-justify: inter-word;
+            list-style-position: inside;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+            white-space: nowrap;
+            min-width: 160px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,107,107,0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        #gameScreen {
+            background: url('modifyImage/background.png') center/cover no-repeat;
+        }
+
+        #gameCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: crosshair;
+        }
+
+        #uiOverlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        #lineCount {
+            background: rgba(255,255,255,0.9);
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #ff6b6b;
+            font-size: 1.1rem;
+        }
+
+        #resetBtn {
+            pointer-events: auto;
+            padding: 10px 20px;
+            font-size: 1rem;
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            box-shadow: 0 4px 15px rgba(78,205,196,0.4);
+        }
+
+        #resetBtn:hover {
+            box-shadow: 0 6px 20px rgba(78,205,196,0.6);
+        }
+
+        #successModal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255,255,255,0.98);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 100;
+        }
+
+        #successModal h2 {
+            color: #51cf66;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        #successModal p {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @media (max-width: 480px) {
+            #startScreen h1 {
+                font-size: 2rem;
+            }
+            
+            #startScreen .instructions {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="startScreen" class="screen">
+            <h1>🐾 画线救小动物 🐾</h1>
+            <div class="instructions">
+                <h3>🎮 游戏玩法</h3>
+                <ul>
+                    <li>有3只可爱的小动物被困住了，周围有危险的陷阱</li>
+                    <li>屏幕底部绿色的区域就是安全区，小动物到达这里就安全啦</li>
+                    <li>先画好所有需要的线条，画完后线条和小动物会一起下落</li>
+                    <li>线条可以搭在陷阱上卡住，帮小动物搭桥避开危险</li>
+                    <li>最多可以画3条线；碰到陷阱小动物会回到起点，可点重置重新画线</li>
+                </ul>
+            </div>
+            <button id="startBtn" class="btn">开始游戏</button>
+        </div>
+
+        <div id="gameScreen" class="screen hidden">
+            <canvas id="gameCanvas"></canvas>
+            <div id="uiOverlay">
+                <div id="lineCount">第1关 | 剩余线条: <span id="remainingLines">3</span></div>
+                <button id="resetBtn" class="btn">重置</button>
+            </div>
+        </div>
+
+        <div id="successModal">
+            <h2>🎉 救援成功！</h2>
+            <p>你真棒！所有小动物都安全了～</p>
+            <button id="playAgainBtn" class="btn">再玩一次</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <script>
+        const gameConfig = {
+            maxLines: 3,
+            lineThickness: 8,
+            lineColor: ['#ff6b6b', '#4ecdc4', '#ffe66d', '#ff8888'],
+            gravity: 1,
+            animalSize: 40,
+            trapSize: 35,
+            safeZoneHeight: 60,
+            totalLevels: 3 // 共3个关卡
+        };
+
+        let engine, world, render, runner;
+        let canvas, ctx;
+        let renderCanvas; // 离屏canvas用于物理渲染
+        let currentLevel = 1; // 当前关卡
+        let linesDrawn = 0;
+        let isDrawing = false;
+        let currentLinePoints = [];
+        let animals = [];
+        let traps = [];
+        let safeZone;
+        let gameStarted = false;
+        let rescuedCount = 0;
+        let totalAnimals = 3;
+
+        const assets = {
+            cat: new Image(),
+            dog: new Image(),
+            trap_spike: new Image(),
+            trap_fire: new Image()
+        };
+
+        let assetsLoaded = 0;
+        const totalAssets = Object.keys(assets).length;
+
+        Object.keys(assets).forEach(key => {
+            assets[key].src = `modifyImage/${key}.png`;
+            assets[key].onload = () => {
+                assetsLoaded++;
+                if (assetsLoaded === totalAssets) {
+                    init();
+                }
+            };
+            assets[key].onerror = () => {
+                assetsLoaded++;
+                if (assetsLoaded === totalAssets) {
+                    init();
+                }
+            };
+        });
+
+        function init() {
+            canvas = document.getElementById('gameCanvas');
+            ctx = canvas.getContext('2d');
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            document.getElementById('startBtn').addEventListener('click', startGame);
+            document.getElementById('resetBtn').addEventListener('click', resetGame);
+            
+            // 全局事件委托处理弹窗按钮点击
+            document.getElementById('successModal').addEventListener('click', (e) => {
+                const successModal = document.getElementById('successModal');
+                if (e.target.id === 'nextLevelBtn') {
+                    currentLevel++;
+                    successModal.style.display = 'none';
+                    resetGame();
+                } else if (e.target.id === 'playAgainBtn') {
+                    currentLevel = 1;
+                    successModal.style.display = 'none';
+                    resetGame();
+                }
+            });
+
+            canvas.addEventListener('touchstart', handleDrawStart, { passive: false });
+            canvas.addEventListener('touchmove', handleDrawMove, { passive: false });
+            canvas.addEventListener('touchend', handleDrawEnd, { passive: false });
+            canvas.addEventListener('mousedown', handleDrawStart);
+            canvas.addEventListener('mousemove', handleDrawMove);
+            canvas.addEventListener('mouseup', handleDrawEnd);
+        }
+
+        function resizeCanvas() {
+            const container = document.getElementById('gameContainer');
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        }
+
+        function startGame() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+            
+            initMatter();
+            createLevel();
+            world.gravity.y = 0; // 初始重力为0，画完线后再开启
+            gameStarted = true;
+            rescuedCount = 0;
+            linesDrawn = 0;
+            updateLineCount();
+            
+            (function gameLoop() {
+                if (gameStarted) {
+                    drawGame();
+                    checkRescued();
+                    requestAnimationFrame(gameLoop);
+                }
+            })();
+        }
+
+        function initMatter() {
+            if (engine) {
+                Matter.Engine.clear(engine);
+                Matter.Runner.stop(runner);
+                Matter.Render.stop(render);
+            }
+
+            engine = Matter.Engine.create();
+            world = engine.world;
+            world.gravity.y = 0;
+
+            // 使用独立的离屏canvas处理物理渲染，避免和画线逻辑冲突
+            renderCanvas = document.createElement('canvas');
+            renderCanvas.width = canvas.width;
+            renderCanvas.height = canvas.height;
+            
+            render = Matter.Render.create({
+                canvas: renderCanvas,
+                engine: engine,
+                options: {
+                    width: canvas.width,
+                    height: canvas.height,
+                    wireframes: false,
+                    background: 'transparent'
+                }
+            });
+
+            runner = Matter.Runner.create();
+            Matter.Runner.run(runner, engine);
+            Matter.Render.run(render);
+
+            const walls = [
+                Matter.Bodies.rectangle(canvas.width/2, -20, canvas.width, 40, { isStatic: true, label: 'wall' }),
+                Matter.Bodies.rectangle(canvas.width/2, canvas.height + 20, canvas.width, 40, { isStatic: true, label: 'wall' }),
+                Matter.Bodies.rectangle(-20, canvas.height/2, 40, canvas.height, { isStatic: true, label: 'wall' }),
+                Matter.Bodies.rectangle(canvas.width + 20, canvas.height/2, 40, canvas.height, { isStatic: true, label: 'wall' })
+            ];
+            Matter.Composite.add(world, walls);
+
+            Matter.Events.on(engine, 'collisionStart', handleCollision);
+        }
+
+        function createLevel() {
+            const w = canvas.width;
+            const h = canvas.height;
+
+            safeZone = Matter.Bodies.rectangle(w/2, h - gameConfig.safeZoneHeight/2, w, gameConfig.safeZoneHeight, {
+                isStatic: true,
+                isSensor: true,
+                label: 'safeZone',
+                render: {
+                    fillStyle: 'rgba(81, 207, 102, 0.3)',
+                    strokeStyle: '#51cf66',
+                    lineWidth: 2
+                }
+            });
+            Matter.Composite.add(world, safeZone);
+
+            animals = [];
+            traps = [];
+
+            // 不同关卡的布局
+            if (currentLevel === 1) {
+                // 第1关：基础布局
+                const animalPositions = [
+                    { x: w * 0.2, y: h * 0.15, type: 'cat' },
+                    { x: w * 0.5, y: h * 0.1, type: 'dog' },
+                    { x: w * 0.8, y: h * 0.18, type: 'cat' }
+                ];
+
+                animalPositions.forEach((pos, index) => {
+                    const animal = Matter.Bodies.circle(pos.x, pos.y, gameConfig.animalSize/2, {
+                        label: 'animal',
+                        restitution: 0.3,
+                        friction: 0.1,
+                        density: 0.001,
+                        render: {
+                            sprite: {
+                                texture: assets[pos.type].src,
+                                xScale: 0.15,
+                                yScale: 0.15
+                            }
+                        }
+                    });
+                    animal.animalType = pos.type;
+                    animal.initialPosition = { x: pos.x, y: pos.y };
+                    animal.rescued = false;
+                    animals.push(animal);
+                });
+
+                const trapPositions = [
+                    { x: w * 0.35, y: h * 0.5, type: 'trap_spike' },
+                    { x: w * 0.65, y: h * 0.5, type: 'trap_fire' },
+                    { x: w * 0.2, y: h * 0.65, type: 'trap_spike' },
+                    { x: w * 0.8, y: h * 0.65, type: 'trap_fire' }
+                ];
+
+                trapPositions.forEach(pos => {
+                    const trap = Matter.Bodies.rectangle(pos.x, pos.y, gameConfig.trapSize, gameConfig.trapSize, {
+                        isStatic: true,
+                        label: 'trap',
+                        friction: 1,
+                        frictionStatic: 1,
+                        restitution: 0,
+                        render: {
+                            sprite: {
+                                texture: assets[pos.type].src,
+                                xScale: 0.15,
+                                yScale: 0.15
+                            }
+                        }
+                    });
+                    trap.trapType = pos.type;
+                    traps.push(trap);
+                });
+            } else if (currentLevel === 2) {
+                // 第2关：中间多陷阱，难度提升
+                const animalPositions = [
+                    { x: w * 0.15, y: h * 0.12, type: 'cat' },
+                    { x: w * 0.5, y: h * 0.08, type: 'dog' },
+                    { x: w * 0.85, y: h * 0.15, type: 'cat' }
+                ];
+
+                animalPositions.forEach((pos, index) => {
+                    const animal = Matter.Bodies.circle(pos.x, pos.y, gameConfig.animalSize/2, {
+                        label: 'animal',
+                        restitution: 0.3,
+                        friction: 0.1,
+                        density: 0.001,
+                        render: {
+                            sprite: {
+                                texture: assets[pos.type].src,
+                                xScale: 0.15,
+                                yScale: 0.15
+                            }
+                        }
+                    });
+                    animal.animalType = pos.type;
+                    animal.initialPosition = { x: pos.x, y: pos.y };
+                    animal.rescued = false;
+                    animals.push(animal);
+                });
+
+                const trapPositions = [
+                    { x: w * 0.25, y: h * 0.4, type: 'trap_spike' },
+                    { x: w * 0.4, y: h * 0.55, type: 'trap_fire' },
+                    { x: w * 0.5, y: h * 0.4, type: 'trap_spike' },
+                    { x: w * 0.6, y: h * 0.55, type: 'trap_fire' },
+                    { x: w * 0.75, y: h * 0.4, type: 'trap_spike' },
+                    { x: w * 0.2, y: h * 0.7, type: 'trap_fire' },
+                    { x: w * 0.8, y: h * 0.7, type: 'trap_fire' }
+                ];
+
+                trapPositions.forEach(pos => {
+                    const trap = Matter.Bodies.rectangle(pos.x, pos.y, gameConfig.trapSize, gameConfig.trapSize, {
+                        isStatic: true,
+                        label: 'trap',
+                        friction: 1,
+                        frictionStatic: 1,
+                        restitution: 0,
+                        render: {
+                            sprite: {
+                                texture: assets[pos.type].src,
+                                xScale: 0.15,
+                                yScale: 0.15
+                            }
+                        }
+                    });
+                    trap.trapType = pos.type;
+                    traps.push(trap);
+                });
+            } else if (currentLevel === 3) {
+                // 第3关：终极难度，陷阱更多
+                const animalPositions = [
+                    { x: w * 0.1, y: h * 0.1, type: 'cat' },
+                    { x: w * 0.5, y: h * 0.08, type: 'dog' },
+                    { x: w * 0.9, y: h * 0.12, type: 'cat' }
+                ];
+
+                animalPositions.forEach((pos, index) => {
+                    const animal = Matter.Bodies.circle(pos.x, pos.y, gameConfig.animalSize/2, {
+                        label: 'animal',
+                        restitution: 0.3,
+                        friction: 0.1,
+                        density: 0.001,
+                        render: {
+                            sprite: {
+                                texture: assets[pos.type].src,
+                                xScale: 0.15,
+                                yScale: 0.15
+                            }
+                        }
+                    });
+                    animal.animalType = pos.type;
+                    animal.initialPosition = { x: pos.x, y: pos.y };
+                    animal.rescued = false;
+                    animals.push(animal);
+                });
+
+                const trapPositions = [
+                    { x: w * 0.2, y: h * 0.35, type: 'trap_spike' },
+                    { x: w * 0.35, y: h * 0.5, type: 'trap_fire' },
+                    { x: w * 0.5, y: h * 0.35, type: 'trap_spike' },
+                    { x: w * 0.65, y: h * 0.5, type: 'trap_fire' },
+                    { x: w * 0.8, y: h * 0.35, type: 'trap_spike' },
+                    { x: w * 0.15, y: h * 0.65, type: 'trap_fire' },
+                    { x: w * 0.3, y: h * 0.75, type: 'trap_spike' },
+                    { x: w * 0.5, y: h * 0.65, type: 'trap_fire' },
+                    { x: w * 0.7, y: h * 0.75, type: 'trap_spike' },
+                    { x: w * 0.85, y: h * 0.65, type: 'trap_fire' }
+                ];
+
+                trapPositions.forEach(pos => {
+                    const trap = Matter.Bodies.rectangle(pos.x, pos.y, gameConfig.trapSize, gameConfig.trapSize, {
+                        isStatic: true,
+                        label: 'trap',
+                        friction: 1,
+                        frictionStatic: 1,
+                        restitution: 0,
+                        render: {
+                            sprite: {
+                                texture: assets[pos.type].src,
+                                xScale: 0.15,
+                                yScale: 0.15
+                            }
+                        }
+                    });
+                    trap.trapType = pos.type;
+                    traps.push(trap);
+                });
+            }
+
+            Matter.Composite.add(world, [...animals, ...traps]);
+        }
+
+        function handleDrawStart(e) {
+            e.preventDefault();
+            if (linesDrawn >= gameConfig.maxLines || !gameStarted || world.gravity.y !== 0) return;
+            
+            isDrawing = true;
+            currentLinePoints = [];
+            const pos = getEventPosition(e);
+            currentLinePoints.push(pos);
+        }
+
+        function handleDrawMove(e) {
+            e.preventDefault();
+            if (!isDrawing || linesDrawn >= gameConfig.maxLines || world.gravity.y !== 0) return;
+            
+            const pos = getEventPosition(e);
+            if (currentLinePoints.length > 0) {
+                const lastPoint = currentLinePoints[currentLinePoints.length - 1];
+                const distance = Math.hypot(pos.x - lastPoint.x, pos.y - lastPoint.y);
+                if (distance > 5) {
+                    currentLinePoints.push(pos);
+                }
+            }
+        }
+
+        function handleDrawEnd(e) {
+            e.preventDefault();
+            if (!isDrawing || currentLinePoints.length < 2 || world.gravity.y !== 0) {
+                isDrawing = false;
+                return;
+            }
+            
+            isDrawing = false;
+            createPhysicsLine(currentLinePoints);
+            linesDrawn++;
+            updateLineCount();
+            currentLinePoints = [];
+            
+            // 画完所有线后开启重力，线条与小动物一起下落
+            if (linesDrawn >= gameConfig.maxLines) {
+                setTimeout(releaseLinesAndGravity, 500);
+            }
+        }
+
+        function releaseLinesAndGravity() {
+            world.gravity.y = gameConfig.gravity;
+            Matter.Composite.allBodies(world).forEach((body) => {
+                if (body.label !== 'line') return;
+                Matter.Body.setStatic(body, false);
+                Matter.Body.set(body, {
+                    density: 0.002,
+                    friction: 0.85,
+                    frictionStatic: 1,
+                    restitution: 0.05
+                });
+            });
+        }
+
+        function getEventPosition(e) {
+            const rect = canvas.getBoundingClientRect();
+            let x, y;
+            
+            if (e.type.startsWith('touch')) {
+                x = e.touches[0].clientX - rect.left;
+                y = e.touches[0].clientY - rect.top;
+            } else {
+                x = e.clientX - rect.left;
+                y = e.clientY - rect.top;
+            }
+            
+            return { x, y };
+        }
+
+        function createPhysicsLine(points) {
+            if (points.length < 2) return;
+
+            const color = gameConfig.lineColor[linesDrawn % gameConfig.lineColor.length];
+            const lineSegments = [];
+
+            for (let i = 0; i < points.length - 1; i++) {
+                const p1 = points[i];
+                const p2 = points[i + 1];
+                const dx = p2.x - p1.x;
+                const dy = p2.y - p1.y;
+                const length = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx);
+
+                const segment = Matter.Bodies.rectangle(
+                    p1.x + dx / 2,
+                    p1.y + dy / 2,
+                    length,
+                    gameConfig.lineThickness,
+                    {
+                        angle: angle,
+                        isStatic: true,
+                        label: 'line',
+                        friction: 0.85,
+                        frictionStatic: 1,
+                        restitution: 0.05,
+                        density: 0.002,
+                        chamfer: { radius: 2 },
+                        render: {
+                            fillStyle: color,
+                            strokeStyle: color,
+                            lineWidth: 0
+                        }
+                    }
+                );
+                lineSegments.push(segment);
+            }
+
+            const constraints = [];
+            for (let i = 0; i < lineSegments.length - 1; i++) {
+                const a = lineSegments[i];
+                const b = lineSegments[i + 1];
+                const linkLen = Matter.Vector.magnitude(Matter.Vector.sub(b.position, a.position));
+                constraints.push(
+                    Matter.Constraint.create({
+                        bodyA: a,
+                        bodyB: b,
+                        length: linkLen,
+                        stiffness: 0.92,
+                        render: { visible: false }
+                    })
+                );
+            }
+
+            if (lineSegments.length > 0) {
+                Matter.Composite.add(world, lineSegments);
+            }
+            if (constraints.length > 0) {
+                Matter.Composite.add(world, constraints);
+            }
+        }
+
+        function drawGame() {
+            // 先绘制物理引擎渲染的所有游戏内容
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(renderCanvas, 0, 0);
+            
+            // 再叠加绘制正在画的线条路径，始终显示
+            if (isDrawing && currentLinePoints.length > 0) {
+                ctx.strokeStyle = gameConfig.lineColor[linesDrawn % gameConfig.lineColor.length];
+                ctx.lineWidth = gameConfig.lineThickness;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.globalAlpha = 1;
+                ctx.beginPath();
+                ctx.moveTo(currentLinePoints[0].x, currentLinePoints[0].y);
+                for (let i = 1; i < currentLinePoints.length; i++) {
+                    ctx.lineTo(currentLinePoints[i].x, currentLinePoints[i].y);
+                }
+                ctx.stroke();
+            }
+        }
+
+        function handleCollision(event) {
+            const pairs = event.pairs;
+            
+            pairs.forEach(pair => {
+                if (pair.bodyA.label === 'animal' && pair.bodyB.label === 'trap') {
+                    resetAnimal(pair.bodyA);
+                }
+                if (pair.bodyB.label === 'animal' && pair.bodyA.label === 'trap') {
+                    resetAnimal(pair.bodyB);
+                }
+                
+                if (pair.bodyA.label === 'animal' && pair.bodyB.label === 'safeZone') {
+                    rescueAnimal(pair.bodyA);
+                }
+                if (pair.bodyB.label === 'animal' && pair.bodyA.label === 'safeZone') {
+                    rescueAnimal(pair.bodyB);
+                }
+            });
+        }
+
+        function resetAnimal(animal) {
+            if (animal.rescued) return;
+            // 重置动物位置并暂停重力，让动物回到初始位置后保持静止
+            Matter.Body.setPosition(animal, { ...animal.initialPosition });
+            Matter.Body.setVelocity(animal, { x: 0, y: 0 });
+            Matter.Body.setAngularVelocity(animal, 0);
+            Matter.Body.setStatic(animal, true);
+            
+            // 1秒后恢复动物物理属性，让其重新下落
+            setTimeout(() => {
+                if (!animal.rescued) {
+                    Matter.Body.setStatic(animal, false);
+                }
+            }, 1000);
+        }
+
+        function rescueAnimal(animal) {
+            if (animal.rescued) return;
+            animal.rescued = true;
+            rescuedCount++;
+            Matter.Composite.remove(world, animal);
+        }
+
+        function checkRescued() {
+            if (rescuedCount >= totalAnimals && gameStarted) {
+                gameStarted = false;
+                setTimeout(() => {
+                    const successModal = document.getElementById('successModal');
+                    if (currentLevel < gameConfig.totalLevels) {
+                        successModal.innerHTML = `
+                            <h2>🎉 第${currentLevel}关通关！</h2>
+                            <p>太棒了！所有小动物都安全了～</p>
+                            <button id="nextLevelBtn" class="btn">进入下一关</button>
+                        `;
+                    } else {
+                        successModal.innerHTML = `
+                            <h2>🏆 全部通关！</h2>
+                            <p>你太厉害了！所有关卡都完成了～</p>
+                            <button id="playAgainBtn" class="btn">再玩一次</button>
+                        `;
+                    }
+                    successModal.style.display = 'block';
+                }, 500);
+            }
+        }
+
+        function updateLineCount() {
+            document.getElementById('lineCount').innerHTML = `第${currentLevel}关 | 剩余线条: <span id="remainingLines">${gameConfig.maxLines - linesDrawn}</span>`;
+        }
+
+        function resetGame() {
+            gameStarted = false;
+            linesDrawn = 0;
+            rescuedCount = 0;
+            currentLinePoints = [];
+            isDrawing = false;
+            
+            updateLineCount();
+            initMatter();
+            createLevel();
+            world.gravity.y = 0; // 重置时关闭重力，等待玩家重新画线
+            
+            gameStarted = true;
+            
+            // 重启游戏循环
+            (function gameLoop() {
+                if (gameStarted) {
+                    drawGame();
+                    checkRescued();
+                    requestAnimationFrame(gameLoop);
+                }
+            })();
+        }
+    </script>
+</body>
+</html>

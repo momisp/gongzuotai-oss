@@ -1,0 +1,18 @@
+当 patch 脚本显示「未匹配中文」而 /metrics 里仍有「倍频、频率、驻留率」等中文时，说明指标名是 PromDapter
+从 HWiNFO 传感器列表「实时拼出来的」，YAML 里本来就没有这些字，必须在 HWiNFO 里改传感器显示名。
+
+步骤（界面因 HWiNFO 版本略有差异）：
+
+1. 打开 HWiNFO64，打开「传感器」窗口（Sensors）。
+2. 在树形列表里找到 CPU / Intel Core 相关节点下的条目，例如：
+   - 「Core 0 倍频」「Core 1 倍频」
+   - 「有效频率」「驻留率」等带中文的项
+3. 在对应行上右键，若有「Rename / 重命名」，改为纯英文，例如：
+   - Core 0 Mult   （原 倍频）
+   - Core 0 Eff MHz （原 有效频率，示意）
+4. 关闭并重新打开 HWiNFO，再次打开传感器窗口。
+5. 浏览器访问：http://127.0.0.1:10445/metrics/reset
+6. 刷新 http://127.0.0.1:10445/metrics ，Ctrl+F 搜「倍」， ideally 无结果。
+7. 再看 Prometheus Targets 是否 UP。
+
+若 HWiNFO 不允许重命名某项：可在 PromDapter 论坛查找「排除传感器 / exclude」或更新 PromDapter 版本。

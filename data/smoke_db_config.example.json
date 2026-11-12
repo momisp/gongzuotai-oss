@@ -1,0 +1,18 @@
+{
+  "_comment": "复制为 data/smoke_db_config.json 后填写；该文件已 gitignore，勿提交密码",
+  "driver": "mysql",
+  "host": "192.168.2.226",
+  "port": 3306,
+  "user": "root",
+  "password": "******",
+  "database": "game_lx",
+  "databases": ["game_yq", "game_lx", "game_hw"],
+  "sourceDbMap": {
+    "lx": "game_lx",
+    "yq": "game_yq",
+    "hw": "game_hw"
+  },
+  "charset": "utf8mb4",
+  "connectTimeoutSec": 8,
+  "notes": "sdkSourceDb=lx/yq/hw 对应三个游戏库。仅测试库。新商务后台用户在库 sw6（sys_user/sys_dept/sys_role 等，商户用户信息表），冒烟需插库造数时再配 sw6 连接，勿与 game_lx 混用。"
+}

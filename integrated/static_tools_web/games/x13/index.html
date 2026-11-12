@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>小游戏合集 x13</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0f0f1a;
+      --card: #1a1a2e;
+      --card-hover: #222240;
+      --accent: #6c5ce7;
+      --accent-light: #a29bfe;
+      --text: #f0f0f5;
+      --text-muted: #8888aa;
+      --border: rgba(255, 255, 255, 0.08);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: 'PingFang SC', 'Microsoft YaHei', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(108, 92, 231, 0.25), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(255, 107, 107, 0.12), transparent),
+        var(--bg);
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 20px 60px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      background: linear-gradient(135deg, #fff 0%, var(--accent-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    header p {
+      margin-top: 10px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .count-badge {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 6px 16px;
+      border-radius: 20px;
+      background: rgba(108, 92, 231, 0.2);
+      border: 1px solid rgba(108, 92, 231, 0.4);
+      color: var(--accent-light);
+      font-size: 0.85rem;
+    }
+
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .game-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .game-card:hover,
+    .game-card:focus-visible {
+      transform: translateY(-3px);
+      background: var(--card-hover);
+      border-color: rgba(108, 92, 231, 0.5);
+      box-shadow: 0 12px 40px rgba(108, 92, 231, 0.2);
+      outline: none;
+    }
+
+    .game-card:active {
+      transform: translateY(-1px);
+    }
+
+    .game-icon {
+      flex-shrink: 0;
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .game-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .game-name {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .game-tag {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .game-arrow {
+      flex-shrink: 0;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      transition: transform 0.2s, color 0.2s;
+    }
+
+    .game-card:hover .game-arrow {
+      transform: translateX(4px);
+      color: var(--accent-light);
+    }
+
+    footer {
+      margin-top: 48px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>小游戏合集</h1>
+      <p>点击游戏名称即可开始游玩</p>
+      <span class="count-badge">共 14 款游戏</span>
+    </header>
+
+    <main class="game-grid" id="gameGrid"></main>
+
+    <footer>小游戏 x13 · 本地静态页面合集</footer>
+  </div>
+
+  <script>
+    const games = [
+      { name: '一杆清台', path: '一杆清台/index.html', icon: '🎱', tag: '台球 · 休闲' },
+      { name: '画线救小动物', path: '画线救小动物/index.html', icon: '🐾', tag: '画线 · 益智' },
+      { name: '绳子物理坠物', path: '绳子物理坠物/index.html', icon: '🪢', tag: '物理 · 解谜' },
+      { name: '复古黑胶混音师', path: '复古黑胶混音师/index.html', icon: '💿', tag: '音乐 · 节奏' },
+      { name: '符号密码破译师', path: '符号密码破译师/index.html', icon: '🔐', tag: '密码 · 推理' },
+      { name: '数字平衡师', path: '数字平衡师/index.html', icon: '⚖️', tag: '数字 · 平衡' },
+      { name: '数墙迷宫', path: '数墙迷宫/index.html', icon: '🧱', tag: '数独 · 迷宫' },
+      { name: '古籍修复师', path: '古籍修复师/index.html', icon: '📜', tag: '修复 · 益智' },
+      { name: '极速拼图挑战', path: '极速拼图挑战/index.html', icon: '🧩', tag: '拼图 · 竞速' },
+      { name: '农场打地鼠', path: '农场打地鼠/index.html', icon: '🐹', tag: '打地鼠 · 街机' },
+      { name: '极速跳一跳', path: '极速跳一跳/index.html', icon: '🦘', tag: '跳跃 · 反应' },
+      { name: '指尖落点', path: '指尖落点/index.html', icon: '👆', tag: '落点 · 精准' },
+      { name: '矿洞爆破大师', path: '矿洞爆破大师/index.html', icon: '💥', tag: '爆破 · 策略' },
+      { name: '萌弹对决', path: '萌弹对决/index.html', icon: '🌈', tag: '弹射 · 人机对战' }
+    ];
+
+    const grid = document.getElementById('gameGrid');
+    grid.innerHTML = games.map(g => `
+      <a class="game-card" href="${g.path}" title="开始游玩：${g.name}">
+        <div class="game-icon">${g.icon}</div>
+        <div class="game-info">
+          <div class="game-name">${g.name}</div>
+          <div class="game-tag">${g.tag}</div>
+        </div>
+        <span class="game-arrow" aria-hidden="true">›</span>
+      </a>
+    `).join('');
+  </script>
+</body>
+</html>

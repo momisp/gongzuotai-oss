@@ -1,0 +1,23 @@
+{
+  "manifest_strings": [],
+  "dex_package_strings": [
+    " Lcom/xycq/longxiang1/R$animator;",
+    " Lcom/xycq/longxiang1/R$drawable;",
+    "!Lcom/xycq/longxiang1/R$styleable;",
+    "$Lcom/xycq/longxiang1/R$interpolator;",
+    "Lcom/xycq/longxiang1/R$anim;",
+    "Lcom/xycq/longxiang1/R$attr;",
+    "Lcom/xycq/longxiang1/R$bool;",
+    "Lcom/xycq/longxiang1/R$color;",
+    "Lcom/xycq/longxiang1/R$dimen;",
+    "Lcom/xycq/longxiang1/R$id;",
+    "Lcom/xycq/longxiang1/R$integer;",
+    "Lcom/xycq/longxiang1/R$layout;",
+    "Lcom/xycq/longxiang1/R$mipmap;",
+    "Lcom/xycq/longxiang1/R$plurals;",
+    "Lcom/xycq/longxiang1/R$string;",
+    "Lcom/xycq/longxiang1/R$style;",
+    "Lcom/xycq/longxiang1/R$xml;",
+    "Lcom/xycq/longxiang1/R;"
+  ]
+}

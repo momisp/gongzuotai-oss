@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>玩家 / 会长 / 总后台 — 预支与分佣验算</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Microsoft Yahei", "PingFang SC", sans-serif; }
+        body { background: #e8ecf1; padding: 16px; color: #262626; }
+        .wrap { max-width: 1320px; margin: 0 auto; }
+        h1 { font-size: 20px; text-align: center; margin-bottom: 4px; }
+        .sub { text-align: center; font-size: 12px; color: #8c8c8c; margin-bottom: 10px; max-width: 760px; margin-left: auto; margin-right: auto; line-height: 1.5; }
+
+        .role-map {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; font-size: 11px;
+        }
+        @media (max-width: 900px) { .role-map { grid-template-columns: 1fr; } }
+        .role-map .box {
+            background: #fff; border-radius: 10px; padding: 10px 12px; border: 1px solid #f0f0f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,.06);
+        }
+        .role-map .box h3 { font-size: 12px; margin-bottom: 6px; }
+        .role-map .box.player h3 { color: #531dab; }
+        .role-map .box.leader h3 { color: #0958d9; }
+        .role-map .box.admin h3 { color: #d4380d; }
+        .role-map ul { margin: 0 0 0 16px; color: #595959; line-height: 1.55; }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            align-items: start;
+        }
+        @media (max-width: 1100px) { .dashboard { grid-template-columns: 1fr; } }
+
+        .col-title {
+            font-size: 14px; font-weight: 700; margin-bottom: 8px;
+            padding-bottom: 6px; border-bottom: 2px solid #d9d9d9;
+        }
+        .player-col .col-title { color: #722ed1; border-color: #d3adf7; }
+        .leader-col .col-title { color: #1890ff; border-color: #91caff; }
+        .admin-col .col-title { color: #d4380d; border-color: #ffc069; }
+
+        .card {
+            background: #fff; border-radius: 10px; padding: 11px 13px;
+            box-shadow: 0 1px 4px rgba(0,0,0,.08); border: 1px solid #f0f0f0;
+        }
+        .card h4 { font-size: 11px; color: #8c8c8c; font-weight: 600; margin-bottom: 5px; }
+        .card .num { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+        .currency-block { margin-bottom: 10px; border: 1px solid #f0f0f0; border-radius: 10px; overflow: hidden; }
+        .currency-block > .cb-head {
+            background: linear-gradient(90deg, #f9f0ff 0%, #efdbff 100%);
+            padding: 8px 10px; font-size: 12px; font-weight: 600; color: #531dab;
+            display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+        }
+        .currency-block.rmb > .cb-head {
+            background: linear-gradient(90deg, #f6ffed 0%, #d9f7be 100%); color: #237804;
+        }
+        .visible-total {
+            font-size: 11px; font-weight: 600; color: #cf1322;
+            border: 2px solid #ff4d4f; border-radius: 6px; padding: 4px 10px;
+            background: #fff; font-variant-numeric: tabular-nums;
+        }
+        .player-actions, .leader-actions {
+            margin-top: 10px; padding-top: 10px; border-top: 1px dashed #e0e0e0;
+        }
+        .player-actions h4, .leader-actions h4 {
+            font-size: 11px; color: #595959; margin-bottom: 8px; font-weight: 600;
+        }
+        .btn-grid {
+            display: flex; flex-direction: column; gap: 6px;
+        }
+        .btn-grid button { width: 100%; text-align: left; font-size: 12px; padding: 8px 10px; }
+        .btn-grid button.player-op { background: #722ed1; }
+        .btn-grid button.player-op:hover { background: #9254de; }
+        .btn-grid button.leader-op { background: #1890ff; }
+        .btn-grid button.leader-op:hover { background: #40a9ff; }
+        .admin-card-settle {
+            margin-top: 10px; padding: 10px; background: #fff7e6; border-radius: 8px; border: 1px solid #ffd591;
+            font-size: 11px;
+        }
+        .admin-card-settle .row2 { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+        .admin-card-settle select { min-width: 0; flex: 1; max-width: 100%; font-size: 11px; }
+        .admin-test { margin-top: 10px; padding-top: 8px; border-top: 1px dashed #ffd591; font-size: 10px; color: #8c8c8c; }
+        .admin-test .row3 { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+        .admin-test button { padding: 6px 10px; font-size: 11px; background: #fa8c16; }
+        .admin-test button:hover { background: #ffa940; }
+        .currency-block .cb-row {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 8px 10px; background: #fff;
+        }
+        .mini-card { background: #fafafa; border-radius: 8px; padding: 8px; border: 1px solid #f0f0f0; }
+        .mini-card.adv { border-left: 3px solid #fa8c16; }
+        .mini-card.real { border-left: 3px solid #52c41a; }
+        .mini-card .lbl { font-size: 10px; color: #8c8c8c; margin-bottom: 3px; }
+
+        .leader-top {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 10px;
+        }
+        @media (max-width: 900px) { .leader-top { grid-template-columns: repeat(2, 1fr); } }
+        .leader-top .card.dw { border-top: 3px solid #13c2c2; }
+        .leader-top .card.q { border-top: 3px solid #1890ff; }
+        .leader-top .card.cap { border-top: 3px solid #597ef7; }
+        .leader-top .card.debt { border-top: 3px solid #ff4d4f; }
+
+        .leader-pools {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .leader-pools .card.rl { border-top: 3px solid #52c41a; }
+        .leader-pools .card.ap { border-top: 3px solid #fa8c16; }
+        .leader-pools .card.pend-a { border-top: 3px solid #722ed1; }
+        .leader-pools .card.pend-r { border-top: 3px solid #eb2f96; }
+        .leader-pools .card.pend-ap { border-top: 3px solid #b37feb; }
+
+        .admin-strip {
+            background: linear-gradient(90deg, #fff2e8 0%, #ffe7ba 100%);
+            border: 1px solid #ffc069; border-radius: 10px; padding: 12px 14px; margin-bottom: 12px;
+        }
+        .admin-strip h3 { font-size: 13px; color: #ad4e00; margin-bottom: 8px; }
+        .admin-pend { display: flex; flex-wrap: wrap; gap: 16px 24px; font-size: 12px; margin-bottom: 10px; }
+        .admin-pend span { font-variant-numeric: tabular-nums; }
+        .admin-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+
+        .panel {
+            background: #fff; border-radius: 10px; padding: 14px;
+            box-shadow: 0 1px 4px rgba(0,0,0,.08); margin-bottom: 12px; border: 1px solid #f0f0f0;
+        }
+        .panel h3.sec { font-size: 13px; color: #262626; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #f0f0f0; }
+        .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
+        select, input[type="number"] {
+            padding: 8px 10px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 13px;
+        }
+        select { min-width: 280px; flex: 1; max-width: 420px; }
+        input[type="number"] { width: 96px; }
+        input.wide { width: 68px; }
+        button {
+            background: #1890ff; color: #fff; border: none; border-radius: 8px;
+            cursor: pointer; font-weight: 500; padding: 8px 14px; font-size: 13px;
+        }
+        button:hover { background: #40a9ff; }
+        button.admin-go { background: #d4380d; }
+        button.admin-go:hover { background: #ff7a45; }
+        button.secondary { background: #722ed1; }
+        button.ghost { background: #fff; color: #1890ff; border: 1px solid #1890ff; }
+        button.danger { background: #ff4d4f; }
+
+        .rule {
+            margin-top: 8px; padding: 10px; background: #e6f7ff; border-radius: 8px;
+            font-size: 11px; color: #0958d9; line-height: 1.62;
+        }
+        .rule strong { color: #0050b3; }
+
+        .snap-wrap { overflow-x: auto; }
+        table.snap {
+            width: 100%; border-collapse: collapse; font-size: 10px;
+            margin-top: 6px; min-width: 1420px;
+        }
+        table.snap th, table.snap td {
+            border: 1px solid #e8e8e8; padding: 5px 3px; text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+        table.snap th { background: #fafafa; font-weight: 600; text-align: center; }
+        table.snap td:first-child, table.snap th:first-child { text-align: center; }
+        table.snap .left { text-align: left; }
+        tr.step-initial { background: #f6ffed; }
+        .hint { font-size: 10px; color: #8c8c8c; margin-top: 6px; }
+
+        /* 整合流程图 */
+        .flow-panel {
+            background: #fff; border-radius: 10px; padding: 10px 12px 14px;
+            margin-bottom: 14px; border: 1px solid #e0e0e0;
+            box-shadow: 0 1px 4px rgba(0,0,0,.06);
+        }
+        .flow-panel > h2 { font-size: 14px; margin-bottom: 8px; color: #333; }
+        .flow-svg-wrap {
+            overflow-x: auto; width: 100%;
+            background: linear-gradient(180deg, #fafbfc 0%, #fff 100%);
+            border-radius: 8px; border: 1px solid #f0f0f0;
+        }
+        .flow-svg-wrap svg { display: block; min-width: 1050px; margin: 0 auto; }
+        .flow-node rect, .flow-node path.shape {
+            fill: #fff; stroke: #bfbfbf; stroke-width: 1.2;
+            transition: filter .2s, stroke .2s, fill .2s;
+        }
+        .flow-node text { fill: #262626; font-size: 11px; pointer-events: none; }
+        .flow-node text.small { font-size: 9px; fill: #595959; }
+        .flow-link path.dash {
+            fill: none; stroke: #d9d9d9; stroke-width: 1.5;
+            stroke-dasharray: 4 3;
+            transition: stroke .2s, stroke-width .2s;
+        }
+        .flow-link path.hit {
+            fill: none; stroke: transparent; stroke-width: 14;
+            cursor: help;
+        }
+        .flow-link.highlight path.dash,
+        .flow-node.highlight rect,
+        .flow-node.highlight path.shape {
+            stroke: #1890ff; stroke-width: 2.2;
+        }
+        .flow-node.highlight rect,
+        .flow-node.highlight path.shape {
+            fill: #e6f7ff;
+            filter: drop-shadow(0 0 6px rgba(24,144,255,.35));
+        }
+        .flow-link.highlight path.dash {
+            stroke: #1890ff;
+            stroke-dasharray: none;
+            stroke-width: 2.5;
+            filter: drop-shadow(0 0 4px rgba(24,144,255,.4));
+        }
+        .flow-dim .flow-node:not(.highlight) rect,
+        .flow-dim .flow-node:not(.highlight) path.shape {
+            opacity: .42;
+        }
+        .flow-dim .flow-link:not(.highlight) path.dash {
+            opacity: .35;
+        }
+        .flow-chart-svg path.flow-link.highlight {
+            stroke: #1890ff !important;
+            stroke-width: 2.2;
+            filter: drop-shadow(0 0 3px rgba(24,144,255,.35));
+        }
+        .flow-chart-svg.flow-dim path.flow-link:not(.highlight) {
+            opacity: .35;
+        }
+
+        #flowTooltip {
+            position: fixed; z-index: 10060; display: none;
+            max-width: 300px; padding: 10px 12px; background: rgba(0,0,0,.88);
+            color: #fff; border-radius: 8px; font-size: 12px; line-height: 1.55;
+            pointer-events: none; box-shadow: 0 4px 16px rgba(0,0,0,.2);
+        }
+        #flowLegendNow {
+            font-size: 11px; color: #0958d9; margin-top: 8px; padding: 8px 10px;
+            background: #e6f7ff; border-radius: 6px; min-height: 2.4em;
+        }
+
+        /* 流程图（三图纵向 + 悬停放大） */
+        .flow-four-intro {
+            font-size: 11px; color: #595959; line-height: 1.55; margin-bottom: 10px;
+        }
+        .flow-charts-host {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            position: relative;
+            max-width: 720px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .flow-tile {
+            position: relative;
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 6px 6px 4px;
+            transition: box-shadow 0.18s ease;
+            z-index: 1;
+        }
+        .flow-tile:hover { box-shadow: 0 2px 12px rgba(24,144,255,.18); }
+        .flow-tile-expanded {
+            position: fixed !important;
+            left: 50% !important;
+            top: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            width: min(760px, 94vw) !important;
+            max-height: 88vh !important;
+            overflow: auto !important;
+            z-index: 10050 !important;
+            background: #fff !important;
+            border: 2px solid #1890ff !important;
+            box-shadow: 0 16px 48px rgba(0,0,0,.18) !important;
+            padding: 14px !important;
+        }
+        .flow-tile-expanded .flow-chart-svg {
+            display: block;
+            width: 100% !important;
+            height: auto !important;
+            min-height: 280px;
+            max-height: none !important;
+        }
+        .flow-tile-caption {
+            font-size: 10px; font-weight: 600; color: #262626; margin-bottom: 4px;
+            padding-bottom: 3px; border-bottom: 1px dashed #e8e8e8;
+        }
+        .flow-chart-svg {
+            display: block; width: 100%; height: auto; max-height: 128px;
+            background: #fff; border-radius: 4px;
+        }
+        .flow-mini-text { font-size: 8px; fill: #595959; }
+        .flow-mini-title { font-size: 9px; font-weight: 700; fill: #262626; }
+
+        .leader-top-wrap {
+            background: linear-gradient(145deg, #e6f7ff 0%, #f0f5ff 45%, #e6fffb 100%);
+            border: 2px solid #69c0ff;
+            border-radius: 12px;
+            padding: 12px 10px 8px;
+            margin-bottom: 12px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 2px 10px rgba(24,144,255,.12);
+        }
+        .leader-top-wrap .leader-top { margin-bottom: 0; }
+        .leader-cap-foot {
+            font-size: 10px; color: #0958d9; margin: 8px 2px 0; text-align: center; line-height: 1.45;
+        }
+        .card .sub-cap {
+            font-size: 9px; color: #8c8c8c; font-weight: 500; margin: -2px 0 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h1>玩家 / 会长 / 总后台 — 预支与分佣验算</h1>
+        <p class="sub">玩家侧展示<strong>人民币、平台币、绑币</strong>各自可见合计（库内拆预支/真实）。三种<strong>消费</strong>彼此独立：人民币消费只动人民币子账，与台币、绑币无关；各自均先预支后真实，分佣进总后台①/②。</p>
+
+        <div class="role-map">
+            <div class="box player">
+                <h3>玩家 · 步骤（本页三种）</h3>
+                <ul>
+                    <li>人民币消费（人民币子账）</li>
+                    <li>平台币消费</li>
+                    <li>绑币消费</li>
+                </ul>
+            </div>
+            <div class="box leader">
+                <h3>会长 · 代充步骤</h3>
+                <ul>
+                    <li>人民币代充 → 玩家绑币 / 平台币</li>
+                    <li>预支额度代充 → 玩家绑币 / 平台币</li>
+                    <li>还款</li>
+                </ul>
+            </div>
+            <div class="box admin">
+                <h3>总后台 · 步骤</h3>
+                <ul>
+                    <li>结算①：玩家人民币等真实链路分佣 → 会长<strong>真实余额库</strong></li>
+                    <li>结算②：玩家台/绑充值分佣、预支代打、消费预支分佣 → 会长<strong>预支余额库</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="flow-panel">
+            <h2>流程说明（三图 · 纵向排列 · 悬停放大 · 高亮与浮窗保留）</h2>
+            <p class="flow-four-intro">① <strong>人民币消费→分佣→真实余额→可预支→代充</strong>。② <strong>平台币消费</strong>真/预支拆分与结算。③ <strong>账户余额与可预支</strong>。鼠标移入某一图即放大，移出还原。</p>
+            <div class="flow-svg-wrap" style="overflow: visible;">
+                <div class="flow-charts-host" id="flowChartsHost">
+                    <div class="flow-tile">
+                        <div class="flow-tile-caption">① 人民币消费 → 分佣 → 真实余额 → 可预支（示意）</div>
+                        <svg class="flow-chart-svg" viewBox="0 0 480 120" xmlns="http://www.w3.org/2000/svg">
+                            <g class="flow-node flow-hl-recharge" data-tip="玩家以人民币渠道消费（本子账与台币/绑币无关）。"><rect x="8" y="38" width="72" height="44" rx="6" fill="#fff" stroke="#bfbfbf"/><text x="44" y="58" text-anchor="middle" font-size="8" font-weight="600">玩家消费</text><text x="44" y="72" text-anchor="middle" font-size="7">(人民币)</text></g>
+                            <path class="flow-link flow-hl-consume-real" d="M 82 60 L 102 60" fill="none" stroke="#d9d9d9" stroke-width="1.4"/><text x="88" y="56" font-size="7" fill="#8c8c8c">分佣</text>
+                            <g class="flow-node flow-hl-consume-real" data-tip="分佣进入待结，总后台结算①后才会进入真实余额库并体现在「显示提现」。"><rect x="104" y="32" width="88" height="56" rx="6" fill="#fff" stroke="#bfbfbf"/><text x="148" y="52" text-anchor="middle" font-size="8" font-weight="600">待结→真实库</text><text x="148" y="66" text-anchor="middle" font-size="7">结算后+余额</text></g>
+                            <path class="flow-link flow-hl-quota" d="M 194 60 L 216 60" fill="none" stroke="#d9d9d9" stroke-width="1.4"/>
+                            <g class="flow-node flow-hl-quota" data-tip="真实余额库增加后，可预支额度随之变化（验算页公式与白名单）。"><rect x="218" y="38" width="76" height="44" rx="6" fill="#fff" stroke="#bfbfbf"/><text x="256" y="58" text-anchor="middle" font-size="8" font-weight="600">可预支↑</text></g>
+                            <path class="flow-link flow-hl-advance" d="M 296 60 L 318 60" fill="none" stroke="#d9d9d9" stroke-width="1.4"/>
+                            <g class="flow-node flow-hl-advance" data-tip="会长使用可预支额度向玩家平台币账户代充。"><rect x="320" y="38" width="72" height="44" rx="6" fill="#fff" stroke="#bfbfbf"/><text x="356" y="58" text-anchor="middle" font-size="8" font-weight="600">会长预支</text></g>
+                            <path class="flow-link flow-hl-proxy-rmb" d="M 394 60 L 414 60" fill="none" stroke="#d9d9d9" stroke-width="1.4"/>
+                            <g class="flow-node flow-hl-proxy-rmb" data-tip="玩家平台币可见余额=预支台+真实台（示意）。"><rect x="416" y="38" width="58" height="44" rx="6" fill="#fff" stroke="#bfbfbf"/><text x="445" y="62" text-anchor="middle" font-size="8" font-weight="600">玩家台币</text></g>
+                        </svg>
+                    </div>
+                    <div class="flow-tile">
+                        <div class="flow-tile-caption">② 平台币消费：真/预支拆分与结算（示意）</div>
+                        <svg class="flow-chart-svg" viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg">
+                            <g class="flow-node flow-hl-recharge" data-tip="玩家消费平台币；同币种先扣预支再扣真实。"><rect x="160" y="10" width="100" height="36" rx="6" fill="#fff" stroke="#bfbfbf"/><text x="210" y="32" text-anchor="middle" font-size="9" font-weight="600">玩家消费(台币)</text></g>
+                            <line x1="210" y1="46" x2="210" y2="62" stroke="#8c8c8c" stroke-width="1.2"/>
+                            <g class="flow-node" data-tip="按扣款来源拆分。"><path d="M210 62 L242 82 L210 102 L178 82 Z" fill="#fff" stroke="#bfbfbf"/><text x="210" y="86" text-anchor="middle" font-size="8">判断类型</text></g>
+                            <path class="flow-link flow-hl-consume-real" d="M 178 82 L 48 82 L 48 118" fill="none" stroke="#d9d9d9" stroke-width="1.4"/>
+                            <g class="flow-node flow-hl-consume-real" data-tip="真实台扣款及分佣→真实侧待结→结算①。"><rect x="8" y="118" width="80" height="40" rx="6" fill="#fff" stroke="#bfbfbf"/><text x="48" y="136" text-anchor="middle" font-size="8" font-weight="600">扣真实台</text><text x="48" y="148" text-anchor="middle" font-size="7">→真实队列</text></g>
+                            <path class="flow-link flow-hl-consume-adv" d="M 242 82 L 372 82 L 372 118" fill="none" stroke="#d9d9d9" stroke-width="1.4"/>
+                            <g class="flow-node flow-hl-consume-adv" data-tip="预支台扣款及分佣→预支侧待结→结算②。"><rect x="332" y="118" width="80" height="40" rx="6" fill="#fff" stroke="#bfbfbf"/><text x="372" y="136" text-anchor="middle" font-size="8" font-weight="600">扣预支台</text><text x="372" y="148" text-anchor="middle" font-size="7">→预支队列</text></g>
+                            <path class="flow-link flow-hl-backend" d="M 48 160 L 48 172 L 210 172 L 210 160" fill="none" stroke="#d9d9d9" stroke-width="1.4"/>
+                            <path class="flow-link flow-hl-settle-real" d="M 210 160 L 210 148" fill="none" stroke="#d9d9d9" stroke-width="1.4" opacity="0"/>
+                            <g class="flow-node flow-hl-backend flow-hl-settle-real flow-hl-settle-adv" data-tip="总后台：结算①入真实库，结算②入预支库；入账后才计入会长可提现侧余额。"><rect x="150" y="160" width="120" height="32" rx="6" fill="#fff" stroke="#bfbfbf"/><text x="210" y="180" text-anchor="middle" font-size="8" font-weight="600">总后台结算 ① / ②</text></g>
+                        </svg>
+                    </div>
+                    <div class="flow-tile">
+                        <div class="flow-tile-caption">③ 账户余额与可预支（示意）</div>
+                        <svg class="flow-chart-svg" viewBox="0 0 340 200" xmlns="http://www.w3.org/2000/svg">
+                            <g class="flow-node flow-hl-repay" data-tip="还款时优先冲减预支侧账面（验算表顺序）。"><rect x="220" y="16" width="100" height="30" rx="5" fill="#fff" stroke="#bfbfbf"/><text x="270" y="35" text-anchor="middle" font-size="9" font-weight="600">预支还款</text></g>
+                            <path class="flow-link flow-hl-repay" d="M 220 31 L 170 31 L 170 48" fill="none" stroke="#d9d9d9" stroke-width="1.4"/><text x="188" y="28" font-size="7" fill="#8c8c8c">扣除</text>
+                            <g class="flow-node" data-tip="会长账户展示用余额（验算页「显示提现」仅含已入账真实库+预支库）。"><rect x="110" y="48" width="120" height="36" rx="6" fill="#fff" stroke="#bfbfbf"/><text x="170" y="70" text-anchor="middle" font-size="9" font-weight="600">账户余额</text></g>
+                            <path class="flow-link" d="M 140 84 L 90 112" fill="none" stroke="#d9d9d9" stroke-width="1.4"/>
+                            <path class="flow-link" d="M 200 84 L 250 112" fill="none" stroke="#d9d9d9" stroke-width="1.4"/>
+                            <g class="flow-node flow-hl-real-pool" data-tip="已结算入账的真实分佣余额（真实余额库）。"><rect x="40" y="112" width="100" height="32" rx="5" fill="#fff" stroke="#bfbfbf"/><text x="90" y="132" text-anchor="middle" font-size="8" font-weight="600">真实余额</text></g>
+                            <g class="flow-node flow-hl-proxy-rmb" data-tip="已结算入账的预支分佣余额（预支余额库）。"><rect x="200" y="112" width="100" height="32" rx="5" fill="#fff" stroke="#bfbfbf"/><text x="250" y="132" text-anchor="middle" font-size="8" font-weight="600">预支余额</text></g>
+                            <line x1="90" y1="156" x2="250" y2="156" stroke="#8c8c8c" stroke-width="1"/>
+                            <g class="flow-node flow-hl-quota" data-tip="验算口径：可预支=min(白名单, 真实库−待还)；总额度=可预支+已预支。"><rect x="70" y="162" width="200" height="34" rx="6" fill="#fff" stroke="#bfbfbf"/><text x="170" y="178" text-anchor="middle" font-size="8" font-weight="600">可预支 = f(未结、真实库、已预支、白名单)</text><text x="170" y="190" text-anchor="middle" font-size="7" fill="#595959">总额度(本页)= 可预支 + 已预支(待还)</text></g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div id="flowLegendNow">当前步骤：<span id="flowStepLabel">初始</span></div>
+        </div>
+
+        <div class="dashboard">
+            <div class="card player-col">
+                <div class="col-title">玩家账户</div>
+                <div class="currency-block rmb">
+                    <div class="cb-head">
+                        <span>人民币</span>
+                        <span class="visible-total">玩家可见 <span id="visRmb">0.00</span></span>
+                    </div>
+                    <div class="cb-row">
+                        <div class="mini-card adv">
+                            <div class="lbl">预支人民币（库内）</div>
+                            <div class="num" id="pAdvRmb">0.00</div>
+                        </div>
+                        <div class="mini-card real">
+                            <div class="lbl">真实人民币（库内）</div>
+                            <div class="num" id="pRealRmb">0.00</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="currency-block plat">
+                    <div class="cb-head">
+                        <span>平台币</span>
+                        <span class="visible-total">玩家可见 <span id="visPlat">0.00</span></span>
+                    </div>
+                    <div class="cb-row">
+                        <div class="mini-card adv">
+                            <div class="lbl">预支的平台币（库内）</div>
+                            <div class="num" id="pAdvPlat">0.00</div>
+                        </div>
+                        <div class="mini-card real">
+                            <div class="lbl">真实平台币（库内）</div>
+                            <div class="num" id="pRealPlat">0.00</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="currency-block bound">
+                    <div class="cb-head">
+                        <span>绑币</span>
+                        <span class="visible-total">玩家可见 <span id="visBound">0.00</span></span>
+                    </div>
+                    <div class="cb-row">
+                        <div class="mini-card adv">
+                            <div class="lbl">预支绑币（库内）</div>
+                            <div class="num" id="pAdvBound">0.00</div>
+                        </div>
+                        <div class="mini-card real">
+                            <div class="lbl">真实绑币（库内）</div>
+                            <div class="num" id="pRealBound">0.00</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="hint">三种币种账户<strong>相互独立</strong>；消费时只扣对应子账（人民币消费≠扣平台币）。同一币种内<strong>先预支、不足再扣真实</strong>。</p>
+                <div class="player-actions">
+                    <h4>操作</h4>
+                    <div class="btn-grid">
+                        <button type="button" class="player-op" onclick="runConsume('rmb')">玩家 · 人民币消费（先预支后真实）</button>
+                        <button type="button" class="player-op" onclick="runConsume('plat')">玩家 · 平台币消费（先预支后真实）</button>
+                        <button type="button" class="player-op" onclick="runConsume('bound')">玩家 · 绑币消费（先预支后真实）</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card leader-col">
+                <div class="col-title">会长侧</div>
+            <div class="leader-top-wrap">
+                <div class="leader-top">
+                    <div class="card dw"><h4>显示提现</h4><div class="num" id="displayWithdraw">0.00</div></div>
+                    <div class="card q"><h4>可预支额度</h4><div class="num" id="quota">0.00</div></div>
+                    <div class="card cap">
+                        <h4>总额度</h4>
+                        <div class="sub-cap">可预支 + 已预支(待还)</div>
+                        <div class="num" id="totalCreditLine">0.00</div>
+                    </div>
+                    <div class="card debt"><h4>已预支（待还）</h4><div class="num" id="debt">0.00</div></div>
+                </div>
+                <p class="leader-cap-foot">白名单上限 <strong id="capWhitelistVal">100000</strong>（仅约束可预支上限，不等于总额度）</p>
+            </div>
+                <div class="leader-pools">
+                    <div class="card rl"><h4>真实余额库</h4><div class="num" id="realPool">0.00</div></div>
+                    <div class="card ap"><h4>预支余额库</h4><div class="num" id="advPool">0.00</div></div>
+                    <div class="card pend-a"><h4>会长预支操作→待结算</h4><div class="num" id="pendAdv">0.00</div></div>
+                    <div class="card pend-ap"><h4>玩家台/绑充值→待②</h4><div class="num" id="pendAdvPlayerSum">0.00</div></div>
+                    <div class="card pend-ac"><h4>消费预支部分→待结算</h4><div class="num" id="pendAdvConsume">0.00</div></div>
+                    <div class="card pend-r"><h4>真实侧待结合计</h4><div class="num" id="pendReal">0.00</div></div>
+                </div>
+                <div class="leader-actions">
+                    <h4>操作</h4>
+                    <div class="btn-grid">
+                        <button type="button" class="leader-op" onclick="runLeader('proxy_plat')">会长 · 人民币代充 → 玩家真实平台币</button>
+                        <button type="button" class="leader-op" onclick="runLeader('proxy_bound')">会长 · 人民币代充 → 玩家真实绑币</button>
+                        <button type="button" class="leader-op" onclick="runLeader('adv_plat')">会长 · 预支额度 → 玩家预支平台币</button>
+                        <button type="button" class="leader-op" onclick="runLeader('adv_bound')">会长 · 预支额度 → 玩家预支绑币</button>
+                        <button type="button" class="leader-op" onclick="runLeader('repay')">会长 · 还款</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card admin-col">
+                <div class="col-title">总后台 · 结算</div>
+                <div class="admin-pend" style="font-size:11px;line-height:1.55;margin-bottom:10px">
+                    <div><strong>真实侧待结</strong>：<span id="pendRealAdmin">0.00</span>（订单 <span id="pendRealPlayerOrders">0.00</span> + 其他/消费 <span id="pendRealOther">0.00</span>）</div>
+                    <div><strong>预支侧待结</strong>：<span id="pendAdvAdmin">0.00</span>（玩家台/绑订单 <span id="pendAdvPlayerOrders">0.00</span> + 会长预支 <span id="pendAdvLeader">0.00</span> + 消费预支 <span id="pendAdvConsumeOnly">0.00</span>）</div>
+                </div>
+                <div class="admin-card-settle">
+                    <div><strong>结算① · 真实人民币链路</strong></div>
+                    <div class="row2">
+                        <select id="settleRealSelect"></select>
+                        <button type="button" class="admin-go" onclick="executeSettleReal()">执行结算①</button>
+                    </div>
+                    <div style="margin-top:12px"><strong>结算② · 预支链路</strong></div>
+                    <div class="row2">
+                        <select id="settleAdvSelect"></select>
+                        <button type="button" class="admin-go" onclick="executeSettleAdv()">执行结算②</button>
+                    </div>
+                </div>
+                <div class="admin-test">
+                    验算用 · 玩家自主充值（到账对应币种「真实」子账；人民币走①，台/绑走②）
+                    <div class="row3">
+                        <button type="button" onclick="testPlayerTopup('rmb')">人民币→真实人民币(验算)</button>
+                        <button type="button" onclick="testPlayerTopup('plat')">平台币→真实平台币</button>
+                        <button type="button" onclick="testPlayerTopup('bound')">绑币→真实绑币</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3 class="sec">参数与辅助</h3>
+            <div class="row">
+                <label>金额 <input type="number" id="amount" placeholder="金额" min="0" step="0.01"></label>
+                <label>分佣比例 <input type="number" id="rate" class="wide" value="0.73" min="0" max="1" step="0.01"></label>
+                <label>白名单上限 <input type="number" id="cap" class="wide" value="100000" min="0" step="1"></label>
+            </div>
+            <div class="row">
+                <button type="button" class="ghost" onclick="pushSnapshot('快照', 0, '', 'snapshot')">插入快照</button>
+                <button type="button" class="danger" onclick="resetAll()">重置</button>
+            </div>
+            <div class="rule">
+                <strong>显示提现</strong>（本验算）= 已入账<strong>真实余额库</strong> + <strong>预支余额库</strong>；待结算队列不计入，须总后台结算①/②后才会增加。<strong>总额度</strong>= 可预支 + 已预支(待还)。白名单见会长区下方。
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3 class="sec">每步验算快照</h3>
+            <div class="snap-wrap">
+                <table class="snap">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th class="left">操作</th>
+                            <th>金额</th>
+                            <th>预支人</th>
+                            <th>实人</th>
+                            <th>预支台</th>
+                            <th>真实台</th>
+                            <th>预支绑</th>
+                            <th>实绑</th>
+                            <th>可预支</th>
+                            <th>真队列</th>
+                            <th>预队列</th>
+                            <th>消预队列</th>
+                            <th>显提现</th>
+                            <th>真库</th>
+                            <th>预库</th>
+                            <th>待还</th>
+                            <th class="left">备注</th>
+                        </tr>
+                    </thead>
+                    <tbody id="snapBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="flowTooltip" role="tooltip"></div>
+
+    <script>
+        let data = {
+            playerAdvRmb: 0,
+            playerRealRmb: 1000000,
+            playerAdvPlat: 0,
+            playerRealPlat: 0,
+            playerAdvBound: 0,
+            playerRealBound: 0,
+            totalCashCommission: 0,
+            usedCashCommission: 0,
+            prepayCommission: 0,
+            pendingAdvanceCommission: 0,
+            pendingAdvFromConsume: 0,
+            pendingRealSettlement: 0,
+            realPlayerOrders: [],
+            advPlayerOrders: [],
+            nextOrderId: 1,
+            debt: 0,
+            step: 0,
+            snapshots: [],
+        };
+
+        function pendingRealOrderSum() {
+            return data.realPlayerOrders.reduce((s, o) => s + o.amount, 0);
+        }
+        function pendingAdvOrderSum() {
+            return data.advPlayerOrders.reduce((s, o) => s + o.amount, 0);
+        }
+        function pendingAdvTotal() {
+            return pendingAdvOrderSum() + data.pendingAdvanceCommission + data.pendingAdvFromConsume;
+        }
+        function pendingRealTotal() {
+            return pendingRealOrderSum() + data.pendingRealSettlement;
+        }
+
+        function getRate() {
+            const r = parseFloat(document.getElementById('rate').value);
+            return isNaN(r) || r < 0 ? 0.73 : r;
+        }
+        function getCap() {
+            const c = parseFloat(document.getElementById('cap').value);
+            return isNaN(c) || c < 0 ? 100000 : c;
+        }
+        function remainingReal() {
+            return Math.max(0, data.totalCashCommission - data.usedCashCommission);
+        }
+        function calcQuota() {
+            const cap = getCap();
+            const raw = remainingReal() - data.debt;
+            return Math.max(0, Math.min(cap, raw));
+        }
+        function displayWithdrawBalance() {
+            return remainingReal() + data.prepayCommission;
+        }
+
+        function totalCreditLine() {
+            return calcQuota() + data.debt;
+        }
+
+        function refreshSettleSelects() {
+            const sr = document.getElementById('settleRealSelect');
+            const sa = document.getElementById('settleAdvSelect');
+            if (!sr || !sa) return;
+            sr.innerHTML = '';
+            data.realPlayerOrders.forEach((o) => {
+                const opt = document.createElement('option');
+                opt.value = `id:${o.id}`;
+                opt.textContent = `#${o.id} ${o.label}（${o.amount.toFixed(2)}）`;
+                sr.appendChild(opt);
+            });
+            if (pendingRealTotal() > 1e-9) {
+                const o = document.createElement('option');
+                o.value = 'all';
+                o.textContent = `全部真实侧（${pendingRealTotal().toFixed(2)}）`;
+                sr.appendChild(o);
+            }
+            if (!sr.options.length) {
+                const o = document.createElement('option');
+                o.value = '';
+                o.textContent = '无可结算真实侧';
+                o.disabled = true;
+                sr.appendChild(o);
+            }
+            sa.innerHTML = '';
+            data.advPlayerOrders.forEach((o) => {
+                const opt = document.createElement('option');
+                opt.value = `id:${o.id}`;
+                opt.textContent = `#${o.id} ${o.label}（${o.amount.toFixed(2)}）`;
+                sa.appendChild(opt);
+            });
+            const rest = data.pendingAdvanceCommission + data.pendingAdvFromConsume;
+            if (rest > 1e-9) {
+                const o = document.createElement('option');
+                o.value = 'rest';
+                o.textContent = `仅会长预支+消费预支（${rest.toFixed(2)}）`;
+                sa.appendChild(o);
+            }
+            if (pendingAdvTotal() > 1e-9) {
+                const o = document.createElement('option');
+                o.value = 'all';
+                o.textContent = `全部预支侧（${pendingAdvTotal().toFixed(2)}）`;
+                sa.appendChild(o);
+            }
+            if (!sa.options.length) {
+                const o = document.createElement('option');
+                o.value = '';
+                o.textContent = '无可结算预支侧';
+                o.disabled = true;
+                sa.appendChild(o);
+            }
+        }
+
+        function syncSnapshotToUI() {
+            document.getElementById('visRmb').textContent = (data.playerAdvRmb + data.playerRealRmb).toFixed(2);
+            document.getElementById('pAdvRmb').textContent = data.playerAdvRmb.toFixed(2);
+            document.getElementById('pRealRmb').textContent = data.playerRealRmb.toFixed(2);
+            document.getElementById('visPlat').textContent = (data.playerAdvPlat + data.playerRealPlat).toFixed(2);
+            document.getElementById('visBound').textContent = (data.playerAdvBound + data.playerRealBound).toFixed(2);
+            document.getElementById('pAdvPlat').textContent = data.playerAdvPlat.toFixed(2);
+            document.getElementById('pRealPlat').textContent = data.playerRealPlat.toFixed(2);
+            document.getElementById('pAdvBound').textContent = data.playerAdvBound.toFixed(2);
+            document.getElementById('pRealBound').textContent = data.playerRealBound.toFixed(2);
+            document.getElementById('realPool').textContent = remainingReal().toFixed(2);
+            document.getElementById('advPool').textContent = data.prepayCommission.toFixed(2);
+            document.getElementById('pendAdv').textContent = data.pendingAdvanceCommission.toFixed(2);
+            document.getElementById('pendAdvPlayerSum').textContent = pendingAdvOrderSum().toFixed(2);
+            document.getElementById('pendAdvConsume').textContent = data.pendingAdvFromConsume.toFixed(2);
+            document.getElementById('pendReal').textContent = pendingRealTotal().toFixed(2);
+            document.getElementById('pendRealAdmin').textContent = pendingRealTotal().toFixed(2);
+            document.getElementById('pendRealPlayerOrders').textContent = pendingRealOrderSum().toFixed(2);
+            document.getElementById('pendRealOther').textContent = data.pendingRealSettlement.toFixed(2);
+            document.getElementById('pendAdvAdmin').textContent = pendingAdvTotal().toFixed(2);
+            document.getElementById('pendAdvPlayerOrders').textContent = pendingAdvOrderSum().toFixed(2);
+            document.getElementById('pendAdvLeader').textContent = data.pendingAdvanceCommission.toFixed(2);
+            document.getElementById('pendAdvConsumeOnly').textContent = data.pendingAdvFromConsume.toFixed(2);
+            document.getElementById('debt').textContent = data.debt.toFixed(2);
+            document.getElementById('quota').textContent = calcQuota().toFixed(2);
+            document.getElementById('displayWithdraw').textContent = displayWithdrawBalance().toFixed(2);
+            document.getElementById('totalCreditLine').textContent = totalCreditLine().toFixed(2);
+            document.getElementById('capWhitelistVal').textContent = getCap().toFixed(0);
+            refreshSettleSelects();
+        }
+
+        const FLOW_LABELS = {
+            init: '初始',
+            snapshot: '插入快照',
+            player_topup: '玩家 · 真实充值 → 结算①候选',
+            player_topup_platbound: '玩家 · 台/绑充值 → 结算②候选',
+            proxy_rmb: '会长 · 人民币代充 → 结算①候选',
+            consume: '玩家 · 消费（预支/真实拆分）',
+            advance: '会长 · 预支额度代充',
+            repay: '会长 · 还款',
+            settle_real: '总后台 · 结算① → 会长真实余额库',
+            settle_adv: '总后台 · 结算② → 会长预支余额库',
+        };
+        const FLOW_PLANS = {
+            init: [],
+            snapshot: [],
+            player_topup: ['flow-hl-recharge'],
+            player_topup_platbound: ['flow-hl-recharge', 'flow-hl-backend', 'flow-hl-settle-adv', 'flow-hl-settle-adv-a', 'flow-hl-settle-adv2'],
+            proxy_rmb: ['flow-hl-proxy-rmb', 'flow-hl-recharge'],
+            consume: ['flow-hl-consume-real', 'flow-hl-consume-adv'],
+            advance: ['flow-hl-advance', 'flow-hl-quota'],
+            repay: ['flow-hl-repay'],
+            settle_real: ['flow-hl-backend', 'flow-hl-settle-real', 'flow-hl-settle-real-a', 'flow-hl-settle-real2', 'flow-hl-real-pool'],
+            settle_adv: ['flow-hl-backend', 'flow-hl-settle-adv', 'flow-hl-settle-adv-a', 'flow-hl-settle-adv2'],
+        };
+
+        function setFlowHighlight(flowKey) {
+            const host = document.getElementById('flowChartsHost');
+            const tip = document.getElementById('flowTooltip');
+            if (tip) tip.style.display = 'none';
+            if (!host) return;
+            const plan = FLOW_PLANS[flowKey];
+            const active = new Set(plan && plan.length ? plan : []);
+            const dim = flowKey !== 'init' && flowKey !== 'snapshot';
+            host.querySelectorAll('.flow-chart-svg').forEach((svg) => {
+                svg.classList.toggle('flow-dim', dim);
+                svg.querySelectorAll('.flow-node, .flow-link').forEach((el) => {
+                    const hit = [...active].some((a) => el.classList.contains(a));
+                    el.classList.toggle('highlight', hit);
+                });
+            });
+            const lab = document.getElementById('flowStepLabel');
+            if (lab) lab.textContent = FLOW_LABELS[flowKey] || flowKey;
+        }
+
+        function consumeSplit(advKey, realKey, amount, rate, currencyLabel) {
+            let need = amount;
+            const takeAdv = Math.min(need, data[advKey]);
+            data[advKey] -= takeAdv;
+            need -= takeAdv;
+            const takeReal = Math.min(need, data[realKey]);
+            data[realKey] -= takeReal;
+            need -= takeReal;
+            if (need > 1e-9) return { ok: false };
+            const commAdv = takeAdv * rate;
+            const commReal = takeReal * rate;
+            data.pendingAdvFromConsume += commAdv;
+            data.pendingRealSettlement += commReal;
+            return {
+                ok: true,
+                note: `${currencyLabel} 扣预支${takeAdv.toFixed(2)} 扣真实${takeReal.toFixed(2)}；预支分佣待结+${commAdv.toFixed(2)} 真分佣队列+${commReal.toFixed(2)}`,
+            };
+        }
+
+        function pushSnapshot(opLabel, amount, note, flowKey) {
+            data.step += 1;
+            const q = calcQuota();
+            const dw = displayWithdrawBalance();
+            const rr = remainingReal();
+            const row = {
+                step: data.step,
+                op: opLabel,
+                amount: amount === undefined || amount === null ? '' : Number(amount).toFixed(2),
+                pAr: data.playerAdvRmb.toFixed(2),
+                pRr: data.playerRealRmb.toFixed(2),
+                pAp: data.playerAdvPlat.toFixed(2),
+                pRp: data.playerRealPlat.toFixed(2),
+                pAb: data.playerAdvBound.toFixed(2),
+                pRb: data.playerRealBound.toFixed(2),
+                quota: q.toFixed(2),
+                pendReal: pendingRealTotal().toFixed(2),
+                pendAdv: (data.pendingAdvanceCommission + pendingAdvOrderSum()).toFixed(2),
+                pendAc: data.pendingAdvFromConsume.toFixed(2),
+                displayW: dw.toFixed(2),
+                baseReal: rr.toFixed(2),
+                advPool: data.prepayCommission.toFixed(2),
+                debt: data.debt.toFixed(2),
+                note: note || '',
+            };
+            data.snapshots.push(row);
+            renderTable();
+            syncSnapshotToUI();
+            setFlowHighlight(flowKey != null ? flowKey : 'snapshot');
+        }
+
+        function renderTable() {
+            const tb = document.getElementById('snapBody');
+            tb.innerHTML = '';
+            data.snapshots.forEach((r, i) => {
+                const tr = document.createElement('tr');
+                if (i === 0) tr.className = 'step-initial';
+                tr.innerHTML = `
+                    <td>${r.step}</td>
+                    <td class="left">${r.op}</td>
+                    <td>${r.amount}</td>
+                    <td>${r.pAr}</td>
+                    <td>${r.pRr}</td>
+                    <td>${r.pAp}</td>
+                    <td>${r.pRp}</td>
+                    <td>${r.pAb}</td>
+                    <td>${r.pRb}</td>
+                    <td>${r.quota}</td>
+                    <td>${r.pendReal}</td>
+                    <td>${r.pendAdv}</td>
+                    <td>${r.pendAc}</td>
+                    <td>${r.displayW}</td>
+                    <td>${r.baseReal}</td>
+                    <td>${r.advPool}</td>
+                    <td>${r.debt}</td>
+                    <td class="left">${r.note}</td>`;
+                tb.appendChild(tr);
+            });
+        }
+
+        function initialSnapshot() {
+            data.step = 0;
+            data.snapshots = [];
+            pushSnapshot('初始 / 重置后', 0, '手工核对起点', 'init');
+        }
+
+        function readAmount() {
+            const amount = parseFloat(document.getElementById('amount').value);
+            if (isNaN(amount) || amount <= 0) {
+                alert('请输入有效金额');
+                return null;
+            }
+            return amount;
+        }
+
+        function drainAdvPlayerOrders(need) {
+            let left = need;
+            while (left > 1e-9 && data.advPlayerOrders.length) {
+                const o = data.advPlayerOrders[0];
+                const t = Math.min(left, o.amount);
+                o.amount -= t;
+                if (o.amount <= 1e-9) data.advPlayerOrders.shift();
+                left -= t;
+            }
+            return need - left;
+        }
+
+        function drainRealPlayerOrders(need) {
+            let left = need;
+            while (left > 1e-9 && data.realPlayerOrders.length) {
+                const o = data.realPlayerOrders[0];
+                const t = Math.min(left, o.amount);
+                o.amount -= t;
+                if (o.amount <= 1e-9) data.realPlayerOrders.shift();
+                left -= t;
+            }
+            return need - left;
+        }
+
+        function testPlayerTopup(kind) {
+            const amount = readAmount();
+            if (amount == null) return;
+            const rate = getRate();
+            const comm = amount * rate;
+            if (kind === 'rmb') {
+                data.playerRealRmb += amount;
+                const oid = data.nextOrderId++;
+                data.realPlayerOrders.push({ id: oid, label: '玩家·人民币充值(人民币子账) 分佣', amount: comm });
+                document.getElementById('amount').value = '';
+                pushSnapshot('【验算】人民币→真实人民币子账', amount, `真实人民币+${amount.toFixed(2)}；①候选订单#${oid}`, 'player_topup');
+                return;
+            }
+            if (kind === 'plat') {
+                data.playerRealPlat += amount;
+                const oid = data.nextOrderId++;
+                data.advPlayerOrders.push({ id: oid, label: '玩家·平台币充值 分佣', amount: comm });
+                document.getElementById('amount').value = '';
+                pushSnapshot('【验算】玩家·平台币→真实台币', amount, `真实台+${amount.toFixed(2)}；②候选订单#${oid}`, 'player_topup_platbound');
+                return;
+            }
+            data.playerRealBound += amount;
+            const oid = data.nextOrderId++;
+            data.advPlayerOrders.push({ id: oid, label: '玩家·绑币充值 分佣', amount: comm });
+            document.getElementById('amount').value = '';
+            pushSnapshot('【验算】玩家·绑币→真实绑币', amount, `真实绑+${amount.toFixed(2)}；②候选订单#${oid}`, 'player_topup_platbound');
+        }
+
+        function runConsume(mode) {
+            const amount = readAmount();
+            if (amount == null) return;
+            const rate = getRate();
+            let opName;
+            let note;
+            if (mode === 'rmb') {
+                const total = data.playerAdvRmb + data.playerRealRmb;
+                if (amount > total + 1e-9) {
+                    alert('玩家人民币子账不足');
+                    return;
+                }
+                const res = consumeSplit('playerAdvRmb', 'playerRealRmb', amount, rate, '人民币');
+                if (!res.ok) return;
+                opName = '玩家·人民币消费';
+                note = res.note;
+            } else if (mode === 'plat') {
+                const total = data.playerAdvPlat + data.playerRealPlat;
+                if (amount > total + 1e-9) {
+                    alert('玩家平台币不足');
+                    return;
+                }
+                const res = consumeSplit('playerAdvPlat', 'playerRealPlat', amount, rate, '台币');
+                if (!res.ok) return;
+                opName = '玩家·平台币消费';
+                note = res.note;
+            } else {
+                const total = data.playerAdvBound + data.playerRealBound;
+                if (amount > total + 1e-9) {
+                    alert('玩家绑币不足');
+                    return;
+                }
+                const res = consumeSplit('playerAdvBound', 'playerRealBound', amount, rate, '绑币');
+                if (!res.ok) return;
+                opName = '玩家·绑币消费';
+                note = res.note;
+            }
+            document.getElementById('amount').value = '';
+            pushSnapshot(opName, amount, note, 'consume');
+        }
+
+        function runLeader(op) {
+            const amount = readAmount();
+            if (amount == null) return;
+            const rate = getRate();
+            let opName = '';
+            let note = '';
+            let flowKey = 'snapshot';
+            if (op === 'proxy_plat') {
+                const comm = amount * rate;
+                data.playerRealPlat += amount;
+                const oid = data.nextOrderId++;
+                data.realPlayerOrders.push({ id: oid, label: '会长·人民币代充→真实台币 分佣', amount: comm });
+                opName = '会长·人民币代充→真实台币';
+                note = `玩家真实台+${amount.toFixed(2)}；①候选#${oid}`;
+                flowKey = 'proxy_rmb';
+            } else if (op === 'proxy_bound') {
+                const comm = amount * rate;
+                data.playerRealBound += amount;
+                const oid = data.nextOrderId++;
+                data.realPlayerOrders.push({ id: oid, label: '会长·人民币代充→真实绑币 分佣', amount: comm });
+                opName = '会长·人民币代充→真实绑币';
+                note = `玩家真实绑+${amount.toFixed(2)}；①候选#${oid}`;
+                flowKey = 'proxy_rmb';
+            } else if (op === 'adv_plat') {
+                const qBefore = calcQuota();
+                if (amount > qBefore + 1e-9) {
+                    alert(`可预支额度不足（当前 ${qBefore.toFixed(2)}）`);
+                    return;
+                }
+                data.debt += amount;
+                data.playerAdvPlat += amount;
+                data.pendingAdvanceCommission += amount * rate;
+                opName = '会长·预支→预支台币';
+                note = `预支台+${amount.toFixed(2)}；待还+${amount.toFixed(2)}；会长预支待结+${(amount * rate).toFixed(2)}`;
+                flowKey = 'advance';
+            } else if (op === 'adv_bound') {
+                const qBefore = calcQuota();
+                if (amount > qBefore + 1e-9) {
+                    alert(`可预支额度不足（当前 ${qBefore.toFixed(2)}）`);
+                    return;
+                }
+                data.debt += amount;
+                data.playerAdvBound += amount;
+                data.pendingAdvanceCommission += amount * rate;
+                opName = '会长·预支→预支绑币';
+                note = `预支绑+${amount.toFixed(2)}；待还+${amount.toFixed(2)}；会长预支待结+${(amount * rate).toFixed(2)}`;
+                flowKey = 'advance';
+            } else if (op === 'repay') {
+                const bal = displayWithdrawBalance();
+                if (amount > data.debt + 1e-9) {
+                    alert('还款不能超过待还本金');
+                    return;
+                }
+                if (amount > bal + 1e-9) {
+                    alert('会长可用提现余额不足');
+                    return;
+                }
+                let left = amount;
+                const takeAdv = Math.min(left, data.prepayCommission);
+                data.prepayCommission -= takeAdv;
+                left -= takeAdv;
+                left -= drainAdvPlayerOrders(left);
+                const takePendOp = Math.min(left, data.pendingAdvanceCommission);
+                data.pendingAdvanceCommission -= takePendOp;
+                left -= takePendOp;
+                const takePendC = Math.min(left, data.pendingAdvFromConsume);
+                data.pendingAdvFromConsume -= takePendC;
+                left -= takePendC;
+                left -= drainRealPlayerOrders(left);
+                const takeRealPend = Math.min(left, data.pendingRealSettlement);
+                data.pendingRealSettlement -= takeRealPend;
+                left -= takeRealPend;
+                if (left > 1e-9) data.usedCashCommission += left;
+                data.debt -= amount;
+                opName = '会长·还款';
+                note = '预支库→玩家台/绑分佣订单→会长预支待结→消费预支→真实消费待结→真实库';
+                flowKey = 'repay';
+            } else {
+                return;
+            }
+            document.getElementById('amount').value = '';
+            pushSnapshot(opName, amount, note, flowKey);
+        }
+
+        function executeSettleReal() {
+            const sr = document.getElementById('settleRealSelect');
+            if (!sr || !sr.value || sr.selectedOptions[0]?.disabled) {
+                alert('请选择结算①项');
+                return;
+            }
+            const v = sr.value;
+            if (v === 'all') {
+                const t = pendingRealTotal();
+                if (t <= 1e-9) {
+                    alert('真实侧为空');
+                    return;
+                }
+                data.totalCashCommission += t;
+                data.realPlayerOrders = [];
+                data.pendingRealSettlement = 0;
+                pushSnapshot('总后台·结算①·全部', 0, `真实库+${t.toFixed(2)}`, 'settle_real');
+                return;
+            }
+            const id = parseInt(v.slice(3), 10);
+            const ix = data.realPlayerOrders.findIndex((o) => o.id === id);
+            if (ix < 0) return;
+            const row = data.realPlayerOrders[ix];
+            data.totalCashCommission += row.amount;
+            data.realPlayerOrders.splice(ix, 1);
+            pushSnapshot(`总后台·结算①·#${id}`, 0, `真实库+${row.amount.toFixed(2)}`, 'settle_real');
+        }
+
+        function executeSettleAdv() {
+            const sa = document.getElementById('settleAdvSelect');
+            if (!sa || !sa.value || sa.selectedOptions[0]?.disabled) {
+                alert('请选择结算②项');
+                return;
+            }
+            const v = sa.value;
+            if (v === 'all') {
+                const t = pendingAdvTotal();
+                if (t <= 1e-9) {
+                    alert('预支侧为空');
+                    return;
+                }
+                data.prepayCommission += t;
+                data.advPlayerOrders = [];
+                data.pendingAdvanceCommission = 0;
+                data.pendingAdvFromConsume = 0;
+                pushSnapshot('总后台·结算②·全部', 0, `预支库+${t.toFixed(2)}`, 'settle_adv');
+                return;
+            }
+            if (v === 'rest') {
+                const t = data.pendingAdvanceCommission + data.pendingAdvFromConsume;
+                if (t <= 1e-9) {
+                    alert('无可结项');
+                    return;
+                }
+                data.prepayCommission += t;
+                data.pendingAdvanceCommission = 0;
+                data.pendingAdvFromConsume = 0;
+                pushSnapshot('总后台·结算②·会长+消费预支', 0, `预支库+${t.toFixed(2)}`, 'settle_adv');
+                return;
+            }
+            const id = parseInt(v.slice(3), 10);
+            const ix = data.advPlayerOrders.findIndex((o) => o.id === id);
+            if (ix < 0) return;
+            const row = data.advPlayerOrders[ix];
+            data.prepayCommission += row.amount;
+            data.advPlayerOrders.splice(ix, 1);
+            pushSnapshot(`总后台·结算②·#${id}`, 0, `预支库+${row.amount.toFixed(2)}`, 'settle_adv');
+        }
+
+        function resetAll() {
+            if (!confirm('确定重置？')) return;
+            data = {
+                playerAdvRmb: 0,
+                playerRealRmb: 1000000,
+                playerAdvPlat: 0,
+                playerRealPlat: 0,
+                playerAdvBound: 0,
+                playerRealBound: 0,
+                totalCashCommission: 0,
+                usedCashCommission: 0,
+                prepayCommission: 0,
+                pendingAdvanceCommission: 0,
+                pendingAdvFromConsume: 0,
+                pendingRealSettlement: 0,
+                realPlayerOrders: [],
+                advPlayerOrders: [],
+                nextOrderId: 1,
+                debt: 0,
+                step: 0,
+                snapshots: [],
+            };
+            initialSnapshot();
+        }
+
+        document.getElementById('rate').addEventListener('change', syncSnapshotToUI);
+        document.getElementById('cap').addEventListener('change', syncSnapshotToUI);
+
+        (function setupFlowTooltip() {
+            const host = document.getElementById('flowChartsHost');
+            const tip = document.getElementById('flowTooltip');
+            if (!host || !tip) return;
+            host.addEventListener('mousemove', (e) => {
+                const hit = e.target.closest('[data-tip]');
+                if (!hit || !host.contains(hit) || !hit.classList.contains('highlight')) {
+                    tip.style.display = 'none';
+                    return;
+                }
+                tip.textContent = hit.getAttribute('data-tip') || '';
+                tip.style.display = 'block';
+                tip.style.left = `${e.clientX + 14}px`;
+                tip.style.top = `${e.clientY + 14}px`;
+            });
+            host.addEventListener('mouseleave', (e) => {
+                if (!e.relatedTarget || !host.contains(e.relatedTarget)) tip.style.display = 'none';
+            });
+        })();
+
+        (function setupFlowTiles() {
+            document.querySelectorAll('.flow-tile').forEach((tile) => {
+                tile.addEventListener('mouseenter', () => tile.classList.add('flow-tile-expanded'));
+                tile.addEventListener('mouseleave', () => tile.classList.remove('flow-tile-expanded'));
+            });
+        })();
+
+        initialSnapshot();
+    </script>
+</body>
+</html>

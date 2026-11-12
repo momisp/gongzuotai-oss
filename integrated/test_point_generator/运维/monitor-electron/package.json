@@ -1,0 +1,12 @@
+{
+  "name": "ops-monitor-shell",
+  "version": "1.0.0",
+  "description": "运维监控侧栏 + 独立窗口打开各控制台（Electron）",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^33.2.0"
+  }
+}

@@ -1,0 +1,4 @@
+.venv/
+.env
+report_*.md
+__pycache__/

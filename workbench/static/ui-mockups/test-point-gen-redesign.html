@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>测试点生成 · UI 改版预览</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #14121a;
+      --ink-soft: #3d3748;
+      --muted: #7a7386;
+      --line: #e4ddd4;
+      --paper: #f3f0ea;
+      --panel: #fffcf8;
+      --sidebar: #1a1520;
+      --sidebar-2: #241c2c;
+      --accent: #e8792f;
+      --accent-2: #c45f18;
+      --accent-soft: rgba(232, 121, 47, 0.14);
+      --accent-glow: rgba(232, 121, 47, 0.35);
+      --ok: #2f9e6b;
+      --sky: #3b82f6;
+      --cyan: #0ea5e9;
+      --preview-bg: #17131c;
+      --preview-line: #2e2636;
+      --radius: 14px;
+      --shadow: 0 12px 32px rgba(40, 28, 18, 0.07);
+      --font: "Outfit", "PingFang SC", "Microsoft YaHei", sans-serif;
+      --mono: "JetBrains Mono", Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--ink);
+      background:
+        radial-gradient(900px 380px at 6% -10%, rgba(232, 121, 47, 0.12), transparent 55%),
+        radial-gradient(700px 320px at 96% 0%, rgba(20, 16, 28, 0.04), transparent 48%),
+        var(--paper);
+    }
+
+    .layout { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 212px; flex-shrink: 0;
+      background: linear-gradient(180deg, var(--sidebar), var(--sidebar-2));
+      color: #d6d0db; padding: 18px 0 24px;
+    }
+    .logo {
+      padding: 4px 20px 18px; font-weight: 700; font-size: 15px; color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 10px;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 18px; margin: 2px 8px; border-radius: 10px;
+      font-size: 13.5px; color: #9a91a8;
+    }
+    .nav-item.active {
+      background: rgba(232, 121, 47, 0.2); color: #fff7ed;
+      box-shadow: inset 3px 0 0 var(--accent);
+    }
+    .nav-ico {
+      width: 18px; height: 18px; flex-shrink: 0;
+      display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 5px; background: rgba(255,255,255,0.08);
+      font-size: 10px; color: #c4b8d4; font-weight: 600;
+    }
+    .nav-item.active .nav-ico { background: var(--accent); color: #fff; }
+    .nav-sec {
+      margin: 18px 20px 8px; font-size: 11px; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #6b6378;
+    }
+
+    .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 12px 22px; background: rgba(255,252,248,0.82);
+      backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);
+    }
+    .topbar-left { min-width: 0; }
+    .topbar h1 { margin: 0; font-size: 15px; font-weight: 600; }
+    .topbar .sub {
+      margin: 2px 0 0; font-size: 12px; color: var(--muted);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .topbar-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .ghost-link {
+      border: 0; background: transparent; color: var(--muted);
+      font: inherit; font-size: 12.5px; cursor: pointer; padding: 4px 6px; border-radius: 6px;
+    }
+    .ghost-link:hover { color: var(--ink-soft); background: rgba(0,0,0,0.04); }
+
+    .banner {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      margin: 12px 22px 0; padding: 8px 12px; border-radius: 10px;
+      background: rgba(26, 21, 32, 0.92);
+      border: 1px solid rgba(232,121,47,0.25);
+      color: #e8dfd4; font-size: 12px;
+    }
+    .banner button {
+      border: 1px solid rgba(255,255,255,0.22); background: transparent;
+      color: #fff; border-radius: 8px; padding: 5px 10px; font: inherit; font-size: 12px; cursor: pointer;
+    }
+    .banner button:hover { background: rgba(232,121,47,0.3); }
+    .gsap-status { font-size: 11px; opacity: 0.7; margin-left: 6px; }
+
+    .workspace {
+      flex: 1; min-height: 0;
+      display: grid;
+      grid-template-columns: minmax(340px, 0.9fr) minmax(400px, 1.1fr);
+      gap: 16px; padding: 14px 22px 22px;
+    }
+    .col { min-height: 0; display: flex; flex-direction: column; gap: 12px; }
+    .panel {
+      background: var(--panel); border: 1px solid var(--line);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+    }
+
+    .anim-in {
+      opacity: 0; transform: translateY(14px);
+      animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .anim-in:nth-child(1) { animation-delay: 0.02s; }
+    .anim-in:nth-child(2) { animation-delay: 0.08s; }
+    .anim-in:nth-child(3) { animation-delay: 0.14s; }
+    .col.panel.anim-in { animation-delay: 0.1s; }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    body.replay .anim-in {
+      animation: none; opacity: 0; transform: translateY(14px);
+    }
+    body.replay-play .anim-in {
+      animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      border-radius: 10px; border: 1px solid var(--line);
+      background: #fff; color: var(--ink-soft);
+      padding: 8px 12px; font: inherit; font-size: 13px; cursor: pointer;
+      transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.15s, border-color 0.15s, box-shadow 0.15s;
+    }
+    .btn:hover:not(:disabled) { border-color: #d0c4b6; background: #fffaf5; }
+    .btn:active:not(:disabled) { transform: scale(0.96); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+    .btn:focus-visible, .step:focus-visible, .ghost-link:focus-visible, .tab:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .btn-primary {
+      background: var(--accent); border-color: var(--accent); color: #fff;
+      box-shadow: 0 6px 16px var(--accent-glow);
+    }
+    .btn-primary:hover:not(:disabled) { background: var(--accent-2); border-color: var(--accent-2); }
+    .btn-ghost { background: transparent; }
+    .btn-sm { padding: 6px 10px; font-size: 12px; border-radius: 8px; }
+    .btn.pop { animation: btnPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    @keyframes btnPop {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.06); }
+      100% { transform: scale(1); }
+    }
+
+    /* —— 步骤轨 = 唯一主操作入口 —— */
+    .step-rail { padding: 14px 16px; }
+    .step-rail-head {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 12px;
+    }
+    .step-rail-head .label { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .step-rail-head .hint { font-size: 12px; color: var(--muted); text-align: right; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .step {
+      position: relative; border: 1px solid var(--line); border-radius: 12px;
+      padding: 12px; background: #fffaf5; cursor: pointer; text-align: left; font: inherit;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+      opacity: 0; transform: scale(0.94) translateY(6px);
+      animation: stepIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    .step:nth-child(1) { animation-delay: 0.16s; }
+    .step:nth-child(2) { animation-delay: 0.22s; }
+    .step:nth-child(3) { animation-delay: 0.28s; }
+    @keyframes stepIn {
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .step:hover:not(:disabled):not(.is-locked) { border-color: #d4b89a; transform: translateY(-2px); }
+    .step.is-locked {
+      opacity: 0.55; cursor: not-allowed; background: #f7f3ee;
+    }
+    .step.is-locked:hover { transform: none; border-color: var(--line); }
+    .step .n {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: #efe6db; color: var(--ink-soft);
+      font-size: 11px; font-weight: 700; margin-bottom: 8px;
+    }
+    .step .t { display: block; font-size: 13px; font-weight: 600; }
+    .step .d { display: block; margin-top: 3px; font-size: 11.5px; color: var(--muted); }
+    .step .cta {
+      display: none; margin-top: 8px; font-size: 11px; font-weight: 600; color: var(--accent-2);
+    }
+    .step.is-done { border-color: rgba(47,158,107,0.4); background: rgba(47,158,107,0.08); }
+    .step.is-done .n { background: var(--ok); color: #fff; }
+    .step.is-done .cta { display: block; color: var(--ok); }
+    .step.is-next {
+      border-color: rgba(232,121,47,0.65); background: var(--accent-soft);
+      box-shadow: 0 0 0 3px rgba(232,121,47,0.12);
+    }
+    .step.is-next .n { background: var(--accent); color: #fff; }
+    .step.is-next .cta { display: block; }
+    .step.is-busy .n { animation: pulseN 0.9s ease-in-out infinite; }
+    .step.is-viewing:not(.is-next):not(.is-done) {
+      border-color: #c9b8a8;
+    }
+    @keyframes pulseN {
+      0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
+      50% { box-shadow: 0 0 0 8px transparent; }
+    }
+
+    .progress-row {
+      display: flex; align-items: center; gap: 10px; margin-top: 12px;
+    }
+    .progress-bar {
+      flex: 1; height: 4px; border-radius: 99px; background: #efe6db; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; width: 0%;
+      background: var(--accent);
+      border-radius: 99px;
+      transition: width 0.55s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    .progress-fill.running { opacity: 0.85; }
+    .progress-label {
+      font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap;
+    }
+
+    .block { padding: 14px 16px; }
+    .block + .block { border-top: 1px solid var(--line); }
+    .block-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px;
+    }
+    .block-title { margin: 0; font-size: 13px; font-weight: 600; }
+    textarea, input[type="text"] {
+      width: 100%; border: 1px solid var(--line); border-radius: 10px;
+      padding: 10px 12px; font: inherit; font-size: 13px; color: var(--ink);
+      background: #fffaf5; resize: vertical;
+    }
+    textarea:focus, input:focus {
+      outline: none; border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft); background: #fff;
+    }
+    .hint { margin: 8px 0 0; font-size: 12px; color: var(--muted); }
+    .skill-body { display: none; }
+    .skill-body.open { display: block; animation: fadeUp 0.3s ease forwards; }
+    .skill-ta { font-family: var(--mono); font-size: 11.5px; line-height: 1.5; min-height: 120px; }
+    .upload-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+    .thumbs { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .thumb {
+      position: relative; width: 52px; height: 40px; border-radius: 8px;
+      background: linear-gradient(135deg, #f0d5b8, #d4a574); border: 1px solid var(--line);
+    }
+    .thumb button {
+      position: absolute; top: -6px; right: -6px; width: 18px; height: 18px;
+      border-radius: 50%; border: 0; background: var(--ink); color: #fff;
+      font-size: 11px; line-height: 1; cursor: pointer; padding: 0;
+    }
+
+    .action-dock {
+      position: sticky; bottom: 0; margin-top: auto;
+      padding: 12px 14px; background: rgba(255,252,248,0.94);
+      backdrop-filter: blur(8px); border: 1px solid var(--line);
+      border-radius: var(--radius); box-shadow: 0 -8px 24px rgba(40,28,18,0.06);
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    }
+    .action-dock .spacer { flex: 1; min-width: 8px; }
+    .busy-chip {
+      display: none; align-items: center; gap: 8px;
+      font-size: 12px; color: var(--accent-2); font-weight: 600;
+      padding: 4px 10px; border-radius: 999px; background: var(--accent-soft);
+    }
+    .busy-chip.on { display: inline-flex; }
+    .breath {
+      width: 10px; height: 10px; border-radius: 50%; background: var(--accent);
+      animation: breath 0.9s ease-in-out infinite;
+    }
+    @keyframes breath {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 var(--accent-glow); }
+      50% { transform: scale(1.35); box-shadow: 0 0 0 10px transparent; }
+    }
+    .dots span {
+      display: inline-block; width: 5px; height: 5px; margin: 0 1px;
+      border-radius: 50%; background: var(--accent);
+      animation: dotJump 0.7s ease-in-out infinite;
+    }
+    .dots span:nth-child(2) { animation-delay: 0.12s; }
+    .dots span:nth-child(3) { animation-delay: 0.24s; }
+    @keyframes dotJump {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    /* —— 预览：Tab 单面板 —— */
+    .preview-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px 0; gap: 10px;
+    }
+    .preview-head h3 { margin: 0; font-size: 14px; font-weight: 600; }
+    .tabs {
+      display: flex; gap: 4px; padding: 10px 16px 0; flex-wrap: wrap;
+    }
+    .tab {
+      border: 1px solid transparent; background: transparent;
+      border-radius: 8px; padding: 6px 10px; font: inherit; font-size: 12px;
+      color: var(--muted); cursor: pointer;
+    }
+    .tab:hover { color: var(--ink-soft); background: rgba(0,0,0,0.03); }
+    .tab.is-on {
+      color: var(--ink); background: #fff; border-color: var(--line);
+      box-shadow: 0 1px 2px rgba(40,28,18,0.04);
+      font-weight: 600;
+    }
+    .tab .dot {
+      display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+      background: #d0c4b6; margin-right: 5px; vertical-align: middle;
+    }
+    .tab.is-done .dot { background: var(--ok); }
+    .tab.is-on .dot { background: var(--accent); }
+    .tab.is-done.is-on .dot { background: var(--ok); }
+
+    .preview-stack {
+      flex: 1; min-height: 0; display: flex; flex-direction: column;
+      padding: 10px 16px 16px;
+    }
+    .pv {
+      flex: 1; min-height: 280px; border-radius: 12px;
+      border: 1px solid var(--preview-line); background: var(--preview-bg);
+      color: #e8e0d8; overflow: hidden; display: none; flex-direction: column;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .pv.is-on { display: flex; }
+    .pv.is-loading {
+      border-color: rgba(232,121,47,0.55);
+      box-shadow: 0 0 0 1px rgba(232,121,47,0.25), inset 0 0 40px rgba(232,121,47,0.06);
+    }
+    .pv-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 12px; border-bottom: 1px solid var(--preview-line);
+      background: rgba(255,255,255,0.03);
+    }
+    .pv-tag {
+      font-size: 10.5px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 6px;
+      background: rgba(232,121,47,0.22); color: #fdba74;
+    }
+    .pv-title { font-size: 13px; font-weight: 600; }
+    .pv-actions { display: flex; gap: 6px; }
+    .pv-actions .btn {
+      background: transparent; color: #9ca3af; border-color: #3f3a46;
+      padding: 4px 8px; font-size: 11px;
+    }
+    .pv-body {
+      flex: 1; padding: 14px; font-size: 12.5px; line-height: 1.55;
+      color: #8b8494; overflow: auto; position: relative;
+    }
+    .pv-body.has-content { color: #f1e9df; }
+    .pv-empty {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 10px; height: 100%; min-height: 160px; text-align: center;
+      color: #6b6378; font-family: var(--font); font-size: 12.5px;
+    }
+    .orb {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 2px solid rgba(232,121,47,0.45);
+      box-shadow: 0 0 0 6px rgba(232,121,47,0.1);
+      animation: breath 1.4s ease-in-out infinite;
+    }
+    #orb2 { animation-delay: 0.25s; border-color: rgba(59,130,246,0.45); box-shadow: 0 0 0 6px rgba(59,130,246,0.1); }
+    #orb3 { animation-delay: 0.5s; border-color: rgba(14,165,233,0.45); box-shadow: 0 0 0 6px rgba(14,165,233,0.1); }
+
+    .mind-nodes { display: flex; flex-wrap: wrap; gap: 8px; }
+    .mind-node, .md-block {
+      opacity: 0; transform: translateY(8px);
+      animation: fadeUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .mind-node {
+      padding: 8px 10px; border-radius: 8px;
+      background: rgba(232,121,47,0.14); border: 1px solid rgba(232,121,47,0.35);
+      color: #fdba74; font-size: 12px;
+    }
+    .md-view { font-family: var(--font); }
+    .md-view h2 {
+      margin: 0 0 10px; font-size: 14px; font-weight: 700; color: #f8f1e8;
+      border-bottom: 1px solid rgba(148,163,184,0.15); padding-bottom: 8px;
+    }
+    .md-view h3 {
+      margin: 14px 0 6px; font-size: 12.5px; font-weight: 600; color: #fdba74;
+    }
+    .md-view ul { margin: 0; padding: 0 0 0 1.1em; }
+    .md-view li {
+      margin: 4px 0; color: #e8e0d8; font-size: 12.5px; line-height: 1.5;
+    }
+
+    .tl-loading {
+      display: none; flex-direction: column; gap: 10px; padding: 8px 0;
+      font-family: var(--font);
+    }
+    .pv.is-loading .tl-loading { display: flex; }
+    .pv.is-loading .pv-empty { display: none; }
+    .tl-row {
+      display: flex; align-items: center; gap: 10px; font-size: 12px; color: #a8a0b0;
+    }
+    .tl-dot {
+      width: 10px; height: 10px; border-radius: 50%; background: #3f3a46; flex-shrink: 0;
+    }
+    .tl-row.on .tl-dot {
+      background: var(--accent);
+      animation: breath 0.8s ease-in-out infinite;
+    }
+    .tl-row.done .tl-dot { background: var(--ok); animation: none; }
+    .tl-bar {
+      flex: 1; height: 3px; background: #2e2636; border-radius: 99px; overflow: hidden;
+    }
+    .tl-bar > i {
+      display: block; height: 100%; width: 0; background: var(--accent);
+      transition: width 0.5s ease;
+    }
+    .tl-row.on .tl-bar > i {
+      width: 70%;
+      background: linear-gradient(90deg, var(--accent), #fbbf24);
+      background-size: 200% 100%;
+      animation: shimmer 1s linear infinite;
+    }
+    .tl-row.done .tl-bar > i { width: 100%; background: var(--ok); animation: none; }
+    @keyframes shimmer {
+      0% { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
+    }
+
+    .toast {
+      position: fixed; top: 18px; right: 22px; z-index: 40;
+      background: #1a1520; color: #ffedd5; padding: 10px 14px; border-radius: 10px;
+      font-size: 13px; box-shadow: var(--shadow);
+      opacity: 0; transform: translateY(-12px); pointer-events: none;
+      border: 1px solid rgba(232,121,47,0.35);
+    }
+    .toast.show { animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    .toast.hide { animation: toastOut 0.3s ease forwards; }
+    @keyframes toastIn { to { opacity: 1; transform: translateY(0); } }
+    @keyframes toastOut { to { opacity: 0; transform: translateY(-8px); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .anim-in, .step, .mind-node, .md-block { opacity: 1; transform: none; }
+    }
+
+    @media (max-width: 1100px) {
+      .workspace { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .action-dock .spacer { display: none; }
+      .btn-run { width: 100%; order: -1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar" aria-label="主导航">
+      <div class="logo">个人工作台</div>
+      <div class="nav-item"><span class="nav-ico" aria-hidden="true">⌂</span>首页</div>
+      <div class="nav-item"><span class="nav-ico" aria-hidden="true">资</span>项目资产</div>
+      <div class="nav-item active" aria-current="page"><span class="nav-ico" aria-hidden="true">测</span>测试点生成</div>
+      <div class="nav-item"><span class="nav-ico" aria-hidden="true">运</span>测试运维工作台</div>
+      <div class="nav-item"><span class="nav-ico" aria-hidden="true">静</span>静态工具网站</div>
+      <div class="nav-item"><span class="nav-ico" aria-hidden="true">甘</span>甘特图排期</div>
+      <div class="nav-sec">其他</div>
+      <div class="nav-item"><span class="nav-ico" aria-hidden="true">★</span>文件路径收藏</div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1>测试点生成</h1>
+          <p class="sub">从原型说明与截图，三步生成可导入 XMind 的 Markdown</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-sm" type="button" id="btnConfig">模型配置</button>
+          <button class="ghost-link" type="button">新窗口打开</button>
+        </div>
+      </header>
+
+      <div class="banner anim-in">
+        <div>
+          <strong>改版预览</strong>
+          · 点步骤卡生成 · Tab 看结果
+          <span class="gsap-status" id="gsapStatus">动效引擎检测中…</span>
+        </div>
+        <button type="button" id="btnReplayEnter">重播入场</button>
+      </div>
+
+      <div class="workspace">
+        <div class="col">
+          <section class="panel step-rail anim-in" aria-label="生成流水线">
+            <div class="step-rail-head">
+              <div>
+                <div class="label">生成流水线</div>
+              </div>
+              <span class="hint" id="stepHint">点卡片执行 · 需按顺序完成</span>
+            </div>
+            <div class="steps" id="steps" role="list">
+              <button class="step is-next" type="button" data-step="1" role="listitem" aria-describedby="stepHint">
+                <span class="n">1</span>
+                <span class="t">页面框架</span>
+                <span class="d">梳理模块结构</span>
+                <span class="cta" data-cta>点击生成 →</span>
+              </button>
+              <button class="step is-locked" type="button" data-step="2" role="listitem" disabled>
+                <span class="n">2</span>
+                <span class="t">业务场景</span>
+                <span class="d">冒烟正/逆向</span>
+                <span class="cta" data-cta>先完成上一步</span>
+              </button>
+              <button class="step is-locked" type="button" data-step="3" role="listitem" disabled>
+                <span class="n">3</span>
+                <span class="t">页面功能</span>
+                <span class="d">控件与校验</span>
+                <span class="cta" data-cta>先完成上一步</span>
+              </button>
+            </div>
+            <div class="progress-row">
+              <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+              </div>
+              <span class="progress-label" id="progressLabel">0 / 3</span>
+            </div>
+          </section>
+
+          <section class="panel anim-in" id="inputPanel">
+            <div class="block">
+              <div class="block-head">
+                <h3 class="block-title">原型图 / 说明</h3>
+                <button class="btn btn-sm btn-ghost" type="button">从项目资产导入</button>
+              </div>
+              <textarea rows="4" placeholder="粘贴原型 URL、脑图摘要……">https://example.com/proto/channel-activate
+渠道激活列表：筛选平台、查看流水</textarea>
+            </div>
+            <div class="block">
+              <div class="block-head">
+                <h3 class="block-title">测试点生成 Skill</h3>
+                <div style="display:flex;gap:6px;">
+                  <button class="btn btn-sm" type="button" id="btnToggleSkill">展开编辑</button>
+                  <button class="btn btn-sm btn-ghost" type="button">保存</button>
+                  <button class="btn btn-sm btn-ghost" type="button">恢复默认</button>
+                </div>
+              </div>
+              <div class="skill-body" id="skillBody">
+                <textarea class="skill-ta" rows="6">你是资深测试工程师。按三步产出：页面框架 → 业务场景 → 页面功能……</textarea>
+                <p class="hint">默认收起，降低信息密度。</p>
+              </div>
+              <div class="upload-row">
+                <button class="btn btn-sm" type="button">上传原型截图</button>
+                <span class="hint" style="margin:0">最多 12 张</span>
+              </div>
+              <div class="thumbs" id="thumbs">
+                <div class="thumb"><button type="button" aria-label="删除截图" title="删除">×</button></div>
+                <div class="thumb"><button type="button" aria-label="删除截图" title="删除">×</button></div>
+              </div>
+            </div>
+          </section>
+
+          <div class="action-dock anim-in">
+            <span class="busy-chip" id="busyChip" aria-live="polite">
+              <span class="breath"></span>
+              <span id="busyText">生成中</span>
+              <span class="dots"><span></span><span></span><span></span></span>
+            </span>
+            <button class="btn btn-primary btn-run" type="button" id="btnRunNext">① 生成页面框架</button>
+            <span class="spacer"></span>
+            <button class="btn btn-sm" type="button" id="btnDlMd" disabled>下载.md</button>
+            <button class="btn btn-sm" type="button" id="btnDlXmind" disabled>下载.xmind</button>
+          </div>
+        </div>
+
+        <div class="col panel anim-in" id="previewCol">
+          <div class="preview-head">
+            <h3>预览</h3>
+            <span class="hint" style="margin:0" id="previewMeta">尚未生成 · 从左侧第 1 步开始</span>
+          </div>
+          <div class="tabs" role="tablist" aria-label="结果步骤">
+            <button class="tab is-on" type="button" role="tab" aria-selected="true" data-tab="1" id="tab1">
+              <span class="dot"></span>框架
+            </button>
+            <button class="tab" type="button" role="tab" aria-selected="false" data-tab="2" id="tab2">
+              <span class="dot"></span>场景
+            </button>
+            <button class="tab" type="button" role="tab" aria-selected="false" data-tab="3" id="tab3">
+              <span class="dot"></span>功能
+            </button>
+          </div>
+          <div class="preview-stack">
+            <article class="pv is-on" id="pv1" role="tabpanel" aria-labelledby="tab1">
+              <div class="pv-head">
+                <div>
+                  <span class="pv-tag">Step 01</span>
+                  <div class="pv-title" style="margin-top:6px">项目页面框架</div>
+                </div>
+                <div class="pv-actions">
+                  <button class="btn" type="button">脑图</button>
+                  <button class="btn" type="button">.xmind</button>
+                </div>
+              </div>
+              <div class="pv-body" id="pv1Body">
+                <div class="tl-loading" id="tl1">
+                  <div class="tl-row" data-i="0"><span class="tl-dot"></span><span>读取原型</span><span class="tl-bar"><i></i></span></div>
+                  <div class="tl-row" data-i="1"><span class="tl-dot"></span><span>拆分模块</span><span class="tl-bar"><i></i></span></div>
+                  <div class="tl-row" data-i="2"><span class="tl-dot"></span><span>输出框架</span><span class="tl-bar"><i></i></span></div>
+                </div>
+                <div class="pv-empty">
+                  <div class="orb" id="orb1"></div>
+                  点「① 生成页面框架」开始
+                </div>
+              </div>
+            </article>
+
+            <article class="pv" id="pv2" role="tabpanel" aria-labelledby="tab2" hidden>
+              <div class="pv-head">
+                <div>
+                  <span class="pv-tag" style="background:rgba(59,130,246,0.2);color:#93c5fd">Step 02</span>
+                  <div class="pv-title" style="margin-top:6px">业务场景测试点（冒烟）</div>
+                </div>
+                <div class="pv-actions">
+                  <button class="btn" type="button">.md</button>
+                  <button class="btn" type="button">.xmind</button>
+                </div>
+              </div>
+              <div class="pv-body" id="pv2Body">
+                <div class="tl-loading" id="tl2">
+                  <div class="tl-row" data-i="0"><span class="tl-dot"></span><span>对齐框架</span><span class="tl-bar"><i></i></span></div>
+                  <div class="tl-row" data-i="1"><span class="tl-dot"></span><span>正向链路</span><span class="tl-bar"><i></i></span></div>
+                  <div class="tl-row" data-i="2"><span class="tl-dot"></span><span>逆向链路</span><span class="tl-bar"><i></i></span></div>
+                </div>
+                <div class="pv-empty">
+                  <div class="orb" id="orb2"></div>
+                  完成框架后生成正/逆向路径
+                </div>
+              </div>
+            </article>
+
+            <article class="pv" id="pv3" role="tabpanel" aria-labelledby="tab3" hidden>
+              <div class="pv-head">
+                <div>
+                  <span class="pv-tag" style="background:rgba(14,165,233,0.18);color:#7dd3fc">Step 03</span>
+                  <div class="pv-title" style="margin-top:6px">页面功能测试点</div>
+                </div>
+                <div class="pv-actions">
+                  <button class="btn" type="button">.md</button>
+                  <button class="btn" type="button">.xmind</button>
+                </div>
+              </div>
+              <div class="pv-body" id="pv3Body">
+                <div class="tl-loading" id="tl3">
+                  <div class="tl-row" data-i="0"><span class="tl-dot"></span><span>扫描控件</span><span class="tl-bar"><i></i></span></div>
+                  <div class="tl-row" data-i="1"><span class="tl-dot"></span><span>写交互断言</span><span class="tl-bar"><i></i></span></div>
+                  <div class="tl-row" data-i="2"><span class="tl-dot"></span><span>整理层级</span><span class="tl-bar"><i></i></span></div>
+                </div>
+                <div class="pv-empty">
+                  <div class="orb" id="orb3"></div>
+                  展开筛选、弹窗、字段校验
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../lib/gsap.min.js"></script>
+  <script>
+    (function () {
+      var state = {
+        done: { 1: false, 2: false, 3: false },
+        busy: false,
+        viewing: 1,
+        timers: [],
+      };
+      var hasGsap = typeof gsap !== "undefined";
+      var STEP_LABELS = {
+        1: "生成页面框架",
+        2: "生成业务场景",
+        3: "生成页面功能",
+      };
+      var BUSY_LABELS = {
+        1: "梳理页面框架中",
+        2: "生成业务场景中",
+        3: "展开页面功能中",
+      };
+
+      document.getElementById("gsapStatus").textContent = hasGsap
+        ? "GSAP ✓ + CSS"
+        : "CSS 动效（GSAP 未加载）";
+
+      wire();
+      syncUI();
+
+      function clearTimers() {
+        state.timers.forEach(clearTimeout);
+        state.timers = [];
+      }
+
+      function later(fn, ms) {
+        var id = setTimeout(fn, ms);
+        state.timers.push(id);
+        return id;
+      }
+
+      function doneCount() {
+        return (state.done[1] ? 1 : 0) + (state.done[2] ? 1 : 0) + (state.done[3] ? 1 : 0);
+      }
+
+      function nextStep() {
+        if (!state.done[1]) return 1;
+        if (!state.done[2]) return 2;
+        if (!state.done[3]) return 3;
+        return null;
+      }
+
+      function canRun(step) {
+        if (step === 1) return true;
+        return !!state.done[step - 1];
+      }
+
+      function wire() {
+        document.getElementById("btnReplayEnter").addEventListener("click", replayEnter);
+        document.getElementById("btnToggleSkill").addEventListener("click", function () {
+          var body = document.getElementById("skillBody");
+          var open = body.classList.toggle("open");
+          this.textContent = open ? "收起" : "展开编辑";
+        });
+        document.getElementById("btnConfig").addEventListener("click", function () {
+          pop(this);
+          toast("模型配置（Mock）");
+        });
+        document.getElementById("btnRunNext").addEventListener("click", function () {
+          var n = nextStep();
+          if (n) runStep(n);
+          else toast("三步已全部完成");
+        });
+        document.getElementById("btnDlMd").addEventListener("click", function () {
+          if (this.disabled) return;
+          toast("已导出 Markdown（Mock）");
+        });
+        document.getElementById("btnDlXmind").addEventListener("click", function () {
+          if (this.disabled) return;
+          toast("已导出 XMind（Mock）");
+        });
+
+        document.querySelectorAll(".step").forEach(function (el) {
+          el.addEventListener("click", function () {
+            var step = Number(this.getAttribute("data-step"));
+            if (state.busy) return;
+            if (state.done[step]) {
+              showTab(step);
+              toast("已切换到步骤 " + step + " 结果");
+              return;
+            }
+            if (!canRun(step)) {
+              toast("请先完成第 " + (step - 1) + " 步");
+              return;
+            }
+            runStep(step);
+          });
+        });
+
+        document.querySelectorAll(".tab").forEach(function (el) {
+          el.addEventListener("click", function () {
+            showTab(Number(this.getAttribute("data-tab")));
+          });
+        });
+
+        document.getElementById("thumbs").addEventListener("click", function (e) {
+          var btn = e.target.closest("button");
+          if (!btn) return;
+          var thumb = btn.closest(".thumb");
+          if (thumb) thumb.remove();
+        });
+      }
+
+      function pop(el) {
+        el.classList.remove("pop");
+        void el.offsetWidth;
+        el.classList.add("pop");
+      }
+
+      function replayEnter() {
+        document.body.classList.remove("replay-play");
+        document.body.classList.add("replay");
+        void document.body.offsetWidth;
+        document.body.classList.remove("replay");
+        document.body.classList.add("replay-play");
+        document.querySelectorAll(".step").forEach(function (el) {
+          el.style.animation = "none";
+          void el.offsetWidth;
+          el.style.animation = "";
+        });
+        if (hasGsap) {
+          gsap.from(".step", {
+            scale: 0.88, opacity: 0, duration: 0.4, stagger: 0.07, ease: "back.out(1.8)",
+          });
+        }
+        toast("入场动效已重播");
+      }
+
+      function syncUI() {
+        var next = nextStep();
+        var count = doneCount();
+
+        document.querySelectorAll(".step").forEach(function (el) {
+          var n = Number(el.getAttribute("data-step"));
+          var locked = !canRun(n) && !state.done[n];
+          var isNext = next === n;
+          el.classList.toggle("is-done", !!state.done[n]);
+          el.classList.toggle("is-next", isNext && !state.busy);
+          el.classList.toggle("is-locked", locked);
+          el.classList.toggle("is-viewing", state.viewing === n);
+          el.disabled = locked || state.busy;
+          var cta = el.querySelector("[data-cta]");
+          if (cta) {
+            if (state.done[n]) cta.textContent = "查看结果 →";
+            else if (isNext) cta.textContent = "点击生成 →";
+            else if (locked) cta.textContent = "先完成上一步";
+            else cta.textContent = "点击生成 →";
+          }
+        });
+
+        var fill = document.getElementById("progressFill");
+        fill.style.width = (count / 3) * 100 + "%";
+        fill.classList.toggle("running", state.busy);
+        document.getElementById("progressBar").setAttribute("aria-valuenow", String(count));
+        document.getElementById("progressLabel").textContent = count + " / 3";
+
+        var runBtn = document.getElementById("btnRunNext");
+        if (next) {
+          runBtn.disabled = state.busy;
+          runBtn.textContent = "①②③"[next - 1] + " " + STEP_LABELS[next];
+        } else {
+          runBtn.disabled = true;
+          runBtn.textContent = "全部完成";
+        }
+
+        var hasAny = count > 0;
+        var allDone = count === 3;
+        document.getElementById("btnDlMd").disabled = !hasAny;
+        document.getElementById("btnDlXmind").disabled = !allDone;
+
+        document.querySelectorAll(".tab").forEach(function (el) {
+          var n = Number(el.getAttribute("data-tab"));
+          el.classList.toggle("is-done", !!state.done[n]);
+          el.classList.toggle("is-on", state.viewing === n);
+          el.setAttribute("aria-selected", state.viewing === n ? "true" : "false");
+        });
+
+        if (!state.busy) {
+          if (count === 0) {
+            document.getElementById("stepHint").textContent = "点卡片执行 · 需按顺序完成";
+            document.getElementById("previewMeta").textContent = "尚未生成 · 从左侧第 1 步开始";
+          } else if (allDone) {
+            document.getElementById("stepHint").textContent = "全部完成 · 可下载导出";
+            document.getElementById("previewMeta").textContent = "3 / 3 已完成";
+          } else {
+            document.getElementById("stepHint").textContent = "已完成 " + count + " 步 · 继续第 " + next + " 步";
+            document.getElementById("previewMeta").textContent = "已完成 " + count + " / 3";
+          }
+        }
+      }
+
+      function showTab(step) {
+        state.viewing = step;
+        document.querySelectorAll(".pv").forEach(function (el) {
+          var n = Number(el.id.replace("pv", ""));
+          var on = n === step;
+          el.classList.toggle("is-on", on);
+          if (on) el.removeAttribute("hidden");
+          else el.setAttribute("hidden", "");
+        });
+        syncUI();
+      }
+
+      function setBusy(on, label) {
+        state.busy = on;
+        document.getElementById("busyChip").classList.toggle("on", on);
+        document.getElementById("busyText").textContent = label || "生成中";
+        syncUI();
+      }
+
+      function toast(msg) {
+        var el = document.getElementById("toast");
+        el.textContent = msg;
+        el.classList.remove("hide", "show");
+        void el.offsetWidth;
+        el.classList.add("show");
+        later(function () {
+          el.classList.remove("show");
+          el.classList.add("hide");
+        }, 1600);
+      }
+
+      function runTl(panelStep) {
+        var root = document.getElementById("tl" + panelStep);
+        if (!root) return;
+        var rows = root.querySelectorAll(".tl-row");
+        rows.forEach(function (r) {
+          r.classList.remove("on", "done");
+        });
+        var i = 0;
+        function tick() {
+          if (i > 0) {
+            rows[i - 1].classList.remove("on");
+            rows[i - 1].classList.add("done");
+          }
+          if (i >= rows.length) return;
+          rows[i].classList.add("on");
+          i += 1;
+          later(tick, 480);
+        }
+        tick();
+      }
+
+      function runStep(step) {
+        if (state.busy) return;
+        if (!canRun(step)) {
+          toast("请先完成第 " + (step - 1) + " 步");
+          return;
+        }
+        clearTimers();
+        showTab(step);
+
+        document.querySelectorAll(".step").forEach(function (el) {
+          el.classList.toggle("is-busy", Number(el.getAttribute("data-step")) === step);
+        });
+
+        var runBtn = document.getElementById("btnRunNext");
+        pop(runBtn);
+        if (hasGsap) {
+          gsap.fromTo(runBtn, { scale: 1 }, { scale: 1.04, duration: 0.12, yoyo: true, repeat: 1, ease: "back.out(2)" });
+        }
+
+        setBusy(true, BUSY_LABELS[step]);
+        document.getElementById("previewMeta").textContent = BUSY_LABELS[step] + "…";
+        document.getElementById("stepHint").textContent = "生成中 · Step " + step + "/3";
+
+        var pv = document.getElementById("pv" + step);
+        var body = document.getElementById("pv" + step + "Body");
+        var tlHtml = document.getElementById("tl" + step).outerHTML;
+        body.classList.remove("has-content");
+        body.innerHTML =
+          tlHtml +
+          '<div class="pv-empty"><div class="orb" id="orb' + step + '"></div>生成中…</div>';
+        pv.classList.add("is-loading");
+        runTl(step);
+
+        later(function () {
+          fillPanel(step);
+          state.done[step] = true;
+          document.querySelectorAll(".step").forEach(function (el) {
+            el.classList.remove("is-busy");
+          });
+          setBusy(false);
+          pv.classList.remove("is-loading");
+          toast("步骤 " + step + " 完成");
+          syncUI();
+        }, 1600);
+      }
+
+      function fillPanel(step) {
+        var body = document.getElementById("pv" + step + "Body");
+        body.classList.add("has-content");
+
+        if (step === 1) {
+          var nodes = ["渠道激活列表", "筛选区 · 平台/状态", "列表行操作", "流水订单弹窗", "导出 / 分页"];
+          body.innerHTML =
+            '<div class="mind-nodes">' +
+            nodes
+              .map(function (t, i) {
+                return '<div class="mind-node" style="animation-delay:' + i * 0.07 + 's">' + escapeHtml(t) + "</div>";
+              })
+              .join("") +
+            "</div>";
+          if (hasGsap) {
+            gsap.from(".mind-node", { opacity: 0, y: 10, scale: 0.92, duration: 0.35, stagger: 0.07, ease: "back.out(1.5)" });
+          }
+          return;
+        }
+
+        var md =
+          step === 2
+            ? {
+                title: "渠道激活 · 业务场景（冒烟）",
+                sections: [
+                  {
+                    h: "正向：满足入池条件 → 渠道入池",
+                    items: [
+                      "平台已开通且状态正常 → 列表可见该渠道",
+                      "点击「流水」→ 弹窗展示对应订单",
+                    ],
+                  },
+                  {
+                    h: "逆向：条件不满足 → 不入池",
+                    items: ["手机号判定关闭时，同号不同证仍各自判定"],
+                  },
+                ],
+              }
+            : {
+                title: "渠道激活 · 页面功能测试点",
+                sections: [
+                  {
+                    h: "筛选区",
+                    items: ["能多选所属平台并筛选列表", "点击清空能重置筛选条件"],
+                  },
+                  {
+                    h: "流水订单弹窗",
+                    items: [
+                      "点击「流水」能打开弹窗",
+                      "弹窗标题与列表行渠道一致",
+                      "点击「取消」关闭弹窗，不改数据",
+                    ],
+                  },
+                ],
+              };
+
+        body.innerHTML = renderMd(md);
+        if (hasGsap) {
+          gsap.from(body.querySelectorAll(".md-block"), {
+            opacity: 0, y: 8, duration: 0.3, stagger: 0.06, ease: "power2.out",
+          });
+        }
+      }
+
+      function renderMd(md) {
+        var html = '<div class="md-view">';
+        html += '<h2 class="md-block">' + escapeHtml(md.title) + "</h2>";
+        md.sections.forEach(function (sec, si) {
+          html +=
+            '<div class="md-block" style="animation-delay:' +
+            (0.08 + si * 0.08) +
+            's"><h3>' +
+            escapeHtml(sec.h) +
+            "</h3><ul>" +
+            sec.items
+              .map(function (it) {
+                return "<li>" + escapeHtml(it) + "</li>";
+              })
+              .join("") +
+            "</ul></div>";
+        });
+        html += "</div>";
+        return html;
+      }
+
+      function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, function (c) {
+          return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

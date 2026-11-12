@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>业务精灵</title>
+  <link rel="stylesheet" href="sprite.css">
+</head>
+<body class="collapsed">
+  <main class="pet-root">
+    <div id="idle-bubble" class="idle-bubble hidden" aria-live="polite"></div>
+
+    <div id="chat-panel" class="chat-panel">
+      <header class="panel-toolbar">
+        <span id="mode-hint" class="mode-hint"></span>
+        <div class="panel-actions">
+          <button id="settings-btn" type="button" title="模型设置">⚙</button>
+          <button id="close-btn" type="button" title="关闭">×</button>
+        </div>
+      </header>
+
+      <div id="speech-bubble" class="speech-bubble" aria-live="polite">
+        <div id="chat-log" class="chat-log"></div>
+      </div>
+
+      <section id="recommendations" class="recommendations"></section>
+
+      <footer class="input-row">
+        <textarea id="message-input" rows="2" placeholder="问业务流程，或让我推荐自动化模块…"></textarea>
+        <button id="send-btn" type="button">发送</button>
+      </footer>
+    </div>
+
+    <section id="settings-panel" class="settings-panel hidden">
+      <input id="base-url" placeholder="API 地址">
+      <input id="model" placeholder="模型">
+      <input id="api-key" type="password" placeholder="API Key（留空则复用测试点生成）">
+      <label class="rest-toggle">
+        <input id="rest-enabled" type="checkbox">
+        每小时提醒休息（DeskTopPet 同款）
+      </label>
+      <button id="save-settings" type="button">保存设置</button>
+    </section>
+
+    <div class="pet-anchor">
+      <div class="pet-drag-handle" title="拖动桌宠">⋯</div>
+      <button id="pet-avatar" class="pet-avatar" type="button" title="点击展开对话 · 右键更多">
+        <img id="pet-image" class="pet-image hidden" alt="皮卡丘桌宠" draggable="false">
+        <span id="pet-fallback" class="pet-fallback">灵</span>
+      </button>
+    </div>
+  </main>
+  <script src="sprite.js"></script>
+</body>
+</html>

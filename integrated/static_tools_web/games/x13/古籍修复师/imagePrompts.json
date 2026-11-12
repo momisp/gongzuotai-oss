@@ -1,0 +1,38 @@
+[
+  {
+    "id": "background",
+    "prompt": "复古宣纸水墨风古籍书页背景，泛黄的古旧书页，带着自然墨痕、轻微折痕和虫蛀纹理，场景中散落毛笔、砚台、铜镇纸、朱砂蜡封等文房物件，细节丰富，古色古香",
+    "filename": "background.png",
+    "size": "1440x2560"
+  },
+  {
+    "id": "startButton",
+    "prompt": "复古水墨风格砚台造型按钮，带有“开始游戏”毛笔书写繁体字，朱砂色文字，竹简边缘装饰，纯白色背景且无阴影",
+    "filename": "alpha_start_button.png",
+    "size": "1920x1920"
+  },
+  {
+    "id": "restartButton",
+    "prompt": "复古水墨风格砚台造型按钮，带有“重新研磨墨”毛笔书写繁体字，墨色文字，竹简边缘装饰，纯白色背景且无阴影",
+    "filename": "alpha_restart_button.png",
+    "size": "1920x1920"
+  },
+  {
+    "id": "bookIcon",
+    "prompt": "复古线装古籍图标，卷边设计，朱砂印章装饰，宣纸纹理，纯白色背景且无阴影",
+    "filename": "alpha_book_icon.png",
+    "size": "1920x1920"
+  },
+  {
+    "id": "heartIcon",
+    "prompt": "复古水墨风格毛笔绘制的心形图标，朱砂色，宣纸纹理，纯白色背景且无阴影",
+    "filename": "alpha_heart_icon.png",
+    "size": "1920x1920"
+  },
+  {
+    "id": "successEffect",
+    "prompt": "淡墨滴晕开特效，墨色渐变，宣纸纹理，纯白色背景且无阴影",
+    "filename": "alpha_success_effect.png",
+    "size": "1920x1920"
+  }
+]

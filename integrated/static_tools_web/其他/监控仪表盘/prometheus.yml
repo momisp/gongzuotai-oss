@@ -1,0 +1,11 @@
+# PromDapter 开启后在本机暴露：http://127.0.0.1:10445/metrics
+# Docker 内用 host.docker.internal 访问宿主机；若不用 Docker、本机直跑 Prometheus，把 targets 改成 127.0.0.1:10445
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: promdapter
+    static_configs:
+      - targets: ["host.docker.internal:10445"]

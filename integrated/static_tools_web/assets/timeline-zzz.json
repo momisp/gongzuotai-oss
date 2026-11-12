@@ -1,0 +1,106 @@
+{
+  "name": "绝区零",
+  "note": "从 announcement-api.mihoyo.com 拉取，过滤 >200 天的长期公告；最后更新 2026-11-11 18:59",
+  "homepage": "https://zzz.mihoyo.com/main/news",
+  "events": [
+    {
+      "name": "3.3版本「丽都城募」说明",
+      "category": "游戏公告",
+      "start": "2026-10-20 14:00",
+      "end": "2026-11-30 03:59",
+      "source": "绝区零 · 米哈游官网公告",
+      "url": "https://zzz.mihoyo.com/main/news",
+      "detailUrl": "https://announcement.mihoyo.com/nap/index.html?ann_id=1331&game=nap&game_biz=nap_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/16/4a81388acbbe241827ec534f9df62fed_6277365941721836895_transformed.png",
+      "desc": ""
+    },
+    {
+      "name": "「全新放送」活动说明",
+      "category": "游戏公告",
+      "start": "2026-10-20 14:15",
+      "end": "2026-12-01 03:59",
+      "source": "绝区零 · 米哈游官网公告",
+      "url": "https://zzz.mihoyo.com/main/news",
+      "detailUrl": "https://announcement.mihoyo.com/nap/index.html?ann_id=1332&game=nap&game_biz=nap_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/16/313b01a985b6a742c300528834d608c9_4921857407890368250_transformed.png",
+      "desc": ""
+    },
+    {
+      "name": "3.3版本「重返天空的旅程」更新公告",
+      "category": "游戏公告",
+      "start": "2026-10-21 06:00",
+      "end": "2026-12-02 06:00",
+      "source": "绝区零 · 米哈游官网公告",
+      "url": "https://zzz.mihoyo.com/main/news",
+      "detailUrl": "https://announcement.mihoyo.com/nap/index.html?ann_id=1339&game=nap&game_biz=nap_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/21/22a23769988f3e1b09d9b23c9ffd5351_2551844542532046139_transformed.jpg",
+      "desc": "3.3版本更新说明"
+    },
+    {
+      "name": "已知问题及游戏优化说明",
+      "category": "游戏公告",
+      "start": "2026-10-21 06:00",
+      "end": "2026-12-02 06:00",
+      "source": "绝区零 · 米哈游官网公告",
+      "url": "https://zzz.mihoyo.com/main/news",
+      "detailUrl": "https://announcement.mihoyo.com/nap/index.html?ann_id=1340&game=nap&game_biz=nap_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2025/12/30/d5ff609cfd2e21cef425170d044f4aca_4578138034465937229_transformed.png",
+      "desc": ""
+    },
+    {
+      "name": "「赛博圣手，出诊!」活动说明",
+      "category": "游戏公告",
+      "start": "2026-10-26 12:30",
+      "end": "2026-11-16 03:59",
+      "source": "绝区零 · 米哈游官网公告",
+      "url": "https://zzz.mihoyo.com/main/news",
+      "detailUrl": "https://announcement.mihoyo.com/nap/index.html?ann_id=1333&game=nap&game_biz=nap_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/16/df53db126729a174b162186e25226318_2414405061110105963_transformed.png",
+      "desc": ""
+    },
+    {
+      "name": "《绝区零》对iPhone Duo机型的适配说明",
+      "category": "游戏公告",
+      "start": "2026-11-05 14:00",
+      "end": "2026-12-02 06:00",
+      "source": "绝区零 · 米哈游官网公告",
+      "url": "https://zzz.mihoyo.com/main/news",
+      "detailUrl": "https://announcement.mihoyo.com/nap/index.html?ann_id=1348&game=nap&game_biz=nap_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/11/04/31277066e538fef43aa5dafe73e3533d_8985718310596300355_transformed.png",
+      "desc": "iPhone Duo适配说明"
+    },
+    {
+      "name": "「跛脚乌鸦奇踪记」活动说明",
+      "category": "游戏公告",
+      "start": "2026-11-09 14:15",
+      "end": "2026-11-30 03:59",
+      "source": "绝区零 · 米哈游官网公告",
+      "url": "https://zzz.mihoyo.com/main/news",
+      "detailUrl": "https://announcement.mihoyo.com/nap/index.html?ann_id=1345&game=nap&game_biz=nap_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/11/06/9cc4f934f6ffda939a80c2fc70769e47_885571584667886245_transformed.png",
+      "desc": ""
+    },
+    {
+      "name": "「『嗯呢』从天降」活动说明",
+      "category": "游戏公告",
+      "start": "2026-11-09 14:30",
+      "end": "2026-12-01 03:59",
+      "source": "绝区零 · 米哈游官网公告",
+      "url": "https://zzz.mihoyo.com/main/news",
+      "detailUrl": "https://announcement.mihoyo.com/nap/index.html?ann_id=1344&game=nap&game_biz=nap_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/11/06/41167d6e12b410834dbc7b567f0635ad_7274554495606633977_transformed.jpg",
+      "desc": ""
+    },
+    {
+      "name": "3.3版本「商城」上新说明",
+      "category": "游戏公告",
+      "start": "2026-11-10 12:00",
+      "end": "2026-12-02 05:59",
+      "source": "绝区零 · 米哈游官网公告",
+      "url": "https://zzz.mihoyo.com/main/news",
+      "detailUrl": "https://announcement.mihoyo.com/nap/index.html?ann_id=1343&game=nap&game_biz=nap_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/11/06/258b465a8fb84ddde3dd2096cacaf718_5878293889572538722.jpg",
+      "desc": ""
+    }
+  ]
+}

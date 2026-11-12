@@ -1,0 +1,108 @@
+═══════════════════════════════════════════════════════════
+  方案二 · HWiNFO + PromDapter + Prometheus + Grafana（炫酷仪表盘）
+  本目录已放好 Docker 用的 Prometheus / Grafana 配置，按顺序做即可。
+═══════════════════════════════════════════════════════════
+
+【一】宿主机（你的 Windows 电脑）先装这三类软件
+────────────────────────────────────────────────────────────
+1. HWiNFO64（官网免费）
+   - 运行后：设置里开启「共享内存支持（Shared Memory Support）」
+   - 打开「传感器」界面一次（可最小化，但不要关 HWiNFO）
+
+2. PromDapter（GitHub：kallex/PromDapter，或 HWiNFO 论坛指引的安装包）
+   - 安装后会读取 HWiNFO 共享内存
+   - 默认在本机 HTTP 暴露 Prometheus 指标：http://127.0.0.1:10445/metrics
+   - 若端口不是 10445，请改本目录下 prometheus.yml 里 targets 的端口
+   - 指标映射可编辑（常见路径）：C:\ProgramData\PromDapter\Prometheusmapping.yaml
+   - Windows 防火墙若弹窗，允许 PromDapter；从手机访问的是 Grafana 端口（见下），不是 10445
+
+3. Docker Desktop（Windows）
+   - 安装并启动，确保能执行：docker compose version
+
+
+【二】启动 Prometheus + Grafana（本仓库自带配置）
+────────────────────────────────────────────────────────────
+在本文件夹「监控仪表盘」里：
+
+  方式 A（推荐）：双击运行「启动-docker监控.bat」
+
+  方式 B：在此目录打开终端执行
+    docker compose up -d
+    （若报 project name must not be empty：compose 文件已写死项目名 tools-monitoring；
+     也可手动执行：docker compose -p tools-monitoring up -d）
+
+说明：
+  - Prometheus 网页：http://127.0.0.1:9090
+    → Status → Targets 里看到 promdapter 为 UP 即正常（需先开 HWiNFO + PromDapter）
+  - Grafana：http://127.0.0.1:3000
+    → 默认账号 admin / 密码 admin（可在 docker-compose.yml 里改 GF_SECURITY_ADMIN_PASSWORD）
+    → 已自动接入 Prometheus 数据源（容器内地址 http://prometheus:9090）
+
+导入仪表盘（任选其一）：
+  - Grafana 左侧「仪表板」→「新建」→「导入」
+  - 在 grafana.com 搜索 “HWiNFO” / “PromDapter” / “PC hardware” 找现成 JSON 或 ID
+  - 数据源选 Prometheus 即可拖拽 CPU/GPU/温度等（具体指标名取决于 PromDapter 映射）
+  - 若模板不匹配：可完全自建，见同目录「Grafana自建仪表盘步骤.txt」
+
+
+【三】手机访问 Grafana（与电脑同一 WiFi）
+────────────────────────────────────────────────────────────
+1. 查电脑局域网 IP（例如 192.168.1.10）：
+   cmd 执行：ipconfig  → 看「无线局域网适配器 WLAN」的 IPv4
+
+2. 手机浏览器打开：
+   http://你的电脑IP:3000
+   （若打不开）在 Windows「高级安全 Windows Defender 防火墙」里允许「入站规则」：
+   TCP 端口 3000（仅限专用网络更安全）
+
+3. 不要用 localhost，手机上的 localhost 是手机自己。
+
+
+【四】常见问题
+────────────────────────────────────────────────────────────
+• Targets 里 promdapter 一直 DOWN：
+  - 先确认浏览器能打开 http://127.0.0.1:10445/metrics（电脑上）
+  - Docker 内用 host.docker.internal 访问宿主机；若仍失败，检查 Docker Desktop 设置里是否允许访问宿主机
+
+• Targets 报错「不是有效的 utf8 字符串」/ HELP 文本 UTF-8 无效（Grafana 探索里也没有曲线）：
+  原因：PromDapter 生成的某条 # HELP 里混入了非法 UTF-8（常见于 CPU 名称、传感器说明与 HWiNFO 编码混用），
+  Prometheus 2.x 会拒绝整次抓取，导致**没有任何指标入库**，所以 Grafana 第二步看不到曲线。
+  处理思路（任选，建议按顺序试）：
+  （1）备份后编辑 C:\ProgramData\PromDapter\Prometheusmapping.yaml：
+      暂时注释/删掉与「出错那条」相关的映射（错误里会带 CPU 型号等关键字）；保存后浏览器打开
+      http://127.0.0.1:10445/metrics/reset ，再刷新 http://127.0.0.1:10445/metrics ，确认 # HELP 行无乱码。
+  （2）在 HWiNFO 传感器里把对应项的显示名改成**纯英文/数字**（减少非 UTF-8 字符），再重开 HWiNFO 与 PromDapter。
+  （3）Windows：设置 → 时间和语言 → 语言和区域 → 相关设置 → 管理语言设置 → 更改系统区域设置 →
+      勾选「Beta 版：使用 Unicode UTF-8 提供全球语言支持」→ 重启电脑后再看 /metrics。
+  （4）仍不行：尝试升级/更换 PromDapter 版本；或在论坛/GitHub 搜 Prometheus + PromDapter + utf8。
+  说明：在 Prometheus Targets 变为 **UP** 之前，Grafana 里用 {__name__=~"hwi.*"} 也不会有数据，属正常现象。
+  若错误里出现「倍频」、\x80\x8d 等：多为**指标名里含中文**或编码混用，详见同目录「PromDapter与Prometheus编码说明.txt」。
+
+• 3000 端口已被占用：
+  - 改 docker-compose.yml 里 grafana 的 ports 为例如 "3001:3000"，用手机访问 http://IP:3001
+
+• 不想用 Docker、想在本机直接装 Prometheus：
+  - 把 prometheus.yml 里 targets 改为 127.0.0.1:10445
+  - 用官方 Prometheus 二进制加载该配置文件即可；Grafana 亦可单独安装
+
+• docker compose 拉镜像报错：failed to resolve ... registry-1.docker.io / connectex / 超时：
+  这是访问 Docker Hub 网络不通（国内常见）。可任选其一：
+  （1）换网络或开全局代理后，在 Docker Desktop → Settings → Resources → Proxies 配置镜像走代理；
+  （2）Docker Desktop → Settings → Docker Engine，在 JSON 里增加镜像加速（示例，任选一个可用的公共源；若失效请自行搜索「Docker 镜像加速 最新」替换）：
+      "registry-mirrors": [
+        "https://docker.m.daocloud.io"
+      ]
+      保存后点 Apply & Restart，再执行 docker compose -p tools-monitoring up -d。
+  （3）先试能否拉到任一镜像：docker pull hello-world
+     若仍失败，说明本机到 Hub 仍不可达，需先解决网络/代理后再试。
+  说明：这与「是否管理员」无关，管理员权限不能替代连通 Docker Hub。
+
+
+【五】停止服务
+────────────────────────────────────────────────────────────
+在本目录执行：docker compose -p tools-monitoring down
+
+
+═══════════════════════════════════════════════════════════
+  与本项目「工具小站」网页/Electron 无冲突；监控独立占用 9090、3000。
+═══════════════════════════════════════════════════════════

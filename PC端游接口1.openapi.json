@@ -1,0 +1,1745 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "PC端游戏接口",
+    "description": "由 apizza HTML 导出转换，适用于 Apifox 导入",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://qq.klewanq.com",
+      "description": "默认服务器"
+    }
+  ],
+  "tags": [
+    {
+      "name": "PC端游戏接口"
+    }
+  ],
+  "paths": {
+    "/pcinterface/User/register": {
+      "post": {
+        "tags": [
+          "PC端游戏接口"
+        ],
+        "summary": "用户注册",
+        "operationId": "用户注册",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "account": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "asdasd"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "123456"
+                  },
+                  "fromip": {
+                    "type": "string",
+                    "description": "建议",
+                    "example": "127.0.0.1"
+                  },
+                  "game_id": {
+                    "type": "string",
+                    "description": "非必须",
+                    "example": "12"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "必填",
+                    "example": "d172c1d12540a2e0b0861b5224bc69e2"
+                  }
+                },
+                "required": [
+                  "account",
+                  "password",
+                  "fromip",
+                  "game_id",
+                  "sign"
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "account": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "asdasd"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "123456"
+                  },
+                  "fromip": {
+                    "type": "string",
+                    "description": "建议",
+                    "example": "127.0.0.1"
+                  },
+                  "game_id": {
+                    "type": "string",
+                    "description": "非必须",
+                    "example": "12"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "必填",
+                    "example": "d172c1d12540a2e0b0861b5224bc69e2"
+                  }
+                },
+                "required": [
+                  "account",
+                  "password",
+                  "fromip",
+                  "game_id",
+                  "sign"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "integer"
+                        },
+                        "account": {
+                          "type": "string"
+                        },
+                        "nickname": {
+                          "type": "string"
+                        },
+                        "head_img": {
+                          "type": "string"
+                        },
+                        "balance": {
+                          "type": "string"
+                        },
+                        "token": {
+                          "type": "string"
+                        },
+                        "fcm": {
+                          "type": "integer"
+                        },
+                        "small_list": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "small_id": {
+                                "type": "integer"
+                              },
+                              "account": {
+                                "type": "string"
+                              },
+                              "nickname": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "is_adult": {
+                          "type": "integer"
+                        },
+                        "new_register_or_login": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "code": 200,
+                  "msg": "登陆成功",
+                  "data": {
+                    "user_id": 2768,
+                    "account": "asdasd001",
+                    "nickname": "asdasd001",
+                    "head_img": "http://fuhua95.oss-cn-hangzhou.aliyuncs.com/sdk/logoo.png",
+                    "balance": "0.00",
+                    "token": "MDAwMDAwMDAwMMitrZKViYShsJqrbICdn6V50rndj4iDx4-9hZ-aZ4_Xx3esl32febK7d6izjHd5qX23rNZ-nnvJmZmFaJpng82sntLKfauAorqdr2l_d32sic7Pz4J3htiQ0IStkZ6lyryutNuOiYhor6qopYugipyJlrjMm4F2ng",
+                    "fcm": 0,
+                    "small_list": [
+                      {
+                        "small_id": 2768,
+                        "account": "asdasd001",
+                        "nickname": "asdasd001 [不可交易]"
+                      }
+                    ],
+                    "is_adult": 2,
+                    "new_register_or_login": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pcinterface/User/login": {
+      "post": {
+        "tags": [
+          "PC端游戏接口"
+        ],
+        "summary": "用户登录",
+        "operationId": "用户登录",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "account": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "asdasd"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "123456"
+                  },
+                  "fromip": {
+                    "type": "string",
+                    "description": "建议",
+                    "example": "127.0.0.1"
+                  },
+                  "game_id": {
+                    "type": "string",
+                    "description": "非必须",
+                    "example": "12"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "必传",
+                    "example": "4b084d3b9b19e99aace35e07dc3bbf9d"
+                  }
+                },
+                "required": [
+                  "account",
+                  "password",
+                  "fromip",
+                  "game_id",
+                  "sign"
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "account": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "asdasd"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "123456"
+                  },
+                  "fromip": {
+                    "type": "string",
+                    "description": "建议",
+                    "example": "127.0.0.1"
+                  },
+                  "game_id": {
+                    "type": "string",
+                    "description": "非必须",
+                    "example": "12"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "必传",
+                    "example": "4b084d3b9b19e99aace35e07dc3bbf9d"
+                  }
+                },
+                "required": [
+                  "account",
+                  "password",
+                  "fromip",
+                  "game_id",
+                  "sign"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "integer"
+                        },
+                        "account": {
+                          "type": "string"
+                        },
+                        "nickname": {
+                          "type": "string"
+                        },
+                        "head_img": {
+                          "type": "string"
+                        },
+                        "balance": {
+                          "type": "string"
+                        },
+                        "token": {
+                          "type": "string"
+                        },
+                        "fcm": {
+                          "type": "integer"
+                        },
+                        "small_list": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "small_id": {
+                                "type": "integer"
+                              },
+                              "account": {
+                                "type": "string"
+                              },
+                              "nickname": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "is_adult": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "code": 200,
+                  "msg": "登陆成功",
+                  "data": {
+                    "user_id": 1,
+                    "account": "asdasd",
+                    "nickname": "asdasd",
+                    "head_img": "sdk/logoo.png",
+                    "balance": "0.00",
+                    "token": "MDAwMDAwMDAwMMitrZKViYShsJqnrHuhjqyKvK3JjoeHy5iZjaqcd4KYrKGp2455ebK7c6use6F6mpOXsZaXY4PMf9CmnoGthsy8obCRgXZ4srqazqV_eoWpis6w246apcmP4IivkouOkrGuqc2Nn4WiumK3opiEdW8",
+                    "fcm": 0,
+                    "small_list": [
+                      {
+                        "small_id": 1,
+                        "account": "asdasd",
+                        "nickname": "asdasd [不可交易]"
+                      }
+                    ],
+                    "is_adult": 2
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pcinterface/User/check_small_account": {
+      "post": {
+        "tags": [
+          "PC端游戏接口"
+        ],
+        "summary": "小号登录验证",
+        "operationId": "小号登录验证",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "account": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "asdasd"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "123456"
+                  },
+                  "fromip": {
+                    "type": "string",
+                    "description": "建议",
+                    "example": "127.0.0.1"
+                  },
+                  "game_id": {
+                    "type": "string",
+                    "description": "非必须",
+                    "example": "12"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "必传",
+                    "example": "4b084d3b9b19e99aace35e07dc3bbf9d"
+                  },
+                  "token": {
+                    "type": "string",
+                    "description": ""
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "description": ""
+                  },
+                  "small_id": {
+                    "type": "string",
+                    "description": ""
+                  }
+                },
+                "required": [
+                  "account",
+                  "password",
+                  "fromip",
+                  "game_id",
+                  "sign",
+                  "token",
+                  "user_id",
+                  "small_id"
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "account": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "asdasd"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "123456"
+                  },
+                  "fromip": {
+                    "type": "string",
+                    "description": "建议",
+                    "example": "127.0.0.1"
+                  },
+                  "game_id": {
+                    "type": "string",
+                    "description": "非必须",
+                    "example": "12"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "必传",
+                    "example": "4b084d3b9b19e99aace35e07dc3bbf9d"
+                  },
+                  "token": {
+                    "type": "string",
+                    "description": ""
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "description": ""
+                  },
+                  "small_id": {
+                    "type": "string",
+                    "description": ""
+                  }
+                },
+                "required": [
+                  "account",
+                  "password",
+                  "fromip",
+                  "game_id",
+                  "sign",
+                  "token",
+                  "user_id",
+                  "small_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "integer"
+                        },
+                        "account": {
+                          "type": "string"
+                        },
+                        "nickname": {
+                          "type": "string"
+                        },
+                        "head_img": {
+                          "type": "string"
+                        },
+                        "balance": {
+                          "type": "string"
+                        },
+                        "token": {
+                          "type": "string"
+                        },
+                        "fcm": {
+                          "type": "integer"
+                        },
+                        "small_list": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "small_id": {
+                                "type": "integer"
+                              },
+                              "account": {
+                                "type": "string"
+                              },
+                              "nickname": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        },
+                        "is_adult": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "code": 200,
+                  "msg": "登陆成功",
+                  "data": {
+                    "user_id": 1,
+                    "account": "asdasd",
+                    "nickname": "asdasd",
+                    "head_img": "sdk/logoo.png",
+                    "balance": "0.00",
+                    "token": "MDAwMDAwMDAwMMitrZKViYShsJqnrHuhjqyKvK3JjoeHy5iZjaqcd4KYrKGp2455ebK7c6use6F6mpOXsZaXY4PMf9CmnoGthsy8obCRgXZ4srqazqV_eoWpis6w246apcmP4IivkouOkrGuqc2Nn4WiumK3opiEdW8",
+                    "fcm": 0,
+                    "small_list": [
+                      {
+                        "small_id": 1,
+                        "account": "asdasd",
+                        "nickname": "asdasd [不可交易]"
+                      }
+                    ],
+                    "is_adult": 2
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pcinterface/User/userinfo": {
+      "post": {
+        "tags": [
+          "PC端游戏接口"
+        ],
+        "summary": "获取用户信息",
+        "operationId": "获取用户信息",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "必需",
+                    "example": "MDAwMDAwMDAwMMitrZKViYShsJqrbICdn6V50rndj4iDx4-9hZ-aZ4_Xx3esl32febK7d6izjHd5qX23rNZ-nnvJmZmFaJpng82sntLKfauAorqdr2l_d32sic7Pz4J3htiQ0IStkZ6lyryutNuOiYhor6qopYugipyJlrjMm4F2ng"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "必需"
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "description": "必须"
+                  },
+                  "user_account": {
+                    "type": "string",
+                    "description": "必须"
+                  }
+                },
+                "required": [
+                  "token",
+                  "sign",
+                  "user_id",
+                  "user_account"
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "必需",
+                    "example": "MDAwMDAwMDAwMMitrZKViYShsJqrbICdn6V50rndj4iDx4-9hZ-aZ4_Xx3esl32febK7d6izjHd5qX23rNZ-nnvJmZmFaJpng82sntLKfauAorqdr2l_d32sic7Pz4J3htiQ0IStkZ6lyryutNuOiYhor6qopYugipyJlrjMm4F2ng"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "必需"
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "description": "必须"
+                  },
+                  "user_account": {
+                    "type": "string",
+                    "description": "必须"
+                  }
+                },
+                "required": [
+                  "token",
+                  "sign",
+                  "user_id",
+                  "user_account"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user_id": {
+                          "type": "integer"
+                        },
+                        "account": {
+                          "type": "string"
+                        },
+                        "qq": {
+                          "type": "string"
+                        },
+                        "vip_level": {
+                          "type": "integer"
+                        },
+                        "head_img": {
+                          "type": "string"
+                        },
+                        "nickname": {
+                          "type": "string"
+                        },
+                        "phone": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "real_name": {
+                          "type": "string"
+                        },
+                        "idcard": {
+                          "type": "string"
+                        },
+                        "balance": {
+                          "type": "string"
+                        },
+                        "receive_address": {
+                          "type": "object",
+                          "properties": {}
+                        },
+                        "point": {
+                          "type": "integer"
+                        },
+                        "member_days": {
+                          "type": "integer"
+                        },
+                        "end_time": {
+                          "type": "string"
+                        },
+                        "age_status": {
+                          "type": "integer"
+                        },
+                        "bind_balance": {
+                          "type": "integer"
+                        },
+                        "tip_count": {
+                          "type": "integer"
+                        },
+                        "vip_status": {
+                          "type": "integer"
+                        },
+                        "member_status": {
+                          "type": "integer"
+                        },
+                        "mcard_name": {
+                          "type": "string"
+                        },
+                        "is_unsubscribe": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "code": 200,
+                  "msg": "获取成功",
+                  "data": {
+                    "user_id": 2768,
+                    "account": "asdasd001",
+                    "qq": "",
+                    "vip_level": 0,
+                    "head_img": "http://fuhua95.oss-cn-hangzhou.aliyuncs.com/sdk/logoo.png",
+                    "nickname": "asdasd001",
+                    "phone": "",
+                    "email": "",
+                    "real_name": "徐亮",
+                    "idcard": "360122198806033939",
+                    "balance": "0.00",
+                    "receive_address": {},
+                    "point": 0,
+                    "member_days": 0,
+                    "end_time": "",
+                    "age_status": 2,
+                    "bind_balance": 0,
+                    "tip_count": 0,
+                    "vip_status": 0,
+                    "member_status": 0,
+                    "mcard_name": "尊享卡",
+                    "is_unsubscribe": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pcinterface/User/realauth": {
+      "post": {
+        "tags": [
+          "PC端游戏接口"
+        ],
+        "summary": "用户实名认证",
+        "operationId": "用户实名认证",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "",
+                    "example": "MDAwMDAwMDAwMMitrZKViYShsJqrbICdn6V50rndj4iDx4-9hZ-aZ4_Xx3esl32febK7d6izjHd5qX23rNZ-nnvJmZmFaJpng82sntLKfauAorqdr2l_d32sic7Pz4J3htiQ0IStkZ6lyryutNuOiYhor6qopYugipyJlrjMm4F2ng"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": ""
+                  },
+                  "real_name": {
+                    "type": "string",
+                    "description": "姓名",
+                    "example": "小波波"
+                  },
+                  "idcard": {
+                    "type": "string",
+                    "description": "身份证信息",
+                    "example": "320321199001063497"
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "description": "用户ID",
+                    "example": "2767"
+                  },
+                  "account": {
+                    "type": "string",
+                    "description": "用户账号"
+                  }
+                },
+                "required": [
+                  "token",
+                  "sign",
+                  "real_name",
+                  "idcard",
+                  "user_id",
+                  "account"
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "",
+                    "example": "MDAwMDAwMDAwMMitrZKViYShsJqrbICdn6V50rndj4iDx4-9hZ-aZ4_Xx3esl32febK7d6izjHd5qX23rNZ-nnvJmZmFaJpng82sntLKfauAorqdr2l_d32sic7Pz4J3htiQ0IStkZ6lyryutNuOiYhor6qopYugipyJlrjMm4F2ng"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": ""
+                  },
+                  "real_name": {
+                    "type": "string",
+                    "description": "姓名",
+                    "example": "小波波"
+                  },
+                  "idcard": {
+                    "type": "string",
+                    "description": "身份证信息",
+                    "example": "320321199001063497"
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "description": "用户ID",
+                    "example": "2767"
+                  },
+                  "account": {
+                    "type": "string",
+                    "description": "用户账号"
+                  }
+                },
+                "required": [
+                  "token",
+                  "sign",
+                  "real_name",
+                  "idcard",
+                  "user_id",
+                  "account"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "code": 200,
+                  "msg": "实名认证成功",
+                  "data": []
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pcinterface/User/save_user_play_role": {
+      "post": {
+        "tags": [
+          "PC端游戏接口"
+        ],
+        "summary": "角色上传(平台添加角色)",
+        "operationId": "角色上传_平台添加角色",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "MDAwMDAwMDAwMMitrZKViYShsJqnrHuhjqyKvK3JjoeHy5iZjaqcd4KYrKGp2455ebK7c6use6F6mpOXsZaXY4PMf9CmnoGthsy8obCRgXZ4srqazqV_eoWpis6w246apcmP4IivkouOkrGuqc2Nn4WiumK3opiEdW8"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "必须"
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "1"
+                  },
+                  "account": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "asdasd"
+                  },
+                  "game_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "1"
+                  },
+                  "server_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "12"
+                  },
+                  "server_name": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "1212121212"
+                  },
+                  "role_name": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "测试角色名称"
+                  },
+                  "role_level": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "11"
+                  },
+                  "ip": {
+                    "type": "string",
+                    "description": "建议",
+                    "example": "127.0.0.1"
+                  },
+                  "role_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "345345"
+                  }
+                },
+                "required": [
+                  "token",
+                  "sign",
+                  "user_id",
+                  "account",
+                  "game_id",
+                  "server_id",
+                  "server_name",
+                  "role_name",
+                  "role_level",
+                  "ip",
+                  "role_id"
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "MDAwMDAwMDAwMMitrZKViYShsJqnrHuhjqyKvK3JjoeHy5iZjaqcd4KYrKGp2455ebK7c6use6F6mpOXsZaXY4PMf9CmnoGthsy8obCRgXZ4srqazqV_eoWpis6w246apcmP4IivkouOkrGuqc2Nn4WiumK3opiEdW8"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "必须"
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "1"
+                  },
+                  "account": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "asdasd"
+                  },
+                  "game_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "1"
+                  },
+                  "server_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "12"
+                  },
+                  "server_name": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "1212121212"
+                  },
+                  "role_name": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "测试角色名称"
+                  },
+                  "role_level": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "11"
+                  },
+                  "ip": {
+                    "type": "string",
+                    "description": "建议",
+                    "example": "127.0.0.1"
+                  },
+                  "role_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "345345"
+                  }
+                },
+                "required": [
+                  "token",
+                  "sign",
+                  "user_id",
+                  "account",
+                  "game_id",
+                  "server_id",
+                  "server_name",
+                  "role_name",
+                  "role_level",
+                  "ip",
+                  "role_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "code": 200,
+                  "msg": "上传角色成功",
+                  "data": []
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pcinterface/User/write_log": {
+      "post": {
+        "tags": [
+          "PC端游戏接口"
+        ],
+        "summary": "记录日志信息",
+        "operationId": "记录日志信息",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "MDAwMDAwMDAwMMitrZKViYShsJqnrHuhjqyKvK3JjoeHy5iZjaqcd4KYrKGp2455ebK7c6use6F6mpOXsZaXY4PMf9CmnoGthsy8obCRgXZ4srqazqV_eoWpis6w246apcmP4IivkouOkrGuqc2Nn4WiumK3opiEdW8"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "必须"
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "description": "必须 (用户id)",
+                    "example": "1"
+                  },
+                  "account": {
+                    "type": "string",
+                    "description": "建议",
+                    "example": "asdasd"
+                  },
+                  "content": {
+                    "type": "string",
+                    "description": "必须 (写入日志内容)",
+                    "example": "角色XX上报成功!"
+                  }
+                },
+                "required": [
+                  "token",
+                  "sign",
+                  "user_id",
+                  "account",
+                  "content"
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "MDAwMDAwMDAwMMitrZKViYShsJqnrHuhjqyKvK3JjoeHy5iZjaqcd4KYrKGp2455ebK7c6use6F6mpOXsZaXY4PMf9CmnoGthsy8obCRgXZ4srqazqV_eoWpis6w246apcmP4IivkouOkrGuqc2Nn4WiumK3opiEdW8"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "必须"
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "description": "必须 (用户id)",
+                    "example": "1"
+                  },
+                  "account": {
+                    "type": "string",
+                    "description": "建议",
+                    "example": "asdasd"
+                  },
+                  "content": {
+                    "type": "string",
+                    "description": "必须 (写入日志内容)",
+                    "example": "角色XX上报成功!"
+                  }
+                },
+                "required": [
+                  "token",
+                  "sign",
+                  "user_id",
+                  "account",
+                  "content"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "code": 200,
+                  "msg": "日志写入成功!",
+                  "data": []
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pcinterface/Scanpay/scanAlipay": {
+      "post": {
+        "tags": [
+          "PC端游戏接口"
+        ],
+        "summary": "支付宝扫码支付",
+        "operationId": "支付宝扫码支付",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "MDAwMDAwMDAwMMitrZKViYShsJqnrHuhjqyKvK3JjoeHy5iZjaqcd4KYrKGp2455ebK7c6use6F6mpOXsZaXY4PMf9CmnoGthsy8obCRgXZ4srqazqV_eoWpis6w246apcmP4IivkouOkrGuqc2Nn4WiumK3opiEdW8"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "必须"
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "1"
+                  },
+                  "account": {
+                    "type": "string",
+                    "description": "账号 (必须)",
+                    "example": "asdasd"
+                  },
+                  "game_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "1"
+                  },
+                  "server_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "12"
+                  },
+                  "server_name": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "1212211221"
+                  },
+                  "role_id": {
+                    "type": "string",
+                    "description": "角色ID (必须)",
+                    "example": "12"
+                  },
+                  "ip": {
+                    "type": "string",
+                    "description": "建议",
+                    "example": "127.0.0.1"
+                  },
+                  "price": {
+                    "type": "string",
+                    "description": "支付金额 (单位 : 元) (必须)",
+                    "example": "1"
+                  },
+                  "role_name": {
+                    "type": "string",
+                    "description": "角色名称 (必须)"
+                  },
+                  "small_id": {
+                    "type": "string",
+                    "description": "小号ID(必须) 不是小号 传大号的ID(user_id)",
+                    "example": "2"
+                  },
+                  "props_name": {
+                    "type": "string",
+                    "description": "道具名称",
+                    "example": "道具_大刀"
+                  },
+                  "extend": {
+                    "type": "string",
+                    "description": "(透传参数)必传",
+                    "example": "CP_G1640747524000"
+                  },
+                  "role_level": {
+                    "type": "string",
+                    "description": "角色等级(建议)"
+                  }
+                },
+                "required": [
+                  "token",
+                  "sign",
+                  "user_id",
+                  "account",
+                  "game_id",
+                  "server_id",
+                  "server_name",
+                  "role_id",
+                  "ip",
+                  "price",
+                  "role_name",
+                  "small_id",
+                  "props_name",
+                  "extend",
+                  "role_level"
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "MDAwMDAwMDAwMMitrZKViYShsJqnrHuhjqyKvK3JjoeHy5iZjaqcd4KYrKGp2455ebK7c6use6F6mpOXsZaXY4PMf9CmnoGthsy8obCRgXZ4srqazqV_eoWpis6w246apcmP4IivkouOkrGuqc2Nn4WiumK3opiEdW8"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "必须"
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "1"
+                  },
+                  "account": {
+                    "type": "string",
+                    "description": "账号 (必须)",
+                    "example": "asdasd"
+                  },
+                  "game_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "1"
+                  },
+                  "server_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "12"
+                  },
+                  "server_name": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "1212211221"
+                  },
+                  "role_id": {
+                    "type": "string",
+                    "description": "角色ID (必须)",
+                    "example": "12"
+                  },
+                  "ip": {
+                    "type": "string",
+                    "description": "建议",
+                    "example": "127.0.0.1"
+                  },
+                  "price": {
+                    "type": "string",
+                    "description": "支付金额 (单位 : 元) (必须)",
+                    "example": "1"
+                  },
+                  "role_name": {
+                    "type": "string",
+                    "description": "角色名称 (必须)"
+                  },
+                  "small_id": {
+                    "type": "string",
+                    "description": "小号ID(必须) 不是小号 传大号的ID(user_id)",
+                    "example": "2"
+                  },
+                  "props_name": {
+                    "type": "string",
+                    "description": "道具名称",
+                    "example": "道具_大刀"
+                  },
+                  "extend": {
+                    "type": "string",
+                    "description": "(透传参数)必传",
+                    "example": "CP_G1640747524000"
+                  },
+                  "role_level": {
+                    "type": "string",
+                    "description": "角色等级(建议)"
+                  }
+                },
+                "required": [
+                  "token",
+                  "sign",
+                  "user_id",
+                  "account",
+                  "game_id",
+                  "server_id",
+                  "server_name",
+                  "role_id",
+                  "ip",
+                  "price",
+                  "role_name",
+                  "small_id",
+                  "props_name",
+                  "extend",
+                  "role_level"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "qrcode_url": {
+                          "type": "string"
+                        },
+                        "orderno": {
+                          "type": "string"
+                        },
+                        "code": {
+                          "type": "integer"
+                        },
+                        "cal_url": {
+                          "type": "string"
+                        },
+                        "pay_type": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "code": 200,
+                  "msg": "获取成功",
+                  "data": {
+                    "qrcode_url": "http://qq.klewanq.com/pcinterface/scanpay/qrcode/level/3/size/4/url/YUhSMGNITTZMeTl4Y2k1aGJHbHdZWGt1WTI5dEwySmhlREF6TXpjMVptTnRZV1JtTUd0cGEzQTJNREE1WlE9PQ==.html",
+                    "orderno": "SP_20211228173413ftCt",
+                    "code": 200,
+                    "cal_url": "http://qq.klewanq.com",
+                    "pay_type": "zfb"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pcinterface/Scanpay/scanWechat": {
+      "post": {
+        "tags": [
+          "PC端游戏接口"
+        ],
+        "summary": "微信宝扫码支付",
+        "operationId": "微信宝扫码支付",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "MDAwMDAwMDAwMMitrZKViYShsJqnrHuhjqyKvK3JjoeHy5iZjaqcd4KYrKGp2455ebK7c6use6F6mpOXsZaXY4PMf9CmnoGthsy8obCRgXZ4srqazqV_eoWpis6w246apcmP4IivkouOkrGuqc2Nn4WiumK3opiEdW8"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "必须"
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "1"
+                  },
+                  "account": {
+                    "type": "string",
+                    "description": "账号 (必须)",
+                    "example": "asdasd"
+                  },
+                  "game_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "1"
+                  },
+                  "server_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "12"
+                  },
+                  "server_name": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "1212211221"
+                  },
+                  "role_id": {
+                    "type": "string",
+                    "description": "角色ID (必须)",
+                    "example": "12"
+                  },
+                  "ip": {
+                    "type": "string",
+                    "description": "建议",
+                    "example": "127.0.0.1"
+                  },
+                  "price": {
+                    "type": "string",
+                    "description": "支付金额 (单位 : 元) (必须)",
+                    "example": "1"
+                  },
+                  "role_name": {
+                    "type": "string",
+                    "description": "角色名称 (必须)"
+                  },
+                  "small_id": {
+                    "type": "string",
+                    "description": "小号ID(必须) 不是小号 传大号的ID(user_id)",
+                    "example": "1"
+                  },
+                  "props_name": {
+                    "type": "string",
+                    "description": "道具名称",
+                    "example": "星月皮肤"
+                  },
+                  "extend": {
+                    "type": "string",
+                    "description": "(透传参数)必传",
+                    "example": "CP_G1640747524000"
+                  },
+                  "role_level": {
+                    "type": "string",
+                    "description": "角色等级(建议)"
+                  }
+                },
+                "required": [
+                  "token",
+                  "sign",
+                  "user_id",
+                  "account",
+                  "game_id",
+                  "server_id",
+                  "server_name",
+                  "role_id",
+                  "ip",
+                  "price",
+                  "role_name",
+                  "small_id",
+                  "props_name",
+                  "extend",
+                  "role_level"
+                ]
+              }
+            },
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "MDAwMDAwMDAwMMitrZKViYShsJqnrHuhjqyKvK3JjoeHy5iZjaqcd4KYrKGp2455ebK7c6use6F6mpOXsZaXY4PMf9CmnoGthsy8obCRgXZ4srqazqV_eoWpis6w246apcmP4IivkouOkrGuqc2Nn4WiumK3opiEdW8"
+                  },
+                  "sign": {
+                    "type": "string",
+                    "description": "必须"
+                  },
+                  "user_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "1"
+                  },
+                  "account": {
+                    "type": "string",
+                    "description": "账号 (必须)",
+                    "example": "asdasd"
+                  },
+                  "game_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "1"
+                  },
+                  "server_id": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "12"
+                  },
+                  "server_name": {
+                    "type": "string",
+                    "description": "必须",
+                    "example": "1212211221"
+                  },
+                  "role_id": {
+                    "type": "string",
+                    "description": "角色ID (必须)",
+                    "example": "12"
+                  },
+                  "ip": {
+                    "type": "string",
+                    "description": "建议",
+                    "example": "127.0.0.1"
+                  },
+                  "price": {
+                    "type": "string",
+                    "description": "支付金额 (单位 : 元) (必须)",
+                    "example": "1"
+                  },
+                  "role_name": {
+                    "type": "string",
+                    "description": "角色名称 (必须)"
+                  },
+                  "small_id": {
+                    "type": "string",
+                    "description": "小号ID(必须) 不是小号 传大号的ID(user_id)",
+                    "example": "1"
+                  },
+                  "props_name": {
+                    "type": "string",
+                    "description": "道具名称",
+                    "example": "星月皮肤"
+                  },
+                  "extend": {
+                    "type": "string",
+                    "description": "(透传参数)必传",
+                    "example": "CP_G1640747524000"
+                  },
+                  "role_level": {
+                    "type": "string",
+                    "description": "角色等级(建议)"
+                  }
+                },
+                "required": [
+                  "token",
+                  "sign",
+                  "user_id",
+                  "account",
+                  "game_id",
+                  "server_id",
+                  "server_name",
+                  "role_id",
+                  "ip",
+                  "price",
+                  "role_name",
+                  "small_id",
+                  "props_name",
+                  "extend",
+                  "role_level"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "paytype": {
+                          "type": "string"
+                        },
+                        "orderno": {
+                          "type": "string"
+                        },
+                        "cal_url": {
+                          "type": "string"
+                        },
+                        "code": {
+                          "type": "integer"
+                        },
+                        "qrcode_url": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "code": 200,
+                  "msg": "请求成功",
+                  "data": {
+                    "paytype": "wx",
+                    "orderno": "SP_20211228191324a8r0",
+                    "cal_url": "http://qq.klewanq.com",
+                    "code": 200,
+                    "qrcode_url": "http://qq.klewanq.com/pcinterface/scanpay/qrcode/level/3/size/4/url/ZDJWcGVHbHVPaTh2ZDNod1lYa3ZZbWw2Y0dGNWRYSnNQM0J5UFVWWVQweFlWbEY2ZWc9PQ==.html"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

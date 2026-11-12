@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Story 使用说明书</title>
+  <style>
+    :root {
+      --bg: #f4f7f6;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --primary: #14b8a6;
+      --primary-dark: #0f766e;
+      --warn: #b45309;
+      --warn-bg: #fff7ed;
+      --danger: #b91c1c;
+      --danger-bg: #fef2f2;
+      --ok: #047857;
+      --ok-bg: #ecfdf5;
+      --border: #e2e8f0;
+      --code-bg: #f1f5f9;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(900px 400px at 10% -10%, rgba(20, 184, 166, 0.14), transparent 60%),
+        radial-gradient(700px 320px at 100% 0%, rgba(56, 189, 248, 0.1), transparent 55%),
+        var(--bg);
+      line-height: 1.65;
+    }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 28px 20px 80px; }
+    header.hero {
+      background: linear-gradient(135deg, #0f766e 0%, #14b8a6 55%, #2dd4bf 100%);
+      color: #fff;
+      border-radius: 16px;
+      padding: 28px 28px 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 12px 30px rgba(15, 118, 110, 0.22);
+    }
+    header.hero h1 { margin: 0 0 8px; font-size: 1.75rem; font-weight: 700; }
+    header.hero p { margin: 0; opacity: 0.95; max-width: 40em; }
+    .toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 22px;
+    }
+    .toc h2 { margin: 0 0 10px; font-size: 1rem; color: var(--muted); font-weight: 600; }
+    .toc ol { margin: 0; padding-left: 1.3em; }
+    .toc a { color: var(--primary-dark); text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+    section.card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 24px;
+      margin-bottom: 16px;
+    }
+    section.card h2 {
+      margin: 0 0 6px;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .why {
+      background: #f0fdfa;
+      border-left: 3px solid var(--primary);
+      padding: 10px 14px;
+      margin: 12px 0;
+      border-radius: 0 8px 8px 0;
+      color: #134e4a;
+      font-size: 0.95rem;
+    }
+    .why strong { color: var(--primary-dark); }
+    .warn, .ok, .danger {
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin: 12px 0;
+      font-size: 0.95rem;
+    }
+    .warn { background: var(--warn-bg); color: var(--warn); border: 1px solid #fed7aa; }
+    .ok { background: var(--ok-bg); color: var(--ok); border: 1px solid #a7f3d0; }
+    .danger { background: var(--danger-bg); color: var(--danger); border: 1px solid #fecaca; }
+    ol.steps, ul.bullets { padding-left: 1.35em; }
+    ol.steps li, ul.bullets li { margin: 6px 0; }
+    code, kbd {
+      font-family: ui-monospace, Consolas, monospace;
+      background: var(--code-bg);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    kbd { border: 1px solid var(--border); }
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 12px 14px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.88rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      margin: 12px 0;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #f8fafc; }
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 14px 0;
+    }
+    .flow span {
+      background: #ecfdf5;
+      border: 1px solid #99f6e4;
+      color: #115e59;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .flow i { color: var(--muted); font-style: normal; }
+    footer {
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+    .top-actions { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .top-actions a {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.35);
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .top-actions a:hover { background: rgba(255,255,255,0.28); }
+    @media (max-width: 640px) {
+      header.hero { padding: 20px; }
+      section.card { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <h1>AI Story 使用说明书</h1>
+      <p>跟着下面步骤，从启动服务到生成视频。每一步都说明「做什么」和「为什么要做」，避免踩 Mock 模型、502、绑错模型等常见坑。</p>
+      <div class="top-actions">
+        <a href="http://127.0.0.1:3000" target="_blank" rel="noopener">打开 AI Story（3000）</a>
+        <a href="/" target="_blank" rel="noopener">返回工作台</a>
+      </div>
+    </header>
+
+    <nav class="toc">
+      <h2>目录</h2>
+      <ol>
+        <li><a href="#s0">先搞清它是干什么的</a></li>
+        <li><a href="#s1">启动服务</a></li>
+        <li><a href="#s2">登录 / 建管理员</a></li>
+        <li><a href="#s3">配置真实模型（最关键）</a></li>
+        <li><a href="#s4">改提示词模板里的默认模型</a></li>
+        <li><a href="#s5">创建作品与分集</a></li>
+        <li><a href="#s6">按流水线一步步出视频</a></li>
+        <li><a href="#s6b">白模镜头预演（可选）</a></li>
+        <li><a href="#s7">常见问题</a></li>
+      </ol>
+    </nav>
+
+    <section class="card" id="s0">
+      <h2><span class="step-num">0</span> 先搞清它是干什么的</h2>
+      <p>AI Story 把「写文案 → 分镜 → 出图 → 运镜 → 成片」拆成流水线。你负责提供剧情与模型 API，它负责按阶段调用模型并串起来。</p>
+      <div class="flow">
+        <span>文案改写</span><i>→</i>
+        <span>分镜脚本</span><i>→</i>
+        <span>白模预演（可选）</span><i>→</i>
+        <span>文生图</span><i>→</i>
+        <span>运镜</span><i>→</i>
+        <span>图生视频</span>
+      </div>
+      <div class="why"><strong>作用：</strong>每一阶段用不同能力的模型。文案/分镜用 LLM；出图用文生图；成片用图生视频。混用 Mock 或类型不对，就会「看起来跑了但结果是假的 / JSON 解析失败」。</div>
+      <div class="warn"><strong>许可证：</strong>CC BY-NC-SA 4.0，仅个人学习 / 非商业。上游 API（如火山方舟）按各家计费与额度，与豆包网页版额度不是同一套。</div>
+    </section>
+
+    <section class="card" id="s1">
+      <h2><span class="step-num">1</span> 启动服务</h2>
+      <ol class="steps">
+        <li>确认本机已安装并打开 <strong>Docker Desktop</strong>。</li>
+        <li>在工作台「AI Story」页点 <strong>启动 Docker</strong>，或运行 <code>integrated/ai_story/start.bat</code>。</li>
+        <li>点 <strong>刷新状态</strong>，看到「服务已就绪」、地址为 <code>http://127.0.0.1:3000</code>。</li>
+        <li>再点 <strong>进入使用</strong> / <strong>工作台内打开</strong>。</li>
+      </ol>
+      <div class="why"><strong>作用：</strong>拉起 frontend（网页）、backend（接口）、celery（后台跑流水线）、redis。没就绪时打开模型页会出现「加载内置厂商失败」、502。</div>
+      <div class="danger"><strong>若反复 Restarting：</strong>多半是库里 Mock 提供商重复导致启动崩溃。回到工作台刷新状态；仍不行可在部署目录执行 <code>docker compose ps</code> / <code>docker compose logs backend</code> 排查。</div>
+    </section>
+
+    <section class="card" id="s2">
+      <h2><span class="step-num">2</span> 登录 / 建管理员</h2>
+      <p>首次部署需要管理员账号，否则接口会 401，页面像「没模型」。</p>
+      <pre>cd integrated/ai_story
+docker compose exec backend python backend/manage.py createsuperuser</pre>
+      <ol class="steps">
+        <li>按提示设置用户名、邮箱、密码。</li>
+        <li>浏览器打开 <code>http://127.0.0.1:3000</code> 登录。</li>
+      </ol>
+      <div class="why"><strong>作用：</strong>项目、模型、提示词都挂在登录用户下；未登录只能看到空壳或报错。</div>
+    </section>
+
+    <section class="card" id="s3">
+      <h2><span class="step-num">3</span> 配置真实模型（最关键）</h2>
+      <p>路径：AI Story → <strong>模型管理</strong>。</p>
+
+      <h3 style="margin-top:16px;font-size:1.05rem;">3.1 停用 Mock（强烈建议）</h3>
+      <ol class="steps">
+        <li>搜索 <code>mock</code>，找到 Mock LLM / Text2Image / Image2Video。</li>
+        <li>对它们点 <strong>停用</strong>（不必删；删了重启可能又自动建回来）。</li>
+      </ol>
+      <div class="why"><strong>作用：</strong>系统默认提示词模板会指向 Mock。Mock 只返回占位内容，分镜常不是合法 JSON，流水线会失败。停用后自动兜底不会再优先选到它。</div>
+
+      <h3 style="margin-top:16px;font-size:1.05rem;">3.2 加载 / 确认火山等真实厂商</h3>
+      <ol class="steps">
+        <li>用「加载内置厂商」或新建提供商，配好火山方舟等。</li>
+        <li>工作台「AI Story」页可复制 LLM 的地址 / 模型 / Key（文案、分镜用）。</li>
+        <li>出图、视频要在 AI Story 里<strong>单独</strong>配文生图、图生视频模型（和聊天 LLM 不是同一个能力）。</li>
+      </ol>
+      <table>
+        <thead>
+          <tr><th>阶段</th><th>需要的模型类型</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>文案改写 / 分镜 / 运镜</td><td>LLM</td><td>可用工作台复制的方舟 Chat 配置</td></tr>
+          <tr><td>文生图</td><td>文生图</td><td>如 Seedream 等，需对应 API</td></tr>
+          <tr><td>图生视频</td><td>图生视频</td><td>如 Seedance / wan i2v，需对应接口与额度</td></tr>
+        </tbody>
+      </table>
+      <div class="warn"><strong>关于「优先级」：</strong>数字越大越优先。Mock 默认常为 100，火山多为 0。停用 Mock 后一般够用；若仍被抢，可把常用真实 LLM 优先级调到 &gt;100。优先级<strong>不等于</strong>「给某个作品点选模型」。</div>
+    </section>
+
+    <section class="card" id="s4">
+      <h2><span class="step-num">4</span> 改提示词模板里的默认模型</h2>
+      <p>路径：AI Story → <strong>提示词</strong> → 打开「默认提示词模板集」（建议先<strong>克隆</strong>一份再改，避免部署重置）。</p>
+      <ol class="steps">
+        <li>进入每个阶段模板（分镜、文生图、运镜、图生视频等）。</li>
+        <li>把「模型提供商」从 Mock 改成对应的<strong>火山真实模型</strong>。</li>
+        <li>点 <strong>保存模板</strong>（不要用「另存版本」——当前实现容易因唯一约束报 400）。</li>
+        <li>可选：在调试页选模型跑一下流式，确认能返回正常内容。</li>
+      </ol>
+      <div class="why"><strong>作用：</strong>新建分集时，项目模型配置经常是空的，流水线会回退到<strong>默认提示词模板</strong>上的模型。只建作品不改这里，仍可能继续走 Mock。</div>
+      <div class="ok"><strong>检查清单：</strong>分镜→LLM；文生图→文生图；运镜→LLM；视频→图生视频。四类都对上再往下走。</div>
+    </section>
+
+    <section class="card" id="s5">
+      <h2><span class="step-num">5</span> 创建作品与分集</h2>
+      <ol class="steps">
+        <li>打开 <strong>作品管理</strong> → <strong>创建作品</strong>（相当于一部剧 / 系列）。</li>
+        <li>在作品下创建分集（一集对应一条流水线）。</li>
+        <li>填入本集主题 / 原始文案（越具体越好：人物、场景、情绪、时长目标）。</li>
+      </ol>
+      <div class="why"><strong>作用：</strong>作品管多集；分集才是真正跑阶段任务的地方。删旧作品只能清掉旧绑定，不能代替第 3、4 步改模型。</div>
+    </section>
+
+    <section class="card" id="s6">
+      <h2><span class="step-num">6</span> 按流水线一步步出视频</h2>
+      <p>进入分集画布后，按节点顺序推进（也可整段跑流水线，但出问题更难定位，建议第一次逐步来）。</p>
+
+      <h3 style="font-size:1.05rem;">6.1 文案改写</h3>
+      <ul class="bullets">
+        <li><strong>做什么：</strong>把粗想法整理成可拍的剧本/旁白。</li>
+        <li><strong>作用：</strong>给后续分镜提供稳定输入；这一步差，后面全歪。</li>
+      </ul>
+
+      <h3 style="font-size:1.05rem;">6.2 分镜脚本</h3>
+      <ul class="bullets">
+        <li><strong>做什么：</strong>拆成镜头列表（画面描述、对白、顺序等）。</li>
+        <li><strong>作用：</strong>出图与视频都按镜头走。必须用真实 LLM；Mock 常吐散文导致解析失败。</li>
+      </ul>
+
+      <h3 style="font-size:1.05rem;">6.3 文生图</h3>
+      <ul class="bullets">
+        <li><strong>做什么：</strong>为每个镜头生成关键帧 / 参考图。</li>
+        <li><strong>作用：</strong>图生视频的输入。可微调提示词、替换不满意的镜头图。</li>
+      </ul>
+
+      <h3 style="font-size:1.05rem;">6.4 运镜</h3>
+      <ul class="bullets">
+        <li><strong>做什么：</strong>生成推拉摇移等镜头运动参数。</li>
+        <li><strong>作用：</strong>让成片更有电影感；用 LLM 阶段，模型需已激活。</li>
+      </ul>
+
+      <h3 style="font-size:1.05rem;">6.5 图生视频</h3>
+      <ul class="bullets">
+        <li><strong>做什么：</strong>按镜头图 + 运镜生成短视频片段。</li>
+        <li><strong>作用：</strong>最终成片素材。耗时与费用最高，确认前面镜头满意再批量跑。</li>
+      </ul>
+
+      <div class="ok"><strong>成功标志：</strong>各阶段状态完成；能预览图/视频；日志里是真实厂商名（如「火山引擎 / …」），而不是 <code>Mock LLM API</code>。</div>
+    </section>
+
+    <section class="card" id="s6b">
+      <h2><span class="step-num">6b</span> 白模镜头预演（可选，V5b）</h2>
+      <p>正式烧 Seedance 之前，用色块人偶先摆站位、机位、运镜，录一段便宜的参考视频，再当 <code>reference_video</code> 喂给图生视频——减少「提示词猜运镜」的废片。</p>
+      <div class="why"><strong>入口：</strong><a href="/static/ai-story-whitebox-previz.html" target="_blank" rel="noopener">/static/ai-story-whitebox-previz.html</a>（工作台 AI Story 页也有按钮）。不依赖 Docker 是否已启动。</div>
+      <ol class="steps">
+        <li>调整角色 X/Z 站位与朝向；可加门板/方块等道具。</li>
+        <li>右侧选景别、画幅（短剧常用 9:16）、时长、运镜（推进/拉远/摇移等）。</li>
+        <li>点「录制预演」→ 自动下载 WebM + JSON；可选「保存到工作台目录」（<code>integrated/ai_story/storage/video/whitebox_previz/</code>）。</li>
+        <li>后续把该 WebM 作为 Seedance 参考视频；提示词写风格/服装即可，不必再堆运镜形容词。</li>
+      </ol>
+      <div class="warn"><strong>首版边界：</strong>不做场景图一键重建白模，也没有骨骼演技库。先验证「空间对了再出片」这条链路。</div>
+    </section>
+
+    <section class="card" id="s7">
+      <h2><span class="step-num">?</span> 常见问题</h2>
+      <table>
+        <thead>
+          <tr><th>现象</th><th>常见原因</th><th>怎么处理</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>加载内置厂商失败 / 模型全空</td>
+            <td>backend 挂了（502）</td>
+            <td>工作台刷新状态；Docker 里看 backend/celery 是否 Up</td>
+          </tr>
+          <tr>
+            <td>分镜报 <code>API请求失败: 404</code></td>
+            <td>LLM 的 API 地址只填了 Base（如 <code>.../api/v3</code>），缺 <code>/chat/completions</code>；或模型名不是你账号下的接入点</td>
+            <td>API 地址改为带 <code>/chat/completions</code>；「模型名」填火山控制台的 <code>ep-...</code>。表里大批目录名多数不能直接用</td>
+          </tr>
+          <tr>
+            <td>生图/生视频 404（模型不存在）</td>
+            <td>导入列表里的模型你账号未开通</td>
+            <td>停用不需要的；保留已验证的 Seedream / Seedance；以控制台实际可用模型为准</td>
+          </tr>
+          <tr>
+            <td>流水线解析 JSON 失败</td>
+            <td>仍在用 Mock LLM，或分镜 JSON 被截断</td>
+            <td>停用 Mock；改真实 LLM；剧本别太长 / 提高 max_tokens；可用「完整流程」重跑</td>
+          </tr>
+          <tr>
+            <td>新建作品仍像走 Mock</td>
+            <td>默认模板还绑着 Mock</td>
+            <td>见第 4 步；不要只删作品重建</td>
+          </tr>
+          <tr>
+            <td>出图/视频失败</td>
+            <td>只配了聊天 LLM</td>
+            <td>单独配文生图、图生视频 Key 与模型</td>
+          </tr>
+          <tr>
+            <td>提示词「另存版本」400</td>
+            <td>同阶段只能一条激活模板</td>
+            <td>用「保存模板」即可</td>
+          </tr>
+          <tr>
+            <td>页面 502，容器却显示 Up</td>
+            <td>frontend 缓存了旧 backend IP</td>
+            <td><code>docker compose restart frontend</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 style="font-size:1.05rem;margin-top:16px;">推荐最短路径（想尽快出片）</h3>
+      <ol class="steps">
+        <li>服务就绪 → 登录</li>
+        <li>停用全部 Mock</li>
+        <li>确认 LLM / 文生图 / 图生视频都有激活的真实模型</li>
+        <li>克隆默认提示词集，四阶段都改绑真实模型并「保存模板」</li>
+        <li>新建作品与分集 → 逐步跑完五个阶段</li>
+      </ol>
+    </section>
+
+    <footer>
+      本说明书由工作台维护，入口在「AI Story」页。上游项目：
+      <a href="https://github.com/xhongc/ai_story" target="_blank" rel="noopener">xhongc/ai_story</a>
+    </footer>
+  </div>
+</body>
+</html>

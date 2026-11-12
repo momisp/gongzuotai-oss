@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>古籍修复师</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SimSun', '宋体', serif;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #gameContainer {
+            width: 100%;
+            height: 100%;
+            max-width: 450px;
+            max-height: 900px;
+            position: relative;
+            overflow: hidden;
+            background: #f5e9d3;
+        }
+
+        #background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            display: none !important;
+        }
+
+        .screen.active {
+            display: flex !important;
+        }
+
+        /* 开始界面 */
+        #startScreen {
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .game-title {
+            font-size: 48px;
+            color: #8b0000;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .game-subtitle {
+            font-size: 20px;
+            color: #fff;
+            margin-bottom: 40px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-description {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            max-width: 350px;
+            border: 2px solid #8b4513;
+        }
+
+        .game-description p {
+            color: #333;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+
+        .game-description p:last-child {
+            margin-bottom: 0;
+        }
+
+        .start-button {
+            width: 280px;
+            height: 80px;
+            background: linear-gradient(135deg, #8b0000, #a52a2a);
+            border: 3px solid #d2b48c;
+            border-radius: 15px;
+            color: #fff;
+            font-size: 28px;
+            font-weight: bold;
+            font-family: 'SimSun', '宋体', serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .start-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(135deg, #a52a2a, #8b0000);
+        }
+
+        .start-button:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .start-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* 游戏界面 */
+        #gameScreen {
+            position: relative;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 20;
+        }
+
+        .book-info {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 2px solid #8b4513;
+        }
+
+        .book-icon {
+            width: 32px;
+            height: 32px;
+            margin-right: 8px;
+        }
+
+        .book-name {
+            font-size: 18px;
+            color: #8b0000;
+            font-weight: bold;
+        }
+
+        .hearts {
+            display: flex;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 2px solid #8b4513;
+        }
+
+        .heart {
+            width: 24px;
+            height: 24px;
+        }
+
+        .targets-bar {
+            position: absolute;
+            top: 80px;
+            left: 0;
+            right: 0;
+            padding: 10px 20px;
+            z-index: 20;
+        }
+
+        .targets-title {
+            font-size: 16px;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            margin-bottom: 8px;
+        }
+
+        .targets-list {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .target-item {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #8b0000;
+            border: 2px solid #8b4513;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .target-item.found {
+            opacity: 0.3;
+            text-decoration: line-through;
+        }
+
+        .game-area {
+            position: absolute;
+            top: 150px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            z-index: 15;
+        }
+
+        .hidden-character {
+            position: absolute;
+            font-size: 28px;
+            font-weight: bold;
+            color: rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 16;
+        }
+
+        .hidden-character:hover {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .hidden-character.found {
+            color: #8b0000;
+            animation: inkSpread 0.8s ease-out;
+        }
+
+        @keyframes inkSpread {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+
+        .decoy {
+            position: absolute;
+            font-size: 24px;
+            color: rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 16;
+        }
+
+        .effect {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            pointer-events: none;
+            z-index: 30;
+            animation: fadeOut 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+                transform: scale(0.5);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1.5);
+            }
+        }
+
+        /* 结束界面 */
+        #endScreen {
+            background: rgba(0, 0, 0, 0.8);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .end-title {
+            font-size: 40px;
+            color: #8b0000;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .end-message {
+            font-size: 20px;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 40px;
+            max-width: 350px;
+            line-height: 1.6;
+        }
+
+        .restart-button {
+            width: 240px;
+            height: 64px;
+            padding: 0 24px;
+            background: linear-gradient(135deg, #8b0000, #a52a2a);
+            border: 3px solid #d2b48c;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+            font-family: 'SimSun', '宋体', serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            appearance: none;
+        }
+
+        .restart-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(135deg, #a52a2a, #8b0000);
+        }
+
+        .restart-button:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 成功界面 */
+        #successScreen {
+            background: rgba(0, 0, 0, 0.8);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .success-title {
+            font-size: 48px;
+            color: #8b0000;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .success-message {
+            font-size: 24px;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .success-subtitle {
+            font-size: 18px;
+            color: #ddd;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .seal-animation {
+            width: 150px;
+            height: 150px;
+            background: #8b0000;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+            animation: sealStamp 1s ease-out;
+        }
+
+        @keyframes sealStamp {
+            0% {
+                transform: scale(2) rotate(20deg);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.1) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .seal-text {
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+            transform: rotate(-15deg);
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <img id="background" src="modifyImage/background.jpg" alt="古籍背景">
+
+        <!-- 开始界面 -->
+        <div id="startScreen" class="screen active">
+            <h1 class="game-title">古籍修复师</h1>
+            <p class="game-subtitle">寻找古书中的遗失文字</p>
+            
+            <div class="game-description">
+                <p>📜 玩法说明：</p>
+                <p>• 在古籍书页中找出所有隐藏的汉字</p>
+                <p>• 找对1个字 +1点修复体力</p>
+                <p>• 点错目标 -1点修复体力</p>
+                <p>• 初始体力8点，体力耗尽无法继续</p>
+                <p>• 累计修复3卷古籍即可通关</p>
+            </div>
+
+            <button class="start-button" id="startButton">开始游戏</button>
+        </div>
+
+        <!-- 游戏界面 -->
+        <div id="gameScreen" class="screen">
+            <div class="top-bar">
+                <div class="book-info">
+                    <img src="modifyImage/book_icon.png" alt="古籍" class="book-icon">
+                    <span class="book-name" id="bookName">《诗经》卷</span>
+                </div>
+                <div class="hearts" id="heartsContainer">
+                    <!-- 体力图标将动态生成 -->
+                </div>
+            </div>
+
+            <div class="targets-bar">
+                <div class="targets-title">寻找目标：</div>
+                <div class="targets-list" id="targetsList">
+                    <!-- 目标文字将动态生成 -->
+                </div>
+            </div>
+
+            <div class="game-area" id="gameArea">
+                <!-- 隐藏文字和干扰项将动态生成 -->
+            </div>
+        </div>
+
+        <!-- 失败界面 -->
+        <div id="endScreen" class="screen">
+            <h2 class="end-title">修复失败</h2>
+            <p class="end-message">体力已耗尽，古籍未能完整修复</p>
+            <button type="button" class="restart-button" id="restartButton">重新研磨墨</button>
+        </div>
+
+        <!-- 通关界面 -->
+        <div id="successScreen" class="screen" style="display: none;">
+            <h1 class="success-title">恭喜！</h1>
+            <p class="success-message">三卷古籍全部修复完成</p>
+            <p class="success-subtitle">您已成为合格的古籍修复师</p>
+            
+            <div class="seal-animation">
+                <div class="seal-text">修复完成</div>
+            </div>
+
+            <button type="button" class="restart-button" id="restartFromSuccess">重新开始</button>
+        </div>
+    </div>
+
+    <script>
+        // 全局配置
+        window.gameConfig = {
+            initialHealth: 8,
+            books: [
+                {
+                    name: "《诗经》卷",
+                    targets: ["春", "秋", "山", "水", "风", "月", "花", "鸟"]
+                },
+                {
+                    name: "《楚辞》卷",
+                    targets: ["兰", "芷", "桂", "松", "云", "雨", "江", "河"]
+                },
+                {
+                    name: "《唐诗》卷",
+                    targets: ["诗", "酒", "剑", "琴", "楼", "台", "亭", "阁"]
+                }
+            ],
+            decoyCharacters: ["之", "乎", "者", "也", "兮", "矣", "焉", "哉", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"],
+            decoyCount: 20,
+            characterSizeRange: [20, 32]
+        };
+
+        // 游戏状态
+        let gameState = {
+            currentBook: 0,
+            health: gameConfig.initialHealth,
+            foundTargets: [],
+            gameActive: false
+        };
+
+        // DOM元素
+        const startScreen = document.getElementById('startScreen');
+        const gameScreen = document.getElementById('gameScreen');
+        const endScreen = document.getElementById('endScreen');
+        const successScreen = document.getElementById('successScreen');
+        const startButton = document.getElementById('startButton');
+        const restartButton = document.getElementById('restartButton');
+        const restartFromSuccess = document.getElementById('restartFromSuccess');
+        const heartsContainer = document.getElementById('heartsContainer');
+        const targetsList = document.getElementById('targetsList');
+        const gameArea = document.getElementById('gameArea');
+        const bookName = document.getElementById('bookName');
+
+        // 音效
+        const successSound = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA');
+        const errorSound = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA');
+
+        // 初始化游戏
+        function initGame() {
+            gameState = {
+                currentBook: 0,
+                health: gameConfig.initialHealth,
+                foundTargets: [],
+                gameActive: true
+            };
+            
+            hideAllScreens();
+            gameScreen.classList.add('active');
+            
+            loadBook(gameState.currentBook);
+            updateHealthDisplay();
+        }
+
+        // 加载书卷
+        function loadBook(bookIndex) {
+            const book = gameConfig.books[bookIndex];
+            bookName.textContent = book.name;
+            gameState.foundTargets = [];
+            
+            // 生成目标列表
+            targetsList.innerHTML = '';
+            book.targets.forEach(char => {
+                const targetItem = document.createElement('div');
+                targetItem.className = 'target-item';
+                targetItem.textContent = char;
+                targetItem.dataset.char = char;
+                targetsList.appendChild(targetItem);
+            });
+
+            // 生成游戏区域
+            generateGameArea(book.targets);
+        }
+
+        // 生成游戏区域内容
+        function generateGameArea(targets) {
+            gameArea.innerHTML = '';
+            
+            // 生成目标文字
+            targets.forEach(char => {
+                const charElement = document.createElement('div');
+                charElement.className = 'hidden-character';
+                charElement.textContent = char;
+                charElement.dataset.char = char;
+                charElement.dataset.type = 'target';
+                
+                // 随机位置
+                const x = Math.random() * (gameArea.offsetWidth - 50);
+                const y = Math.random() * (gameArea.offsetHeight - 50);
+                charElement.style.left = `${x}px`;
+                charElement.style.top = `${y}px`;
+                
+                // 随机大小
+                const size = gameConfig.characterSizeRange[0] + 
+                            Math.random() * (gameConfig.characterSizeRange[1] - gameConfig.characterSizeRange[0]);
+                charElement.style.fontSize = `${size}px`;
+                
+                // 随机旋转
+                const rotate = Math.random() * 20 - 10;
+                charElement.style.transform = `rotate(${rotate}deg)`;
+                
+                gameArea.appendChild(charElement);
+                
+                // 添加点击事件
+                charElement.addEventListener('click', (e) => handleCharacterClick(e, char));
+            });
+
+            // 生成干扰项
+            for (let i = 0; i < gameConfig.decoyCount; i++) {
+                const decoyChar = gameConfig.decoyCharacters[Math.floor(Math.random() * gameConfig.decoyCharacters.length)];
+                const decoyElement = document.createElement('div');
+                decoyElement.className = 'decoy';
+                decoyElement.textContent = decoyChar;
+                decoyElement.dataset.type = 'decoy';
+                
+                // 随机位置
+                const x = Math.random() * (gameArea.offsetWidth - 40);
+                const y = Math.random() * (gameArea.offsetHeight - 40);
+                decoyElement.style.left = `${x}px`;
+                decoyElement.style.top = `${y}px`;
+                
+                // 随机大小
+                const size = 18 + Math.random() * 10;
+                decoyElement.style.fontSize = `${size}px`;
+                
+                // 随机旋转
+                const rotate = Math.random() * 30 - 15;
+                decoyElement.style.transform = `rotate(${rotate}deg)`;
+                
+                // 随机透明度
+                const opacity = 0.1 + Math.random() * 0.2;
+                decoyElement.style.color = `rgba(0, 0, 0, ${opacity})`;
+                
+                gameArea.appendChild(decoyElement);
+                
+                // 添加点击事件
+                decoyElement.addEventListener('click', handleDecoyClick);
+            }
+        }
+
+        // 处理目标文字点击
+        function handleCharacterClick(e, char) {
+            if (!gameState.gameActive) return;
+            if (gameState.foundTargets.includes(char)) return;
+            
+            // 标记为已找到
+            gameState.foundTargets.push(char);
+            
+            // 播放成功音效
+            successSound.play().catch(() => {});
+            
+            // 视觉效果
+            const element = e.target;
+            element.classList.add('found');
+            
+            // 显示墨滴特效
+            const effect = document.createElement('img');
+            effect.src = 'modifyImage/success_effect.png';
+            effect.className = 'effect';
+            effect.style.left = `${e.offsetX - 30}px`;
+            effect.style.top = `${e.offsetY - 30}px`;
+            element.appendChild(effect);
+            
+            // 更新目标列表
+            const targetItem = targetsList.querySelector(`[data-char="${char}"]`);
+            if (targetItem) {
+                targetItem.classList.add('found');
+            }
+            
+            // 增加体力
+            gameState.health = Math.min(gameState.health + 1, gameConfig.initialHealth + 2);
+            updateHealthDisplay();
+            
+            // 检查当前书卷是否完成
+            if (gameState.foundTargets.length === gameConfig.books[gameState.currentBook].targets.length) {
+                setTimeout(() => {
+                    handleBookComplete();
+                }, 1000);
+            }
+        }
+
+        // 处理干扰项点击
+        function handleDecoyClick(e) {
+            if (!gameState.gameActive) return;
+            
+            // 播放错误音效
+            errorSound.play().catch(() => {});
+            
+            // 减少体力
+            gameState.health--;
+            updateHealthDisplay();
+            
+            // 震动效果
+            gameArea.classList.add('shake');
+            setTimeout(() => {
+                gameArea.classList.remove('shake');
+            }, 300);
+            
+            // 检查游戏是否结束
+            if (gameState.health <= 0) {
+                handleGameOver();
+            }
+        }
+
+        // 处理书卷完成
+        function handleBookComplete() {
+            gameState.currentBook++;
+            
+            if (gameState.currentBook >= gameConfig.books.length) {
+                // 全部完成
+                handleGameSuccess();
+            } else {
+                // 加载下一卷
+                loadBook(gameState.currentBook);
+            }
+        }
+
+        // 游戏成功
+        function handleGameSuccess() {
+            gameState.gameActive = false;
+            hideAllScreens();
+            successScreen.classList.add('active');
+        }
+
+        // 游戏结束
+        function handleGameOver() {
+            gameState.gameActive = false;
+            hideAllScreens();
+            endScreen.classList.add('active');
+        }
+
+        // 更新体力显示
+        function updateHealthDisplay() {
+            heartsContainer.innerHTML = '';
+            
+            for (let i = 0; i < gameState.health; i++) {
+                const heart = document.createElement('img');
+                heart.src = 'modifyImage/heart_icon.png';
+                heart.alt = '体力';
+                heart.className = 'heart';
+                heartsContainer.appendChild(heart);
+            }
+        }
+
+        // 隐藏所有界面
+        function hideAllScreens() {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+        }
+
+        // 事件监听
+        startButton.addEventListener('click', initGame);
+        restartButton.addEventListener('click', initGame);
+        restartFromSuccess.addEventListener('click', initGame);
+
+        // 禁止页面缩放
+        document.addEventListener('touchmove', function(e) {
+            if (e.scale !== 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // 适配屏幕
+        function resizeGame() {
+            const container = document.getElementById('gameContainer');
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            
+            if (width < height) {
+                // 竖屏
+                container.style.width = '100%';
+                container.style.height = '100%';
+                container.style.maxWidth = 'none';
+                container.style.maxHeight = 'none';
+            } else {
+                // 横屏
+                container.style.maxWidth = '450px';
+                container.style.maxHeight = '900px';
+            }
+        }
+
+        window.addEventListener('resize', resizeGame);
+        resizeGame();
+    </script>
+</body>
+</html>

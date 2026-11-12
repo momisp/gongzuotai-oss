@@ -1,0 +1,150 @@
+{
+  "importantTopic": {
+    "id": "ed2cbbaa-82c0-4fda-8a3c-f65c9387fc0c",
+    "properties": {
+      "fo:font-weight": "bold",
+      "fo:color": "#F8F7F7",
+      "svg:fill": "#111111"
+    }
+  },
+  "minorTopic": {
+    "id": "6adf0549-7174-4893-b07f-88f9d262c393",
+    "properties": {
+      "fo:font-weight": "bold",
+      "fo:color": "#F8F7F7",
+      "svg:fill": "#666666"
+    }
+  },
+  "expiredTopic": {
+    "id": "a9e7ce21-0b6c-42ec-b362-7672553b1c2e",
+    "properties": {
+      "fo:font-style": "italic",
+      "fo:text-decoration": " line-through"
+    }
+  },
+  "boundary": {
+    "id": "7eb41177-cdd1-4b51-9a09-819580a7a8f5",
+    "properties": {
+      "fo:font-family": "NeverMind",
+      "fo:font-size": "13",
+      "fo:font-weight": "700",
+      "fo:font-style": "normal",
+      "fo:color": "#FFFFFF",
+      "svg:fill": "none",
+      "line-color": "#F6212D"
+    }
+  },
+  "calloutTopic": {
+    "id": "ac43f41c-0777-4e5e-af51-385566884bed",
+    "properties": {
+      "fo:font-family": "NeverMind",
+      "fo:font-size": "14",
+      "fo:font-weight": "600",
+      "fo:font-style": "normal",
+      "svg:fill": "#292929"
+    }
+  },
+  "centralTopic": {
+    "id": "d6ec6ed0-fc44-4c73-9f4f-17a1656eca49",
+    "properties": {
+      "fo:font-family": "NeverMind",
+      "fo:font-size": "28",
+      "fo:font-weight": "600",
+      "fo:font-style": "normal",
+      "fo:color": "#FFFFFF",
+      "svg:fill": "#F6212D",
+      "line-width": "4",
+      "line-color": "#333333",
+      "border-line-width": "0",
+      "shape-class": "org.xmind.topicShape.roundedRect",
+      "line-class": "org.xmind.branchConnection.curve"
+    }
+  },
+  "floatingTopic": {
+    "id": "c12f37a4-34b8-4a96-86c0-3b224f86cd41",
+    "properties": {
+      "fo:font-family": "NeverMind",
+      "fo:font-size": "16",
+      "fo:font-weight": "600",
+      "fo:font-style": "normal",
+      "svg:fill": "#292929",
+      "line-width": "2",
+      "line-color": "#292929",
+      "border-line-width": "0"
+    }
+  },
+  "mainTopic": {
+    "id": "a38cff55-d043-4d59-ae40-68be1d94d4b1",
+    "properties": {
+      "fo:font-family": "NeverMind",
+      "fo:font-size": "20",
+      "fo:font-weight": "500",
+      "fo:font-style": "normal",
+      "fo:color": "#333333",
+      "svg:fill": "#FFFFFF",
+      "border-line-width": "1",
+      "border-line-color": "#D0D0D0",
+      "shape-class": "org.xmind.topicShape.roundedRect",
+      "line-width": "3",
+      "line-color": "#333333",
+      "line-class": "org.xmind.branchConnection.curve"
+    }
+  },
+  "map": {
+    "id": "a751a55c-1140-4e7c-902a-2c714e5c4604",
+    "properties": {
+      "svg:fill": "#FFFFFF"
+    }
+  },
+  "relationship": {
+    "id": "6e66ddbb-5ac0-49aa-baee-26fdcfaea503",
+    "properties": {
+      "fo:font-family": "NeverMind",
+      "fo:font-size": "14",
+      "fo:font-weight": "normal",
+      "fo:font-style": "normal",
+      "fo:color": "#292929",
+      "line-color": "#292929",
+      "line-pattern": "dash",
+      "arrow-begin-class": "org.xmind.arrowShape.none",
+      "arrow-end-class": "org.xmind.arrowShape.triangle"
+    }
+  },
+  "subTopic": {
+    "id": "71f97740-8a9c-46f9-a28d-77243ca46a9a",
+    "properties": {
+      "fo:font-family": "NeverMind",
+      "fo:font-size": "14",
+      "fo:font-weight": "500",
+      "fo:font-style": "normal",
+      "fo:color": "#333333",
+      "svg:fill": "#F8F7F7",
+      "border-line-width": "0",
+      "shape-class": "org.xmind.topicShape.roundedRect",
+      "line-class": "org.xmind.branchConnection.curve",
+      "line-width": "2",
+      "line-color": "#333333"
+    }
+  },
+  "summary": {
+    "id": "99b208e6-b7b1-4a12-b1ce-df3e6e21a9b9",
+    "properties": {
+      "line-width": "2",
+      "line-color": "#292929",
+      "shape-class": "org.xmind.summaryShape.round"
+    }
+  },
+  "summaryTopic": {
+    "id": "93e4ec30-6b6c-4b50-9b31-ebd648257c44",
+    "properties": {
+      "fo:font-family": "NeverMind",
+      "fo:font-size": "16",
+      "fo:font-weight": "600",
+      "fo:font-style": "normal",
+      "svg:fill": "#4051B5",
+      "line-width": "2",
+      "border-line-width": "0",
+      "line-class": "org.xmind.branchConnection.curve"
+    }
+  }
+}

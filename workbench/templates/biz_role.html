@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>角色业务台</title>
+  <link rel="stylesheet" href="/static/style.css?v=48">
+  <link rel="stylesheet" href="/static/theme-daisy-v1.css?v=2">
+</head>
+<body class="theme-daisy-v1 br-page">
+  <div class="br-shell">
+    <header class="page-header">
+      <div>
+        <h1 id="br-title">角色业务台</h1>
+        <p class="subtitle" id="br-sub">按角色分框：系统、账号、对应主流程步骤。底稿阶段，先看范围，再接线跑测。</p>
+      </div>
+      <div class="page-header-actions">
+        <label class="bf-field">
+          <span>平台</span>
+          <select id="br-target"></select>
+        </label>
+        <label class="bf-field">
+          <span>模式</span>
+          <select id="br-mode">
+            <option value="silent">静默（全接口）</option>
+            <option value="display">展示（浏览器可视化）</option>
+          </select>
+        </label>
+        <button class="btn" type="button" onclick="loadBizRolePage()">刷新</button>
+        <a class="btn" id="br-knowledge" href="#" target="_blank" rel="noopener">业务知识</a>
+      </div>
+    </header>
+    <p class="bf-hint" id="br-hint"></p>
+    <div id="br-roles" class="br-role-stack"></div>
+  </div>
+  <script src="/static/biz_role.js?v=2"></script>
+</body>
+</html>

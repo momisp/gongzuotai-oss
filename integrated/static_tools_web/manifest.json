@@ -1,0 +1,26 @@
+{
+  "name": "工具小站",
+  "short_name": "工具箱",
+  "description": "轻量级在线工具：JSON、Base64、时间戳、命名、URL/HTML、Hex、哈希、JWT、正则、颜色、rem、Cron、UUID、随机串、对比、Query、UA、图片、文件探测、进制、单位等",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2c3e50",
+  "orientation": "portrait-primary",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "assets/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-192x192.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>高德地图点击标注（卫星地图）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script>
+    window._AMapSecurityConfig = {
+      securityJsCode: "4b42791a31fb11f1942298ff2f4bc18b"
+    };
+  </script>
+  <script src="https://webapi.amap.com/maps?v=2.0&key=9db22adb0682ad3ac21d856f81ed4e5c&plugin=AMap.CitySearch,AMap.PlaceSearch,AMap.DistrictSearch"></script>
+
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .container { display: flex; height: 100vh; overflow: hidden; }
+    .map-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 0;
+      min-height: 0;
+    }
+    /* 卫星图整体提亮、略降对比与饱和度，便于看清标注与文字 */
+    #map {
+      width: 100%;
+      height: 100%;
+      filter: brightness(1.16) contrast(0.9) saturate(0.88);
+    }
+    .map-coord-hud {
+      position: absolute;
+      left: 8px;
+      bottom: 36px;
+      z-index: 500;
+      max-width: calc(100% - 16px);
+      padding: 6px 10px;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #1a1a1a;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+      pointer-events: none;
+      font-variant-numeric: tabular-nums;
+    }
+    @media (max-width: 640px) {
+      .map-coord-hud { font-size: 11px; bottom: 8px; }
+    }
+
+    .panel {
+      width: 360px;
+      min-width: 320px;
+      max-width: 42vw;
+      border-left: 1px solid #eee;
+      background: #fafafa;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .panel h3 {
+      margin: 12px;
+      font-size: 16px;
+    }
+    .search-wrap {
+      margin: 0 12px 8px;
+      display: flex;
+      gap: 8px;
+    }
+    .search-wrap input {
+      flex: 1;
+      height: 32px;
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+      padding: 0 10px;
+      font-size: 13px;
+      outline: none;
+    }
+    .search-wrap input:focus {
+      border-color: #1677ff;
+      box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.12);
+    }
+    .search-wrap button {
+      height: 32px;
+      padding: 0 10px;
+      margin-right: 0;
+      white-space: nowrap;
+      background: #1677ff;
+      color: #fff;
+    }
+    .coord-wrap {
+      margin: 0 12px 8px;
+      display: flex;
+      gap: 8px;
+    }
+    .coord-wrap input {
+      flex: 1;
+      min-width: 0;
+      height: 30px;
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+      padding: 0 8px;
+      font-size: 12px;
+      outline: none;
+    }
+    .coord-wrap input:focus {
+      border-color: #1677ff;
+      box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.12);
+    }
+    .coord-wrap button {
+      height: 30px;
+      padding: 0 8px;
+      margin-right: 0;
+      white-space: nowrap;
+      background: #6f42c1;
+      color: #fff;
+    }
+    .region-wrap {
+      margin: 0 12px 8px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+      gap: 6px;
+    }
+    .region-wrap input,
+    .region-wrap select {
+      width: 100%;
+      min-width: 0;
+      height: 30px;
+      border: 1px solid #d9d9d9;
+      border-radius: 6px;
+      padding: 0 8px;
+      font-size: 12px;
+      outline: none;
+      background: #fff;
+    }
+    .region-wrap input:focus,
+    .region-wrap select:focus {
+      border-color: #1677ff;
+      box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.12);
+    }
+    .region-wrap button {
+      height: 30px;
+      padding: 0 6px;
+      margin-right: 0;
+      background: #13a36e;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .city {
+      margin: 0 12px 8px;
+      font-size: 13px;
+      color: #666;
+    }
+
+    .list {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 0 12px 12px;
+    }
+
+    .item {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 8px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      word-break: break-all;
+    }
+
+    .item:hover { background: #eef5ff; }
+
+    .actions { margin-top: 6px; }
+
+    button {
+      padding: 4px 8px;
+      font-size: 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 6px;
+    }
+
+    .copy { background: #1677ff; color: #fff; }
+    .delete { background: #ff4d4f; color: #fff; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="map-wrap">
+    <div id="map"></div>
+    <div id="mapCoordHud" class="map-coord-hud" aria-live="polite">移动鼠标查看经纬度</div>
+  </div>
+
+  <div class="panel">
+    <h3>点位列表</h3>
+    <div class="search-wrap">
+      <input id="searchKeyword" placeholder="输入地址或店铺名搜索" />
+      <button id="searchBtn">搜索</button>
+    </div>
+    <div class="coord-wrap">
+      <input id="coordInput" placeholder='输入坐标JSON，如 {"lat":25.842829,"lng":116.348624}' />
+      <button id="coordBtn">坐标定位</button>
+    </div>
+    <div class="region-wrap">
+      <select id="provinceInput">
+        <option value="">省</option>
+      </select>
+      <select id="cityInput">
+        <option value="">市</option>
+      </select>
+      <select id="districtInput">
+        <option value="">区/县</option>
+      </select>
+      <button id="regionBtn">定位区划</button>
+    </div>
+    <div class="city" id="cityName">定位中...</div>
+    <div class="list" id="list"></div>
+  </div>
+</div>
+
+<script>
+  const satelliteLayer = new AMap.TileLayer.Satellite({ opacity: 0.88, zIndex: 4 });
+  const roadNetLayer = new AMap.TileLayer.RoadNet({ zIndex: 5 });
+
+  const map = new AMap.Map("map", {
+    zoom: 11,
+    layers: [satelliteLayer, roadNetLayer]
+  });
+  const coordEl = document.getElementById("mapCoordHud");
+
+  function setHudLngLat(lng, lat) {
+    if (!coordEl) return;
+    coordEl.textContent = "经度 " + Number(lng).toFixed(6) + "　纬度 " + Number(lat).toFixed(6);
+  }
+
+  map.on("mousemove", function (e) {
+    if (e && e.lnglat) {
+      setHudLngLat(e.lnglat.getLng(), e.lnglat.getLat());
+    }
+  });
+  map.on("mouseout", function () {
+    if (coordEl) coordEl.textContent = "移动鼠标查看经纬度";
+  });
+
+  let currentCity = "全国";
+  let placeSearch = null;
+  let districtSearch = null;
+  let searchMarker = null;
+  let districtPolygons = [];
+
+  AMap.plugin("AMap.CitySearch", () => {
+    const citySearch = new AMap.CitySearch();
+
+    citySearch.getLocalCity((status, result) => {
+      if (status === "complete" && result && result.bounds) {
+        currentCity = result.city || "全国";
+        map.setBounds(result.bounds);
+        document.getElementById("cityName").innerText =
+          "当前城市：" + result.city + "（卫星图）";
+      } else {
+        map.setCenter([116.397428, 39.90923]);
+        map.setZoom(11);
+        document.getElementById("cityName").innerText =
+          "当前城市：定位失败（已使用默认，卫星图）";
+      }
+    });
+  });
+
+  AMap.plugin("AMap.PlaceSearch", () => {
+    placeSearch = new AMap.PlaceSearch({
+      city: currentCity,
+      citylimit: false,
+      pageSize: 1,
+      extensions: "all"
+    });
+  });
+
+  AMap.plugin("AMap.DistrictSearch", () => {
+    districtSearch = new AMap.DistrictSearch({
+      subdistrict: 0,
+      level: "district",
+      extensions: "all"
+    });
+    initRegionSelector();
+  });
+
+  let index = 1;
+  const points = [];
+
+  map.on("click", (e) => {
+    if (e && e.lnglat) {
+      setHudLngLat(e.lnglat.getLng(), e.lnglat.getLat());
+    }
+    addPointByLngLat(e.lnglat);
+  });
+
+  function renderList() {
+    const list = document.getElementById("list");
+    list.innerHTML = "";
+
+    points.forEach((p, i) => {
+      const div = document.createElement("div");
+      div.className = "item";
+      div.innerHTML = `
+        <strong>点位 ${p.id}</strong><br>
+        经度：${p.lng}<br>
+        纬度：${p.lat}
+        <div class="actions">
+          <button class="copy" onclick="copy('${p.lng},${p.lat}', event)">复制</button>
+          <button class="delete" onclick="removePoint(${i}, event)">删除</button>
+        </div>
+      `;
+      div.onclick = () => focus(p);
+      list.appendChild(div);
+    });
+  }
+
+  function focus(p) {
+    map.setZoomAndCenter(15, [p.lng, p.lat]);
+    setHudLngLat(p.lng, p.lat);
+    p.marker.setAnimation("AMAP_ANIMATION_BOUNCE");
+    setTimeout(() => p.marker.setAnimation(""), 800);
+  }
+
+  function copy(text, e) {
+    e.stopPropagation();
+    navigator.clipboard.writeText(text);
+    alert("已复制：" + text);
+  }
+
+  function removePoint(i, e) {
+    e.stopPropagation();
+    const p = points[i];
+    p.marker.setMap(null);
+    p.text.setMap(null);
+    points.splice(i, 1);
+    renderList();
+  }
+
+  function addPointByLngLat(lnglat) {
+    if (!lnglat) return;
+    const lng = lnglat.getLng();
+    const lat = lnglat.getLat();
+    addPoint(lng, lat);
+  }
+
+  function addPoint(lng, lat) {
+    const id = index++;
+    const marker = new AMap.Marker({
+      position: [lng, lat],
+      map,
+      anchor: "bottom-center"
+    });
+
+    const text = new AMap.Text({
+      text: id.toString(),
+      position: [lng, lat],
+      offset: new AMap.Pixel(0, -38),
+      style: {
+        background: "#1677ff",
+        color: "#fff",
+        padding: "2px 6px",
+        borderRadius: "10px",
+        fontSize: "12px",
+        border: "none"
+      },
+      map
+    });
+
+    points.push({ id, lng, lat, marker, text });
+    renderList();
+    return marker;
+  }
+
+  function clearDistrictPolygons() {
+    if (!districtPolygons.length) return;
+    map.remove(districtPolygons);
+    districtPolygons = [];
+  }
+
+  function makeRegionCandidates(province, city, district) {
+    const list = [];
+    const p = (province || "").trim();
+    const c = (city || "").trim();
+    const d = (district || "").trim();
+
+    if (p && c && d) {
+      list.push(p + c + d, p + c + " " + d, c + d, d);
+    } else if (p && c) {
+      list.push(p + c, p + " " + c, c);
+    } else if (c && d) {
+      list.push(c + d, c + " " + d, d);
+    } else if (c) {
+      list.push(c);
+    } else if (p) {
+      list.push(p);
+    } else if (d) {
+      list.push(d);
+    }
+
+    return Array.from(new Set(list.filter(Boolean)));
+  }
+
+  function searchDistrictOnce(keyword, level, done) {
+    const ds = new AMap.DistrictSearch({
+      subdistrict: 0,
+      level: level,
+      extensions: "all"
+    });
+    ds.search(keyword, (status, result) => done(status, result));
+  }
+
+  function setSelectOptions(selectEl, list, placeholder) {
+    const options = [`<option value="">${placeholder}</option>`];
+    list.forEach((item) => {
+      const name = (item && item.name) ? item.name : "";
+      if (name) options.push(`<option value="${name}">${name}</option>`);
+    });
+    selectEl.innerHTML = options.join("");
+  }
+
+  function searchDistrictChildren(keyword, level, done) {
+    const ds = new AMap.DistrictSearch({
+      subdistrict: 1,
+      level,
+      extensions: "base"
+    });
+    ds.search(keyword, (status, result) => {
+      if (status !== "complete" || !result || !result.districtList || !result.districtList.length) {
+        done([]);
+        return;
+      }
+      const children = result.districtList[0].districtList || [];
+      done(children);
+    });
+  }
+
+  function initRegionSelector() {
+    const provinceSelect = document.getElementById("provinceInput");
+    const citySelect = document.getElementById("cityInput");
+    const districtSelect = document.getElementById("districtInput");
+
+    setSelectOptions(provinceSelect, [], "省");
+    setSelectOptions(citySelect, [], "市");
+    setSelectOptions(districtSelect, [], "区/县");
+
+    searchDistrictChildren("中国", "country", (provinces) => {
+      setSelectOptions(provinceSelect, provinces, "省");
+    });
+
+    provinceSelect.addEventListener("change", () => {
+      const province = (provinceSelect.value || "").trim();
+      setSelectOptions(citySelect, [], "市");
+      setSelectOptions(districtSelect, [], "区/县");
+      if (!province) return;
+
+      searchDistrictChildren(province, "province", (cities) => {
+        setSelectOptions(citySelect, cities, "市");
+      });
+    });
+
+    citySelect.addEventListener("change", () => {
+      const city = (citySelect.value || "").trim();
+      setSelectOptions(districtSelect, [], "区/县");
+      if (!city) return;
+
+      searchDistrictChildren(city, "city", (districts) => {
+        setSelectOptions(districtSelect, districts, "区/县");
+      });
+    });
+  }
+
+  function searchAddress() {
+    const keywordInput = document.getElementById("searchKeyword");
+    const keyword = (keywordInput.value || "").trim();
+    if (!keyword) {
+      alert("请输入要搜索的地址");
+      return;
+    }
+    if (!placeSearch) {
+      placeSearch = new AMap.PlaceSearch({
+        city: currentCity,
+        citylimit: false,
+        pageSize: 1,
+        extensions: "all"
+      });
+    }
+
+    placeSearch.setCity(currentCity || "全国");
+    placeSearch.search(keyword, (status, result) => {
+      if (status !== "complete" || !result || !result.poiList || !result.poiList.pois || !result.poiList.pois.length) {
+        const info = result && result.info ? ("，原因：" + result.info) : "";
+        alert("未找到地址：" + keyword + info);
+        return;
+      }
+
+      const poi = result.poiList.pois[0];
+      if (!poi.location) {
+        alert("找到结果但无坐标信息");
+        return;
+      }
+
+      const lng = poi.location.lng;
+      const lat = poi.location.lat;
+      map.setZoomAndCenter(16, [lng, lat]);
+      setHudLngLat(lng, lat);
+
+      if (searchMarker) {
+        searchMarker.setMap(null);
+      }
+      searchMarker = new AMap.Marker({
+        position: [lng, lat],
+        map,
+        anchor: "bottom-center",
+        icon: "https://a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png"
+      });
+
+      addPoint(lng, lat);
+    });
+  }
+
+  function parseCoordText(text) {
+    const raw = (text || "").trim();
+    if (!raw) return null;
+    try {
+      const data = JSON.parse(raw);
+      const lat = Number(data.lat);
+      const lng = Number(data.lng);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+      return { lat, lng };
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function locateByCoordInput() {
+    const coordText = document.getElementById("coordInput").value;
+    const coord = parseCoordText(coordText);
+    if (!coord) {
+      alert('坐标格式错误，请使用：{"lat":25.842829,"lng":116.348624}');
+      return;
+    }
+
+    if (coord.lat < -90 || coord.lat > 90 || coord.lng < -180 || coord.lng > 180) {
+      alert("坐标超出范围：纬度应在 -90~90，经度应在 -180~180");
+      return;
+    }
+
+    map.setZoomAndCenter(16, [coord.lng, coord.lat]);
+    setHudLngLat(coord.lng, coord.lat);
+    addPoint(coord.lng, coord.lat);
+  }
+
+  function locateRegion() {
+    const province = (document.getElementById("provinceInput").value || "").trim();
+    const city = (document.getElementById("cityInput").value || "").trim();
+    const district = (document.getElementById("districtInput").value || "").trim();
+    const keyword = [province, city, district].filter(Boolean).join("");
+
+    if (!keyword) {
+      alert("请至少输入省/市/区中的一个");
+      return;
+    }
+    const levels = district
+      ? ["district", "city", "province"]
+      : city
+      ? ["city", "district", "province"]
+      : ["province", "city", "district"];
+    const candidates = makeRegionCandidates(province, city, district);
+
+    let i = 0;
+    let lastInfo = "";
+
+    function tryNext() {
+      if (i >= candidates.length * levels.length) {
+        const info = lastInfo ? ("，原因：" + lastInfo) : "";
+        alert("未找到该行政区：" + keyword + info);
+        return;
+      }
+
+      const candidate = candidates[i % candidates.length];
+      const level = levels[Math.floor(i / candidates.length)];
+      i += 1;
+
+      searchDistrictOnce(candidate, level, (status, result) => {
+        if (status !== "complete" || !result || !result.districtList || !result.districtList.length) {
+          lastInfo = (result && result.info) ? result.info : lastInfo;
+          tryNext();
+          return;
+        }
+
+        const target = result.districtList[0];
+        const boundaries = target.boundaries || [];
+        clearDistrictPolygons();
+
+        if (boundaries.length) {
+          districtPolygons = boundaries.map((path) => new AMap.Polygon({
+            path,
+            strokeColor: "#1f7fff",
+            strokeWeight: 2,
+            fillColor: "#4ea1ff",
+            fillOpacity: 0.15
+          }));
+          map.add(districtPolygons);
+          districtPolygons.forEach((polygon) => {
+            polygon.on("click", (e) => {
+              addPointByLngLat(e.lnglat);
+            });
+          });
+          map.setFitView(districtPolygons);
+        } else if (target.center) {
+          map.setZoomAndCenter(11, [target.center.lng, target.center.lat]);
+          setHudLngLat(target.center.lng, target.center.lat);
+        } else {
+          alert("找到行政区但没有边界信息");
+          return;
+        }
+
+        const fullName = [target.province, target.city, target.district].filter(Boolean).join("");
+        document.getElementById("cityName").innerText = "当前区域：" + (fullName || candidate) + "（卫星图）";
+      });
+    }
+
+    tryNext();
+  }
+
+  document.getElementById("searchBtn").addEventListener("click", searchAddress);
+  document.getElementById("searchKeyword").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      searchAddress();
+    }
+  });
+  document.getElementById("coordBtn").addEventListener("click", locateByCoordInput);
+  document.getElementById("coordInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      locateByCoordInput();
+    }
+  });
+  document.getElementById("regionBtn").addEventListener("click", locateRegion);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>自动化控制面板 · 六版视觉样稿</title>
+  <style>
+    :root {
+      --font: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      --mono: Consolas, "Cascadia Mono", "Sarasa Mono SC", monospace;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      font-family: var(--font);
+      background: #e7e5e1;
+      color: #1c1917;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, select { font-family: inherit; }
+    .picker {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 18px;
+      background: #1c1917;
+      color: #f5f5f4;
+    }
+    .picker b { font-weight: 650; font-size: 13px; letter-spacing: 0.01em; }
+    .picker span.note { color: #a8a29e; font-size: 12px; }
+    .picks { display: flex; gap: 6px; margin-left: auto; }
+    .picks button {
+      border: 1px solid #44403c;
+      background: transparent;
+      color: #e7e5e4;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .picks button.on { background: #fafaf9; color: #1c1917; border-color: #fafaf9; }
+    .skin { display: none; min-height: calc(100vh - 46px); }
+    .skin.on { display: block; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 20px;
+      padding: 0 7px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: 0.01em;
+    }
+    .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+    /* ========== 1 浅台 ========== */
+    .light {
+      background: #f4f5f7;
+      color: #111827;
+      padding: 22px 28px 48px;
+    }
+    .light .wrap { max-width: 1120px; margin: 0 auto; }
+    .light header.top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+    .kicker { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #6b7280; margin: 0 0 4px; }
+    .light h1 { margin: 0; font-size: 22px; font-weight: 650; letter-spacing: -0.02em; }
+    .sub { margin: 4px 0 0; color: #6b7280; font-size: 13px; }
+    .actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+    .btn {
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      background: #fff;
+      color: #111827;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn.pri { background: #0f766e; border-color: #0f766e; color: #fff; }
+    .btn.stop { color: #b91c1c; }
+    .health { display: flex; gap: 6px; margin-top: 10px; }
+    .pill { font-size: 12px; color: #374151; background: #fff; border: 1px solid #e5e7eb; border-radius: 999px; padding: 3px 8px; }
+    .pill i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+    .pill .g { background: #16a34a; }
+    .pill .r { background: #dc2626; }
+    .alert {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 13px;
+      margin: 12px 0;
+    }
+    .grid3 { display: grid; grid-template-columns: 0.9fr 1.25fr 0.95fr; gap: 12px; }
+    .card {
+      background: #fff;
+      border: 1px solid #e6e8ec;
+      border-radius: 12px;
+      padding: 14px 14px 12px;
+    }
+    .card h3 { margin: 0 0 10px; font-size: 12px; font-weight: 650; color: #6b7280; letter-spacing: 0.04em; }
+    .q-item { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; padding: 8px 0; border-top: 1px solid #f3f4f6; }
+    .q-item b { font-weight: 650; }
+    .muted { color: #6b7280; }
+    .now-name { font-size: 18px; font-weight: 650; letter-spacing: -0.02em; margin: 0; }
+    .now-meta { margin: 6px 0 0; font-size: 13px; color: #4b5563; }
+    .progress {
+      margin-top: 12px;
+      height: 4px;
+      background: #e5e7eb;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress > i { display: block; height: 100%; width: 57%; background: #0f766e; }
+    .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .metric { background: #fff; border: 1px solid #e6e8ec; border-radius: 12px; padding: 12px; }
+    .metric .n { font-size: 26px; font-weight: 650; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+    .metric .l { margin-top: 6px; font-size: 12px; color: #6b7280; }
+    .metric.ok .n { color: #15803d; }
+    .metric.bad .n { color: #b91c1c; }
+    .steps-card { margin-top: 12px; }
+    .rail { display: flex; gap: 0; list-style: none; margin: 4px 0 0; padding: 8px 0 0; }
+    .rail li { flex: 1; min-width: 0; position: relative; padding-top: 16px; }
+    .rail li::before {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; top: 5px;
+      height: 2px;
+      background: #e5e7eb;
+    }
+    .rail li:first-child::before { left: 12px; }
+    .rail li:last-child::before { right: 50%; }
+    .rail .dot {
+      position: absolute;
+      left: 12px; top: 0;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid #d1d5db;
+    }
+    .rail .t { display: block; margin-top: 4px; font-size: 12px; font-weight: 650; }
+    .rail .e { display: block; font-size: 11px; color: #6b7280; margin-top: 2px; }
+    .rail li.passed .dot { background: #16a34a; border-color: #16a34a; }
+    .rail li.passed::before { background: #86efac; }
+    .rail li.run .dot { background: #fff; border-color: #0f766e; box-shadow: 0 0 0 4px rgba(15,118,110,.15); }
+    .rail li.run .t { color: #0f766e; }
+    .rail li.stub .t, .rail li.off .t { color: #9ca3af; }
+    .rail li.off .dot { background: #f3f4f6; }
+    .bottom { display: grid; grid-template-columns: 1.3fr 0.9fr 0.9fr; gap: 12px; margin-top: 12px; }
+    .chart-cap { display: flex; justify-content: space-between; font-size: 12px; color: #6b7280; margin-bottom: 6px; }
+    .legend i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin: 0 4px 0 10px; }
+    .legend .ok { background: #16a34a; }
+    .legend .bad { background: #dc2626; }
+    svg.spark { width: 100%; height: 92px; display: block; }
+    .stat-row { display: grid; grid-template-columns: 52px 1fr 52px 36px; gap: 8px; align-items: center; font-size: 13px; padding: 7px 0; border-top: 1px solid #f3f4f6; }
+    .bar { height: 6px; background: #f3f4f6; border-radius: 99px; overflow: hidden; display: flex; }
+    .bar .ok { background: #16a34a; }
+    .bar .bad { background: #fca5a5; }
+    .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; align-items: end; height: 92px; }
+    .days div { text-align: center; }
+    .days .col { width: 100%; border-radius: 3px 3px 0 0; background: #fecaca; margin: 0 auto 6px; }
+    .days .z { height: 4px; background: #e5e7eb; }
+    .days em { font-style: normal; font-size: 11px; color: #6b7280; }
+    .foot { margin: 14px 0 0; font-size: 12px; color: #9ca3af; }
+
+    /* ========== 2 暗舱 ========== */
+    .dark {
+      background: #0c0e13;
+      color: #e7e8ea;
+      min-height: calc(100vh - 46px);
+      padding: 0 0 40px;
+    }
+    .dark .hud {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 10px 22px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      font-size: 12px;
+      color: #9aa1ad;
+      font-variant-numeric: tabular-nums;
+    }
+    .dark .hud .brand { color: #f3f4f6; font-weight: 650; letter-spacing: 0.16em; font-size: 11px; }
+    .dark .dotg { width: 7px; height: 7px; border-radius: 50%; background: #3dd68c; display: inline-block; margin-right: 6px; }
+    .dark .dotr { width: 7px; height: 7px; border-radius: 50%; background: #f07178; display: inline-block; margin-right: 6px; }
+    .dark .hud .sp { margin-left: auto; display: flex; gap: 8px; }
+    .dark .ghost {
+      height: 28px; padding: 0 10px; border-radius: 6px;
+      border: 1px solid rgba(255,255,255,.14); background: transparent; color: #e7e8ea; font-size: 12px; cursor: pointer;
+    }
+    .dark .ghost.hot { background: #e7b008; color: #1a1403; border-color: #e7b008; font-weight: 650; }
+    .dark .body { max-width: 1140px; margin: 0 auto; padding: 18px 22px 0; }
+    .dark .alarm {
+      border: 1px solid rgba(240,113,120,.45);
+      color: #ffc1c4;
+      background: rgba(240,113,120,.08);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+    .dark .layout { display: grid; grid-template-columns: 280px 1fr 220px; gap: 12px; align-items: start; }
+    .panel {
+      background: #141820;
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .panel h3 { margin: 0 0 12px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #8b93a1; font-weight: 650; }
+    .dark .runline { font-size: 13px; padding: 8px 0; border-top: 1px solid rgba(255,255,255,.06); display: flex; justify-content: space-between; }
+    .dark .stage { position: relative; overflow: hidden; }
+    .dark .stage::after {
+      content: "";
+      position: absolute; right: -40px; top: -50px;
+      width: 180px; height: 180px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(231,176,8,.18), transparent 68%);
+      pointer-events: none;
+    }
+    .eyebrow { font-size: 11px; letter-spacing: 0.16em; color: #e7b008; margin: 0 0 8px; }
+    .dark .big { margin: 0; font-size: 28px; font-weight: 650; letter-spacing: -0.03em; }
+    .dark .meta { margin: 8px 0 0; color: #b7bec8; font-size: 13px; }
+    .readout { display: flex; justify-content: space-between; align-items: baseline; padding: 11px 0; border-top: 1px solid rgba(255,255,255,.06); }
+    .readout .n { font-size: 22px; font-weight: 650; font-variant-numeric: tabular-nums; }
+    .readout .l { font-size: 12px; color: #8b93a1; }
+    .readout.ok .n { color: #3dd68c; }
+    .readout.bad .n { color: #f07178; }
+    .readout.run .n { color: #e7b008; }
+    .dark-rail { display: grid; grid-template-columns: repeat(9, 1fr); gap: 6px; margin-top: 14px; }
+    .node {
+      background: #10141b;
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 8px;
+      padding: 8px 8px 10px;
+      min-height: 74px;
+    }
+    .node .id { font-family: var(--mono); font-size: 11px; color: #8b93a1; }
+    .node .nm { display: block; margin-top: 6px; font-size: 13px; font-weight: 650; }
+    .node .st { display: block; margin-top: 4px; font-size: 11px; color: #8b93a1; }
+    .node.passed { border-color: rgba(61,214,140,.45); }
+    .node.passed .st { color: #3dd68c; }
+    .node.run { border-color: #e7b008; background: #1c180d; }
+    .node.run .id, .node.run .st { color: #e7b008; }
+    .node.stub { opacity: .55; }
+    .dark .split { display: grid; grid-template-columns: 1.4fr 1fr; gap: 12px; margin-top: 12px; }
+    .hours { display: flex; align-items: flex-end; gap: 4px; height: 72px; }
+    .hours i { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; height: 100%; gap: 1px; }
+    .hours i b, .hours i s { display: block; border-radius: 2px 2px 0 0; }
+    .hours i b { background: #3dd68c; }
+    .hours i s { background: #f07178; text-decoration: none; }
+    .hour-lab { display: flex; justify-content: space-between; color: #6b7280; font-size: 11px; margin-top: 6px; font-variant-numeric: tabular-nums; }
+    .wk { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+    .wk .cell { text-align: center; font-size: 12px; }
+    .wk .cell strong { display: block; font-size: 16px; font-variant-numeric: tabular-nums; }
+    .wk .cell.hot strong { color: #f07178; }
+    .wk .cell em { font-style: normal; color: #8b93a1; font-size: 11px; }
+
+    /* ========== 3 轨道 ========== */
+    .railskin { background: #f6f3ee; color: #1c1917; }
+    .stageband {
+      background: #161513;
+      color: #f5f5f4;
+      padding: 26px 32px 22px;
+    }
+    .stageband .inner, .railskin .below { max-width: 1120px; margin: 0 auto; }
+    .stage-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+    .stageband .k { margin: 0; font-size: 12px; letter-spacing: 0.18em; color: #a8a29e; }
+    .stageband h1 { margin: 8px 0 0; font-size: 40px; font-weight: 620; letter-spacing: -0.035em; }
+    .elapsed { text-align: right; }
+    .elapsed .n { font-size: 40px; font-weight: 620; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; color: #f5c16c; }
+    .elapsed .l { font-size: 12px; color: #a8a29e; }
+    .chips { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    .chip { border: 1px solid rgba(255,255,255,.14); border-radius: 999px; padding: 4px 10px; font-size: 12px; color: #d6d3d1; }
+    .timeline { display: grid; grid-template-columns: repeat(9, 1fr); margin-top: 26px; position: relative; }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 4%; right: 4%; top: 7px;
+      height: 2px;
+      background: linear-gradient(90deg, #3f3f46 0 42%, #f5c16c 42% 48%, #3f3f46 48% 100%);
+    }
+    .tl { position: relative; padding-top: 22px; }
+    .tl .mk {
+      position: absolute; top: 2px; left: 0;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: #161513; border: 2px solid #57534e;
+    }
+    .tl.done .mk { background: #d6d3d1; border-color: #d6d3d1; }
+    .tl.now .mk { background: #f5c16c; border-color: #f5c16c; }
+    .tl b { display: block; font-size: 13px; font-weight: 650; }
+    .tl span { display: block; margin-top: 2px; font-size: 11px; color: #a8a29e; }
+    .tl.now b { color: #f5c16c; }
+    .tl.wait b { color: #78716c; }
+    .stage-actions { display: flex; gap: 8px; margin-top: 18px; }
+    .stage-actions button {
+      height: 34px; padding: 0 14px; border-radius: 8px; cursor: pointer; font-size: 13px;
+      border: 1px solid rgba(255,255,255,.16); background: transparent; color: #f5f5f4;
+    }
+    .stage-actions .go { background: #f5f5f4; color: #1c1917; border-color: #f5f5f4; }
+    .below { padding: 18px 32px 40px; }
+    .film {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid #e7e0d6;
+      border-bottom: 1px solid #e7e0d6;
+    }
+    .film div { padding: 14px 8px 14px 0; }
+    .film .n { font-size: 28px; font-weight: 620; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+    .film .l { font-size: 12px; color: #78716c; margin-top: 2px; }
+    .film .ok { color: #3f6212; }
+    .film .bad { color: #9f1239; }
+    .trio { display: grid; grid-template-columns: 1fr 1.3fr 0.9fr; gap: 22px; margin-top: 18px; }
+    .trio h3 { margin: 0 0 8px; font-size: 13px; }
+    .line { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid #e7e0d6; font-size: 13px; }
+    .src { margin-top: 22px; font-size: 12px; color: #78716c; line-height: 1.6; }
+
+    /* ========== 4 霓虹玻璃 ========== */
+    .neon {
+      position: relative;
+      overflow: hidden;
+      color: #f4f7ff;
+      background: #070816;
+      padding: 22px 28px 48px;
+    }
+    .neon .orb {
+      position: absolute;
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      filter: blur(40px);
+      pointer-events: none;
+    }
+    .neon .orb.a { left: -80px; top: -60px; background: rgba(34, 211, 238, .35); }
+    .neon .orb.b { right: -60px; top: 180px; background: rgba(232, 121, 249, .28); }
+    .neon .wrap { position: relative; max-width: 1120px; margin: 0 auto; }
+    .neon .top { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; }
+    .neon h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -0.03em;
+      background: linear-gradient(100deg, #e0fbff, #67e8f9 40%, #f0abfc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .neon .sub { color: #b7c0d8; }
+    .g-btn {
+      height: 34px; padding: 0 14px; border-radius: 999px; cursor: pointer;
+      border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.06); color: #fff; font-size: 13px;
+    }
+    .g-btn.go {
+      border: 0;
+      background: linear-gradient(100deg, #22d3ee, #818cf8 55%, #e879f9);
+      color: #0b1020;
+      font-weight: 700;
+      box-shadow: 0 0 24px rgba(129, 140, 248, .45);
+    }
+    .glass {
+      background: rgba(12, 16, 36, .55);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 18px;
+      backdrop-filter: blur(16px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+      padding: 14px 16px;
+    }
+    .glass.live {
+      background:
+        linear-gradient(180deg, rgba(18,22,48,.82), rgba(18,22,48,.72)) padding-box,
+        linear-gradient(120deg, #22d3ee, #e879f9) border-box;
+      border: 1px solid transparent;
+      box-shadow: 0 0 36px rgba(34, 211, 238, .22);
+    }
+    .neon .alert {
+      background: rgba(244, 63, 94, .12);
+      border-color: rgba(251, 113, 133, .45);
+      color: #fecdd3;
+    }
+    .g-top { display: grid; grid-template-columns: .85fr 1.3fr .9fr; gap: 12px; margin-top: 12px; }
+    .g-k { margin: 0 0 8px; font-size: 11px; letter-spacing: .16em; color: #93a0c2; }
+    .g-hero { font-size: 30px; margin: 0; font-weight: 680; letter-spacing: -.03em; }
+    .g-meta { margin: 8px 0 0; color: #c9d2ea; font-size: 13px; line-height: 1.5; }
+    .g-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .g-metrics .glass { padding: 12px; }
+    .g-metrics .n {
+      font-size: 28px; font-weight: 720; letter-spacing: -.03em;
+      text-shadow: 0 0 16px rgba(103, 232, 249, .45);
+    }
+    .g-metrics .ok { color: #5eead4; }
+    .g-metrics .bad { color: #fb7185; text-shadow: 0 0 16px rgba(251, 113, 133, .45); }
+    .g-metrics .l { font-size: 12px; color: #93a0c2; margin-top: 4px; }
+    .g-steps { display: grid; grid-template-columns: repeat(9, 1fr); gap: 6px; margin-top: 16px; position: relative; }
+    .g-steps::before {
+      content: "";
+      position: absolute; left: 4%; right: 4%; top: 10px; height: 2px;
+      background: linear-gradient(90deg, #22d3ee 0 36%, #e879f9 36% 44%, rgba(255,255,255,.16) 44%);
+      box-shadow: 0 0 12px #22d3ee;
+    }
+    .g-step { position: relative; padding-top: 26px; }
+    .g-step i {
+      position: absolute; top: 4px; left: 0; width: 14px; height: 14px; border-radius: 50%;
+      background: #12162c; border: 2px solid rgba(255,255,255,.3);
+    }
+    .g-step.ok i { background: #22d3ee; border-color: #22d3ee; box-shadow: 0 0 10px #22d3ee; }
+    .g-step.hot i { background: #f0abfc; border-color: #fff; box-shadow: 0 0 0 5px rgba(232,121,249,.35), 0 0 16px #e879f9; animation: pulse 1.8s ease-out infinite; }
+    .g-step b { display: block; font-size: 13px; }
+    .g-step span { display: block; margin-top: 2px; font-size: 11px; color: #93a0c2; }
+    .g-step.dim b, .g-step.dim span { color: #66708d; }
+    .g-bot { display: grid; grid-template-columns: 1.4fr .8fr; gap: 12px; margin-top: 12px; }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(232,121,249,.55); }
+      100% { box-shadow: 0 0 0 10px rgba(232,121,249,0); }
+    }
+
+    /* ========== 5 极光 ========== */
+    .aurora {
+      min-height: calc(100vh - 46px);
+      color: #1e1b4b;
+      padding: 26px 28px 48px;
+      background:
+        radial-gradient(ellipse at 8% -10%, rgba(192, 132, 252, .7), transparent 42%),
+        radial-gradient(ellipse at 92% 0%, rgba(45, 212, 191, .55), transparent 38%),
+        radial-gradient(ellipse at 70% 110%, rgba(251, 146, 60, .4), transparent 46%),
+        #f7f4ff;
+    }
+    .aurora .wrap { max-width: 1120px; margin: 0 auto; }
+    .a-bar {
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 18px;
+      padding: 12px 14px;
+      box-shadow: 0 16px 40px rgba(88, 28, 135, .08);
+    }
+    .aurora h1 { margin: 0; font-size: 20px; }
+    .a-pills { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+    .a-pill { font-size: 12px; background: #fff; border-radius: 999px; padding: 3px 8px; color: #4c1d95; }
+    .a-pill.bad { color: #be123c; }
+    .a-hero {
+      margin-top: 14px;
+      border-radius: 24px;
+      padding: 22px 22px 18px;
+      color: #fff;
+      background: linear-gradient(115deg, #4c1d95 0%, #6d28d9 38%, #0f766e 100%);
+      box-shadow: 0 24px 50px rgba(76, 29, 149, .28);
+      display: flex; justify-content: space-between; gap: 16px;
+    }
+    .a-hero h2 { margin: 6px 0 0; font-size: 40px; letter-spacing: -.04em; font-weight: 680; }
+    .a-hero .k { margin: 0; letter-spacing: .14em; font-size: 12px; opacity: .8; }
+    .a-time { font-size: 42px; font-weight: 680; letter-spacing: -.04em; }
+    .a-time small { display: block; font-size: 12px; font-weight: 500; opacity: .8; letter-spacing: 0; }
+    .a-steps { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+    .a-steps span {
+      background: rgba(255,255,255,.16);
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+    .a-steps .now { background: #fff; color: #5b21b6; font-weight: 700; }
+    .a-steps .wait { opacity: .65; }
+    .a-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 14px; }
+    .a-card {
+      background: rgba(255,255,255,.78);
+      border-radius: 18px;
+      padding: 14px 16px;
+      box-shadow: 0 12px 30px rgba(88, 28, 135, .08);
+    }
+    .a-card .n {
+      font-size: 32px; font-weight: 720; letter-spacing: -.03em;
+      background: linear-gradient(120deg, #6d28d9, #0f766e);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .a-card.bad .n { background: linear-gradient(120deg, #e11d48, #f97316); -webkit-background-clip: text; background-clip: text; }
+    .a-card .l { margin-top: 4px; font-size: 12px; color: #6b6280; }
+    .a-split { display: grid; grid-template-columns: 1.3fr .9fr; gap: 12px; margin-top: 12px; }
+
+    /* ========== 6 光轨 ========== */
+    .hud {
+      color: #d7fbff;
+      background:
+        linear-gradient(rgba(94, 242, 255, .05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(94, 242, 255, .05) 1px, transparent 1px),
+        #05080c;
+      background-size: 28px 28px, 28px 28px, auto;
+      padding: 18px 24px 40px;
+    }
+    .hud .wrap { max-width: 1120px; margin: 0 auto; }
+    .h-status { display: flex; gap: 16px; font-size: 12px; letter-spacing: .08em; color: #7dcea8; font-family: var(--mono); }
+    .h-status .bad { color: #ff5d73; }
+    .h-frame {
+      position: relative;
+      margin-top: 12px;
+      padding: 18px 18px 16px;
+      background:
+        linear-gradient(#5ef2ff, #5ef2ff) left top / 16px 2px no-repeat,
+        linear-gradient(#5ef2ff, #5ef2ff) left top / 2px 16px no-repeat,
+        linear-gradient(#5ef2ff, #5ef2ff) right top / 16px 2px no-repeat,
+        linear-gradient(#5ef2ff, #5ef2ff) right top / 2px 16px no-repeat,
+        linear-gradient(#5ef2ff, #5ef2ff) left bottom / 16px 2px no-repeat,
+        linear-gradient(#5ef2ff, #5ef2ff) left bottom / 2px 16px no-repeat,
+        linear-gradient(#5ef2ff, #5ef2ff) right bottom / 16px 2px no-repeat,
+        linear-gradient(#5ef2ff, #5ef2ff) right bottom / 2px 16px no-repeat,
+        rgba(4, 16, 22, .86);
+    }
+    .h-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+    .hud h1 { margin: 0; font-size: 36px; letter-spacing: .12em; font-weight: 650; color: #e8feff; text-shadow: 0 0 18px rgba(94,242,255,.55); }
+    .h-sub { margin: 6px 0 0; color: #8fd4de; font-size: 13px; }
+    .h-clock { font-size: 34px; color: #5ef2ff; text-shadow: 0 0 16px rgba(94,242,255,.8); }
+    .h-beam {
+      margin-top: 18px; height: 8px; border-radius: 99px;
+      background: repeating-linear-gradient(90deg, rgba(94,242,255,.15) 0 10px, transparent 10px 16px);
+      position: relative; overflow: hidden;
+    }
+    .h-beam i {
+      display: block; height: 100%; width: 42%;
+      background: linear-gradient(90deg, transparent, #5ef2ff, #fff);
+      box-shadow: 0 0 16px #5ef2ff;
+      animation: sweep 2.4s linear infinite;
+    }
+    @keyframes sweep { from { transform: translateX(-30%); } to { transform: translateX(220%); } }
+    .h-steps { display: grid; grid-template-columns: repeat(9, 1fr); gap: 6px; margin-top: 12px; }
+    .h-steps div { font-size: 12px; color: #6f8f96; }
+    .h-steps b { display: block; color: #d7fbff; font-weight: 650; }
+    .h-steps .now b { color: #5ef2ff; text-shadow: 0 0 8px #5ef2ff; }
+    .h-grid { display: grid; grid-template-columns: 1.1fr .9fr .9fr; gap: 12px; margin-top: 12px; }
+    .h-grid .h-frame { margin-top: 0; min-height: 150px; }
+    .h-grid h3 { margin: 0 0 10px; font-size: 12px; letter-spacing: .16em; color: #5ef2ff; }
+    .h-line { display: flex; justify-content: space-between; padding: 6px 0; border-top: 1px solid rgba(94,242,255,.15); font-size: 13px; }
+    .h-bars { display: flex; align-items: flex-end; gap: 4px; height: 70px; }
+    .h-bars i { flex: 1; background: linear-gradient(#fff, #5ef2ff); box-shadow: 0 0 8px rgba(94,242,255,.6); }
+
+    @media (max-width: 980px) {
+      .light .grid3, .light .bottom, .dark .layout, .dark .split, .railskin .trio { grid-template-columns: 1fr; }
+      .light .rail, .dark .dark-rail, .railskin .timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .light .rail li::before, .railskin .timeline::before { display: none; }
+      .light .rail li { padding: 8px; border: 1px solid #e5e7eb; border-radius: 8px; }
+      .film, .a-grid { grid-template-columns: 1fr 1fr; }
+      .g-top, .g-bot, .a-split, .h-grid { grid-template-columns: 1fr; }
+      .g-steps, .h-steps { grid-template-columns: repeat(3, 1fr); }
+      .g-steps::before { display: none; }
+      .a-hero { flex-direction: column; }
+      .a-hero h2, .a-time { font-size: 32px; }
+      .stageband h1, .elapsed .n { font-size: 32px; }
+      .picker { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <div class="picker">
+    <b>自动化控制面板 · 视觉样稿</b>
+    <span class="note">同一套总览数据。4–6 是更抢眼的皮肤。样稿不是真实运行。</span>
+    <div class="picks">
+      <button type="button" data-skin="light" class="on">1 浅台</button>
+      <button type="button" data-skin="dark">2 暗舱</button>
+      <button type="button" data-skin="rail">3 轨道</button>
+      <button type="button" data-skin="neon">4 霓虹</button>
+      <button type="button" data-skin="aurora">5 极光</button>
+      <button type="button" data-skin="hud">6 光轨</button>
+    </div>
+  </div>
+
+  <!-- 浅台：Stripe 数字 + Linear 细线 + 现有青绿 -->
+  <article class="skin light on" id="skin-light">
+    <div class="wrap">
+      <header class="top">
+        <div>
+          <p class="kicker">Auto control · 龙翔 · 档 A</p>
+          <h1>自动化控制面板</h1>
+          <p class="sub">玩家充值 → 会长提现 · 单槽串行 · 轮询 5s</p>
+          <div class="health">
+            <span class="pill"><i class="g"></i>工作台</span>
+            <span class="pill"><i class="g"></i>:3780</span>
+            <span class="pill"><i class="r"></i>Apifox token</span>
+            <span class="pill"><i class="g"></i>数据库</span>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn pri" type="button">跑 · 档 A</button>
+          <button class="btn" type="button">跑 · 档 B</button>
+          <button class="btn" type="button">仅 Apifox 充值</button>
+          <button class="btn stop" type="button">停止</button>
+        </div>
+      </header>
+      <div class="alert">APIFOX_TOKEN 未配置。档 A 若走 Apifox 充值会停；SDK 路径仍可入队。</div>
+      <div class="grid3">
+        <section class="card">
+          <h3>排队 · 1</h3>
+          <div class="q-item"><div><b>档 B · 游趣</b><div class="muted">手工 · 09:12</div></div><span class="mono muted">#1842</span></div>
+          <div class="q-item"><div class="muted">空位。单槽，当前跑完才轮到它。</div></div>
+        </section>
+        <section class="card">
+          <h3>当前执行</h3>
+          <p class="now-name">分佣断言</p>
+          <p class="now-meta">S6 · SQL · 4 / 7 · <span class="mono">ac-20261022-0041</span><br>已用 01:24 · 龙翔 · 会长 g_10086</p>
+          <div class="progress" aria-hidden="true"><i></i></div>
+        </section>
+        <section class="metrics">
+          <div class="metric ok"><div class="n">12</div><div class="l">今日成功</div></div>
+          <div class="metric bad"><div class="n">2</div><div class="l">今日失败</div></div>
+          <div class="metric"><div class="n">1</div><div class="l">排队中</div></div>
+          <div class="metric"><div class="n">1</div><div class="l">进行中</div></div>
+        </section>
+      </div>
+      <section class="card steps-card">
+        <h3>主链 · 充值到提现</h3>
+        <ol class="rail">
+          <li class="passed"><i class="dot"></i><b class="t">种子会长</b><span class="e">S0 · 2s</span></li>
+          <li class="passed"><i class="dot"></i><b class="t">注册下单</b><span class="e">S4 · 18s</span></li>
+          <li class="passed"><i class="dot"></i><b class="t">模拟回调</b><span class="e">S5 · 4s</span></li>
+          <li class="run"><i class="dot"></i><b class="t">分佣断言</b><span class="e">S6 · SQL</span></li>
+          <li class="stub"><i class="dot"></i><b class="t">渠道结算</b><span class="e">S7 · 待接线</span></li>
+          <li class="stub"><i class="dot"></i><b class="t">会长确认</b><span class="e">S8 · 待接线</span></li>
+          <li class="stub"><i class="dot"></i><b class="t">会长提现</b><span class="e">S9 · 待接线</span></li>
+          <li class="stub"><i class="dot"></i><b class="t">审核通过</b><span class="e">S10 · 待接线</span></li>
+          <li class="off"><i class="dot"></i><b class="t">打款</b><span class="e">S11 · 默认关</span></li>
+        </ol>
+      </section>
+      <div class="bottom">
+        <section class="card">
+          <h3>吞吐 · 近 24 小时</h3>
+          <div class="chart-cap"><span>次数 / 小时</span><span class="legend"><i class="ok"></i>成功<i class="bad"></i>失败</span></div>
+          <svg class="spark" viewBox="0 0 320 90" role="img" aria-label="近 24 小时成功与失败折线">
+            <polyline fill="none" stroke="#16a34a" stroke-width="2" points="0,70 26,68 52,66 78,58 104,62 130,40 156,28 182,36 208,18 234,30 260,34 286,48 314,52" />
+            <polyline fill="none" stroke="#dc2626" stroke-width="2" points="0,82 26,82 52,82 78,82 104,70 130,82 156,82 182,64 208,82 234,82 260,82 286,82 314,76" />
+          </svg>
+        </section>
+        <section class="card">
+          <h3>运行情况</h3>
+          <div class="stat-row"><span>当日</span><span class="bar"><i class="ok" style="width:80%"></i><i class="bad" style="width:12%"></i></span><b>86%</b><span class="muted">14</span></div>
+          <div class="stat-row"><span>本周</span><span class="bar"><i class="ok" style="width:84%"></i><i class="bad" style="width:10%"></i></span><b>89%</b><span class="muted">54</span></div>
+          <div class="stat-row"><span>本月</span><span class="bar"><i class="ok" style="width:86%"></i><i class="bad" style="width:9%"></i></span><b>90%</b><span class="muted">207</span></div>
+          <p class="muted" style="font-size:12px;margin:8px 0 0">当日另有进行中 1、排队 1。点数字进任务筛选。</p>
+        </section>
+        <section class="card">
+          <h3>风险 · 近 7 日失败</h3>
+          <div class="days">
+            <div><div class="col z"></div><em>10/16</em></div>
+            <div><div class="col" style="height:28px"></div><em>10/17</em></div>
+            <div><div class="col z"></div><em>10/18</em></div>
+            <div><div class="col" style="height:64px"></div><em>10/19</em></div>
+            <div><div class="col z"></div><em>10/20</em></div>
+            <div><div class="col" style="height:42px"></div><em>10/21</em></div>
+            <div><div class="col z"></div><em>10/22</em></div>
+          </div>
+        </section>
+      </div>
+      <p class="foot">借鉴 Stripe 指标密度、Linear 细线与状态克制、GitHub Actions 步骤轨。配色沿用工作台青绿，适合当首版皮肤。</p>
+    </div>
+  </article>
+
+  <!-- 暗舱：Datadog / Grafana 驾驶舱，琥珀只标「正在跑」 -->
+  <article class="skin dark" id="skin-dark">
+    <div class="hud">
+      <span class="brand">AUTO CONTROL</span>
+      <span><i class="dotg"></i>工作台</span>
+      <span><i class="dotg"></i>3780</span>
+      <span><i class="dotr"></i>TOKEN</span>
+      <span><i class="dotg"></i>DB</span>
+      <span class="mono">16:27:04</span>
+      <span>龙翔</span>
+      <span>轮询 5s</span>
+      <div class="sp">
+        <button class="ghost hot" type="button">档 A</button>
+        <button class="ghost" type="button">档 B</button>
+        <button class="ghost" type="button">停止</button>
+      </div>
+    </div>
+    <div class="body">
+      <div class="alarm">APIFOX_TOKEN 未配置 · 接口场景不可跑 · SDK 充值仍可用</div>
+      <div class="layout">
+        <section class="panel">
+          <h3>排队</h3>
+          <div class="runline"><span>档 B · 游趣</span><span class="mono">09:12</span></div>
+          <div class="runline"><span class="muted">#1842 手工</span><span>等待当前槽</span></div>
+          <div class="runline"><span class="muted">空闲槽位</span><span>0</span></div>
+        </section>
+        <section class="panel stage">
+          <p class="eyebrow">执行中 · S6 / 7</p>
+          <p class="big">分佣断言</p>
+          <p class="meta">SQL · 已用 <span class="mono">01:24</span> · ac-20261022-0041<br>sum_money 断言进行中 · 会长 g_10086 · 游戏默认档</p>
+        </section>
+        <section class="panel">
+          <h3>今日</h3>
+          <div class="readout ok"><span class="l">成功</span><span class="n">12</span></div>
+          <div class="readout bad"><span class="l">失败</span><span class="n">02</span></div>
+          <div class="readout"><span class="l">排队</span><span class="n">01</span></div>
+          <div class="readout run"><span class="l">槽位</span><span class="n">1/1</span></div>
+        </section>
+      </div>
+      <div class="dark-rail" style="margin-top:12px">
+        <div class="node passed"><span class="id">S0</span><span class="nm">种子会长</span><span class="st">通过 · 2s</span></div>
+        <div class="node passed"><span class="id">S4</span><span class="nm">注册下单</span><span class="st">通过 · 18s</span></div>
+        <div class="node passed"><span class="id">S5</span><span class="nm">模拟回调</span><span class="st">通过 · 4s</span></div>
+        <div class="node run"><span class="id">S6</span><span class="nm">分佣断言</span><span class="st">执行中</span></div>
+        <div class="node stub"><span class="id">S7</span><span class="nm">渠道结算</span><span class="st">待接线</span></div>
+        <div class="node stub"><span class="id">S8</span><span class="nm">会长确认</span><span class="st">待接线</span></div>
+        <div class="node stub"><span class="id">S9</span><span class="nm">会长提现</span><span class="st">待接线</span></div>
+        <div class="node stub"><span class="id">S10</span><span class="nm">审核通过</span><span class="st">待接线</span></div>
+        <div class="node stub"><span class="id">S11</span><span class="nm">打款</span><span class="st">默认关</span></div>
+      </div>
+      <div class="split">
+        <section class="panel">
+          <h3>吞吐 · 24h</h3>
+          <div class="hours" aria-hidden="true">
+            <i><b style="height:18%"></b></i>
+            <i><b style="height:22%"></b></i>
+            <i><b style="height:20%"></b></i>
+            <i><b style="height:40%"></b></i>
+            <i><b style="height:28%"></b><s style="height:16%"></s></i>
+            <i><b style="height:62%"></b></i>
+            <i><b style="height:80%"></b></i>
+            <i><b style="height:48%"></b><s style="height:22%"></s></i>
+            <i><b style="height:90%"></b></i>
+            <i><b style="height:55%"></b></i>
+            <i><b style="height:42%"></b></i>
+            <i><b style="height:30%"></b><s style="height:8%"></s></i>
+          </div>
+          <div class="hour-lab"><span>06</span><span>10</span><span>14</span><span>18</span><span>22</span></div>
+        </section>
+        <section class="panel">
+          <h3>近 7 日失败</h3>
+          <div class="wk">
+            <div class="cell"><strong>0</strong><em>16</em></div>
+            <div class="cell"><strong>1</strong><em>17</em></div>
+            <div class="cell"><strong>0</strong><em>18</em></div>
+            <div class="cell hot"><strong>3</strong><em>19</em></div>
+            <div class="cell"><strong>0</strong><em>20</em></div>
+            <div class="cell hot"><strong>2</strong><em>21</em></div>
+            <div class="cell"><strong>0</strong><em>22</em></div>
+          </div>
+          <p class="muted" style="font-size:12px;margin:12px 0 0">运行情况：当日 86% · 本周 89% · 本月 90%</p>
+        </section>
+      </div>
+      <p class="foot" style="color:#6b7280">借鉴 Datadog / Grafana 暗色驾驶舱，和 996 看板的「排队 | 当前 | 指标」三栏。琥珀只留给正在跑的步骤，成败仍用绿红。对应 PRD 里的二期深色皮肤。</p>
+    </div>
+  </article>
+
+  <!-- 轨道：Temporal / GitHub Actions，步骤是主角 -->
+  <article class="skin railskin" id="skin-rail">
+    <div class="stageband">
+      <div class="inner">
+        <div class="stage-top">
+          <div>
+            <p class="k">正在跑 · 龙翔 · 档 A · 4/7</p>
+            <h1>分佣断言</h1>
+            <div class="chips">
+              <span class="chip mono">S6</span>
+              <span class="chip">引擎 SQL</span>
+              <span class="chip mono">ac-20261022-0041</span>
+              <span class="chip">会长 g_10086</span>
+              <span class="chip">遇 stub 即停</span>
+            </div>
+          </div>
+          <div class="elapsed">
+            <div class="n mono">01:24</div>
+            <div class="l">本步已用时</div>
+          </div>
+        </div>
+        <div class="timeline">
+          <div class="tl done"><i class="mk"></i><b>种子会长</b><span>2s</span></div>
+          <div class="tl done"><i class="mk"></i><b>注册下单</b><span>18s</span></div>
+          <div class="tl done"><i class="mk"></i><b>模拟回调</b><span>4s</span></div>
+          <div class="tl now"><i class="mk"></i><b>分佣断言</b><span>进行中</span></div>
+          <div class="tl wait"><i class="mk"></i><b>渠道结算</b><span>待接线</span></div>
+          <div class="tl wait"><i class="mk"></i><b>会长确认</b><span>待接线</span></div>
+          <div class="tl wait"><i class="mk"></i><b>会长提现</b><span>待接线</span></div>
+          <div class="tl wait"><i class="mk"></i><b>审核通过</b><span>待接线</span></div>
+          <div class="tl wait"><i class="mk"></i><b>打款</b><span>默认关</span></div>
+        </div>
+        <div class="stage-actions">
+          <button class="go" type="button">跑 · 档 A</button>
+          <button type="button">跑 · 档 B</button>
+          <button type="button">停止</button>
+          <button type="button">打开日志尾</button>
+        </div>
+      </div>
+    </div>
+    <div class="below">
+      <div class="film">
+        <div><div class="n ok">12</div><div class="l">今日成功</div></div>
+        <div><div class="n bad">2</div><div class="l">今日失败</div></div>
+        <div><div class="n">1</div><div class="l">排队 · 游趣档 B</div></div>
+        <div><div class="n">86%</div><div class="l">当日成功率</div></div>
+      </div>
+      <div class="trio">
+        <section>
+          <h3>接着会停在哪</h3>
+          <div class="line"><span>S7 渠道结算</span><b>stub · 停止</b></div>
+          <div class="line"><span>S8 会长确认</span><span class="muted">不会假绿</span></div>
+          <div class="line"><span>S11 打款</span><span class="muted">默认关</span></div>
+          <div class="line"><span>告警</span><span>token 未配置</span></div>
+        </section>
+        <section>
+          <h3>近 24 小时 · 成功 / 失败</h3>
+          <svg class="spark" viewBox="0 0 360 80" role="img" aria-label="轨道版近 24 小时折线">
+            <polyline fill="none" stroke="#3f6212" stroke-width="2" points="0,62 30,60 60,58 90,48 120,52 150,34 180,22 210,30 240,12 270,26 300,28 330,40 354,44" />
+            <polyline fill="none" stroke="#9f1239" stroke-width="2" points="0,72 30,72 60,72 90,72 120,60 150,72 180,72 210,54 240,72 270,72 300,72 330,72 354,66" />
+          </svg>
+          <div class="hour-lab" style="color:#a8a29e"><span>昨日 16:00</span><span>今日 16:00</span></div>
+        </section>
+        <section>
+          <h3>近 7 日失败</h3>
+          <div class="line"><span>10/19</span><b>3</b></div>
+          <div class="line"><span>10/21</span><b>2</b></div>
+          <div class="line"><span>10/17</span><b>1</b></div>
+          <div class="line"><span>其余四日</span><span class="muted">0</span></div>
+        </section>
+      </div>
+      <p class="src">借鉴 GitHub Actions 的步骤时间线、Temporal 把当前活动放大、Vercel 部署页的舞台头图。适合「钱链路跑到哪」比指标墙更重要的时候。下半页用暖纸色，避免整页发黑。</p>
+    </div>
+  </article>
+
+  <article class="skin neon" id="skin-neon">
+    <div class="orb a"></div>
+    <div class="orb b"></div>
+    <div class="wrap">
+      <div class="top">
+        <div>
+          <p class="kicker" style="color:#93a0c2">龙翔 · 档 A · 单槽</p>
+          <h1>自动化控制面板</h1>
+          <p class="sub">玩家充值 → 会长提现 · 玻璃卡片 + 霓虹步骤</p>
+        </div>
+        <div class="actions">
+          <button class="g-btn go" type="button">跑 · 档 A</button>
+          <button class="g-btn" type="button">跑 · 档 B</button>
+          <button class="g-btn" type="button">停止</button>
+        </div>
+      </div>
+      <div class="alert">APIFOX_TOKEN 未配置。接口场景不可跑，SDK 充值仍可入队。</div>
+      <div class="g-top">
+        <section class="glass">
+          <p class="g-k">排队</p>
+          <div class="q-item" style="border-color:rgba(255,255,255,.08)"><div><b>档 B · 游趣</b><div class="muted">手工 · 09:12</div></div><span class="mono muted">#1842</span></div>
+        </section>
+        <section class="glass live">
+          <p class="g-k">当前执行</p>
+          <p class="g-hero">分佣断言</p>
+          <p class="g-meta">S6 · SQL · 4/7 · 已用 <span class="mono">01:24</span><br>ac-20261022-0041 · 会长 g_10086</p>
+        </section>
+        <div class="g-metrics">
+          <div class="glass"><div class="n ok">12</div><div class="l">今日成功</div></div>
+          <div class="glass"><div class="n bad">2</div><div class="l">今日失败</div></div>
+          <div class="glass"><div class="n">1</div><div class="l">排队中</div></div>
+          <div class="glass"><div class="n">86%</div><div class="l">当日成功率</div></div>
+        </div>
+      </div>
+      <section class="glass" style="margin-top:12px">
+        <p class="g-k">主链光轨</p>
+        <div class="g-steps">
+          <div class="g-step ok"><i></i><b>种子会长</b><span>2s</span></div>
+          <div class="g-step ok"><i></i><b>注册下单</b><span>18s</span></div>
+          <div class="g-step ok"><i></i><b>模拟回调</b><span>4s</span></div>
+          <div class="g-step hot"><i></i><b>分佣断言</b><span>进行中</span></div>
+          <div class="g-step dim"><i></i><b>渠道结算</b><span>待接线</span></div>
+          <div class="g-step dim"><i></i><b>会长确认</b><span>待接线</span></div>
+          <div class="g-step dim"><i></i><b>会长提现</b><span>待接线</span></div>
+          <div class="g-step dim"><i></i><b>审核通过</b><span>待接线</span></div>
+          <div class="g-step dim"><i></i><b>打款</b><span>默认关</span></div>
+        </div>
+      </section>
+      <div class="g-bot">
+        <section class="glass">
+          <p class="g-k">吞吐 · 近 24 小时</p>
+          <svg class="spark" viewBox="0 0 320 80" role="img" aria-label="霓虹版近 24 小时折线">
+            <polyline fill="none" stroke="#22d3ee" stroke-width="2.4" points="0,62 26,58 52,54 78,46 104,50 130,32 156,20 182,28 208,12 234,24 260,28 286,40 314,36" />
+            <polyline fill="none" stroke="#fb7185" stroke-width="2" points="0,72 26,72 52,72 78,70 104,60 130,72 156,72 182,54 208,72 234,72 260,72 286,70 314,66" />
+          </svg>
+        </section>
+        <section class="glass">
+          <p class="g-k">近 7 日失败</p>
+          <div class="line" style="border-color:rgba(255,255,255,.08)"><span>10/19</span><b>3</b></div>
+          <div class="line" style="border-color:rgba(255,255,255,.08)"><span>10/21</span><b>2</b></div>
+          <div class="line" style="border-color:rgba(255,255,255,.08)"><span>10/17</span><b>1</b></div>
+          <div class="line" style="border-color:rgba(255,255,255,.08)"><span>其余四日</span><span class="muted">0</span></div>
+        </section>
+      </div>
+      <p class="foot" style="color:#7c879f">借鉴玻璃拟态控制台和赛博霓虹落地页：模糊底板、渐变描边、步骤光点。好看，但告警和步骤在发光里会变抢。</p>
+    </div>
+  </article>
+
+  <article class="skin aurora" id="skin-aurora">
+    <div class="wrap">
+      <div class="a-bar">
+        <div>
+          <h1>自动化控制面板</h1>
+          <div class="a-pills">
+            <span class="a-pill">工作台正常</span>
+            <span class="a-pill">:3780 正常</span>
+            <span class="a-pill bad">Apifox token 缺失</span>
+            <span class="a-pill">龙翔 · 档 A</span>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn pri" type="button" style="background:#6d28d9;border-color:#6d28d9">跑 · 档 A</button>
+          <button class="btn" type="button">跑 · 档 B</button>
+          <button class="btn stop" type="button">停止</button>
+        </div>
+      </div>
+      <section class="a-hero">
+        <div>
+          <p class="k">正在跑 · 4/7 · SQL</p>
+          <h2>分佣断言</h2>
+          <div class="a-steps">
+            <span>种子会长</span>
+            <span>注册下单</span>
+            <span>模拟回调</span>
+            <span class="now">分佣断言</span>
+            <span class="wait">渠道结算 · 待接线</span>
+            <span class="wait">打款 · 关</span>
+          </div>
+        </div>
+        <div class="a-time mono">01:24<small>本步已用 · ac-20261022-0041</small></div>
+      </section>
+      <div class="a-grid">
+        <div class="a-card"><div class="n">12</div><div class="l">今日成功</div></div>
+        <div class="a-card bad"><div class="n">2</div><div class="l">今日失败</div></div>
+        <div class="a-card"><div class="n">1</div><div class="l">排队 · 游趣档 B</div></div>
+        <div class="a-card"><div class="n">86%</div><div class="l">当日成功率</div></div>
+      </div>
+      <div class="a-split">
+        <section class="a-card">
+          <h3 style="margin:0 0 8px;font-size:13px">近 24 小时</h3>
+          <svg class="spark" viewBox="0 0 360 80" role="img" aria-label="极光版近 24 小时折线">
+            <polyline fill="none" stroke="#6d28d9" stroke-width="2.4" points="0,62 30,58 60,52 90,46 120,50 150,32 180,18 210,28 240,10 270,22 300,26 330,38 354,34" />
+            <polyline fill="none" stroke="#e11d48" stroke-width="2" points="0,72 30,72 60,72 90,68 120,58 150,72 180,72 210,52 240,72 270,72 300,72 330,70 354,66" />
+          </svg>
+        </section>
+        <section class="a-card">
+          <h3 style="margin:0 0 8px;font-size:13px">遇 stub 即停</h3>
+          <div class="line"><span>S7 渠道结算</span><b>停止</b></div>
+          <div class="line"><span>S8 会长确认</span><span class="muted">不会假绿</span></div>
+          <div class="line"><span>S11 打款</span><span class="muted">默认关</span></div>
+          <div class="line"><span>10/19 失败</span><b>3</b></div>
+        </section>
+      </div>
+      <p class="src">借鉴 Arc / Framer 那类极光渐变产品页：大色块舞台、渐变数字、悬浮白卡片。适合演示，日跑盯屏会比浅台更累。</p>
+    </div>
+  </article>
+
+  <article class="skin hud" id="skin-hud">
+    <div class="wrap">
+      <div class="h-status">
+        <span>SYS OK</span>
+        <span>3780 OK</span>
+        <span class="bad">TOKEN FAIL</span>
+        <span>DB OK</span>
+        <span>LX · PROFILE A</span>
+        <span>POLL 5s</span>
+      </div>
+      <section class="h-frame">
+        <div class="h-row">
+          <div>
+            <p class="g-k">当前槽位 · S6 / 7</p>
+            <h1>分佣断言</h1>
+            <p class="h-sub">SQL · ac-20261022-0041 · 会长 g_10086 · 遇 stub 即停</p>
+          </div>
+          <div class="h-clock mono">01:24</div>
+        </div>
+        <div class="h-beam" aria-hidden="true"><i></i></div>
+        <div class="h-steps">
+          <div><b>S0 种子</b>通过</div>
+          <div><b>S4 下单</b>通过</div>
+          <div><b>S5 回调</b>通过</div>
+          <div class="now"><b>S6 分佣</b>执行中</div>
+          <div><b>S7 结算</b>待接线</div>
+          <div><b>S8 确认</b>待接线</div>
+          <div><b>S9 提现</b>待接线</div>
+          <div><b>S10 审核</b>待接线</div>
+          <div><b>S11 打款</b>默认关</div>
+        </div>
+      </section>
+      <div class="h-grid">
+        <section class="h-frame">
+          <h3>排队</h3>
+          <div class="h-line"><span>档 B · 游趣</span><span class="mono">09:12</span></div>
+          <div class="h-line"><span>#1842 手工</span><span>等待当前槽</span></div>
+          <div class="h-line"><span>告警</span><span class="bad" style="color:#ff5d73">token 未配置</span></div>
+        </section>
+        <section class="h-frame">
+          <h3>吞吐 24H</h3>
+          <div class="h-bars" aria-hidden="true">
+            <i style="height:22%"></i><i style="height:28%"></i><i style="height:24%"></i><i style="height:40%"></i>
+            <i style="height:36%"></i><i style="height:62%"></i><i style="height:84%"></i><i style="height:50%"></i>
+            <i style="height:92%"></i><i style="height:58%"></i><i style="height:44%"></i><i style="height:30%"></i>
+          </div>
+        </section>
+        <section class="h-frame">
+          <h3>近 7 日失败</h3>
+          <div class="h-line"><span>10/19</span><b>3</b></div>
+          <div class="h-line"><span>10/21</span><b>2</b></div>
+          <div class="h-line"><span>10/17</span><b>1</b></div>
+          <div class="h-line"><span>当日成功率</span><b>86%</b></div>
+        </section>
+      </div>
+      <p class="foot" style="color:#5f7c84">借鉴航天指挥屏和游戏任务 HUD：网格底、四角框、扫描光条。步骤名被压短，日常阅读不如浅台。</p>
+    </div>
+  </article>
+
+  <script>
+    const buttons = document.querySelectorAll(".picks button");
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-skin");
+        document.querySelectorAll(".skin").forEach((el) => el.classList.toggle("on", el.id === "skin-" + id));
+        buttons.forEach((b) => b.classList.toggle("on", b === btn));
+        history.replaceState(null, "", "#" + id);
+      });
+    });
+    const initial = (location.hash || "#light").slice(1);
+    const start = document.querySelector('.picks button[data-skin="' + initial + '"]');
+    if (start) start.click();
+  </script>
+</body>
+</html>

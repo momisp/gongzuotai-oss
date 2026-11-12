@@ -1,0 +1,33 @@
+[
+  {
+    "title": "画布 1",
+    "topic": {
+      "title": "测试点",
+      "topics": [
+        {
+          "title": "我的-查看更多",
+          "topics": [
+            {
+              "title": "存在创作者中心入口"
+            },
+            {
+              "title": "存在授权列表入口"
+            }
+          ]
+        },
+        {
+          "title": "创作者中心",
+          "topics": [
+            {
+              "title": "页面与UI图一致"
+            },
+            {
+              "title": "创作者图标能够随等级增加而改变"
+            }
+          ]
+        }
+      ]
+    },
+    "structure": "org.xmind.ui.logic.right"
+  }
+]

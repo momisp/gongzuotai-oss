@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>矿洞爆破大师</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(180deg, #1a120a 0%, #2d1f14 50%, #1a120a 100%);
+            min-height: 100vh;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        #gameContainer {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mine-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .rock-texture {
+            position: absolute;
+            background: linear-gradient(45deg, #3d2e1f 25%, transparent 25%),
+                        linear-gradient(-45deg, #3d2e1f 25%, transparent 25%),
+                        linear-gradient(45deg, transparent 75%, #2d1f14 75%),
+                        linear-gradient(-45deg, transparent 75%, #2d1f14 75%);
+            background-size: 20px 20px;
+            opacity: 0.3;
+        }
+
+        .lantern {
+            position: absolute;
+            width: 30px;
+            height: 40px;
+            background: radial-gradient(ellipse, #ffaa00 0%, #ff6600 50%, #8b4513 100%);
+            border-radius: 50% 50% 30% 30%;
+            box-shadow: 0 0 30px #ff8800, 0 0 60px #ff6600;
+            animation: flicker 0.5s infinite alternate;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.8; box-shadow: 0 0 30px #ff8800, 0 0 60px #ff6600; }
+            100% { opacity: 1; box-shadow: 0 0 40px #ffaa00, 0 0 80px #ff8800; }
+        }
+
+        .dynamite-crate {
+            position: absolute;
+            width: 40px;
+            height: 30px;
+            background: linear-gradient(180deg, #8b4513 0%, #654321 100%);
+            border: 2px solid #4a3015;
+            border-radius: 4px;
+        }
+
+        #startScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            background: linear-gradient(180deg, rgba(26,18,10,0.95) 0%, rgba(45,31,20,0.95) 100%);
+        }
+
+        .game-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 0 0 20px #ff8800, 0 4px 8px rgba(0,0,0,0.8);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .game-subtitle {
+            font-size: 16px;
+            color: #ccc;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .rules-panel {
+            background: rgba(60, 40, 20, 0.8);
+            border: 2px solid #8b4513;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 0 20px 30px;
+            max-height: 45vh;
+            overflow-y: auto;
+        }
+
+        .rules-title {
+            font-size: 18px;
+            color: #ffd700;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .rule-item {
+            font-size: 13px;
+            color: #ddd;
+            margin-bottom: 10px;
+            line-height: 1.6;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .rule-item:before {
+            content: "💥";
+            position: absolute;
+            left: 0;
+        }
+
+        .rock-legend {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+
+        .legend-item {
+            text-align: center;
+            font-size: 11px;
+        }
+
+        .legend-rock {
+            width: 30px;
+            height: 30px;
+            margin: 0 auto 5px;
+            border-radius: 4px;
+        }
+
+        .shale { background: linear-gradient(135deg, #8b7355 0%, #6b5344 100%); }
+        .granite { background: linear-gradient(135deg, #808080 0%, #5a5a5a 100%); }
+        .obsidian { background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%); }
+
+        .start-btn {
+            background: #ff4444;
+            border: 2px solid #cc0000;
+            border-radius: 8px;
+            padding: 12px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .start-btn:active {
+            background: #cc0000;
+        }
+
+        .back-btn {
+            background: transparent;
+            border: none;
+            color: #ffd700;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 5px 10px;
+            margin-right: 10px;
+        }
+
+        .back-btn {
+            background: linear-gradient(180deg, #5a4a3a 0%, #3d2e22 100%);
+            border: 2px solid #8b7355;
+            border-radius: 8px;
+            color: #ffd700;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 6px 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .back-btn::before {
+            font-size: 11px;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(180deg, #6b5a4a 0%, #4e3f33 100%);
+            border-color: #a08060;
+        }
+
+        .back-btn:active {
+            background: linear-gradient(180deg, #3d2e22 0%, #5a4a3a 100%);
+            transform: scale(0.95);
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: rgba(40, 25, 10, 0.6);
+            border-bottom: 2px solid #654321;
+        }
+
+        .status-bar .status-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #ddd;
+            font-size: 14px;
+        }
+
+        #gameScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            z-index: 50;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 10px;
+            background: linear-gradient(180deg, rgba(40,25,10,0.9) 0%, rgba(60,35,15,0.7) 100%);
+            border-bottom: 1px solid #654321;
+            position: relative;
+        }
+
+        .top-bar .level-indicator {
+            text-align: center;
+            flex: 1;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-icon {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .status-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .level-indicator {
+            text-align: center;
+        }
+
+        .level-name {
+            font-size: 14px;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .level-desc {
+            font-size: 11px;
+            color: #aaa;
+        }
+
+        .game-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            position: relative;
+        }
+
+        .grid-container {
+            background: rgba(30, 20, 10, 0.8);
+            border: 4px solid #654321;
+            border-radius: 8px;
+            padding: 8px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .grid {
+            display: grid;
+            gap: 3px;
+        }
+
+        .cell {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            font-size: 18px;
+        }
+
+        .cell.empty {
+            background: linear-gradient(135deg, #4a3520 0%, #3a2818 100%);
+            border: 1px solid #5a4530;
+        }
+
+        .cell.empty:hover {
+            background: linear-gradient(135deg, #5a4530 0%, #4a3520 100%);
+            box-shadow: 0 0 10px rgba(255,200,100,0.3);
+        }
+
+        .cell.rock-shale {
+            background: linear-gradient(135deg, #8b7355 0%, #6b5344 100%);
+            border: 2px solid #5b4333;
+        }
+
+        .cell.rock-granite {
+            background: linear-gradient(135deg, #808080 0%, #5a5a5a 100%);
+            border: 2px solid #4a4a4a;
+        }
+
+        .cell.rock-obsidian {
+            background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+            border: 2px solid #3d3d3d;
+        }
+
+        .cell.bomb {
+            background: linear-gradient(135deg, #ff6600 0%, #cc4400 100%);
+            border: 2px solid #aa3300;
+            box-shadow: 0 0 15px rgba(255,100,0,0.6);
+            animation: bombPulse 1s infinite;
+        }
+
+        @keyframes bombPulse {
+            0%, 100% { box-shadow: 0 0 15px rgba(255,100,0,0.6); }
+            50% { box-shadow: 0 0 25px rgba(255,100,0,0.9); }
+        }
+
+        .cell.gem {
+            background: linear-gradient(135deg, #4a3520 0%, #3a2818 100%);
+            border: 1px solid #5a4530;
+        }
+
+        .gem-icon {
+            font-size: 24px;
+            filter: drop-shadow(0 0 8px currentColor);
+            animation: gemGlow 2s infinite;
+        }
+
+        .gem-red { color: #ff4444; }
+        .gem-blue { color: #4488ff; }
+        .gem-green { color: #44ff44; }
+
+        @keyframes gemGlow {
+            0%, 100% { filter: drop-shadow(0 0 8px currentColor); }
+            50% { filter: drop-shadow(0 0 15px currentColor); }
+        }
+
+        .gem-cracked {
+            position: relative;
+        }
+
+        .gem-cracked:after {
+            content: "💔";
+            position: absolute;
+            font-size: 12px;
+            top: -5px;
+            right: -5px;
+        }
+
+        .durability {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            font-size: 10px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 3px #000;
+        }
+
+        .bottom-controls {
+            padding: 15px;
+            background: linear-gradient(0deg, rgba(40,25,10,0.9) 0%, rgba(60,35,15,0.7) 100%);
+            border-top: 3px solid #8b4513;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .control-btn {
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .control-btn:active {
+            opacity: 0.8;
+        }
+
+        .preview-btn {
+            background: #4488ff;
+            color: #fff;
+            border-color: #2266cc;
+        }
+
+        .preview-btn:disabled {
+            background: #999;
+            border-color: #777;
+            cursor: not-allowed;
+        }
+
+        .detonate-btn {
+            background: #ff4444;
+            color: #fff;
+            font-size: 16px;
+            padding: 12px 24px;
+            border-color: #cc0000;
+        }
+
+        .detonate-btn:disabled {
+            background: #999;
+            border-color: #777;
+            cursor: not-allowed;
+        }
+
+        .reset-btn {
+            background: #888;
+            color: #fff;
+            border-color: #666;
+        }
+
+        .explosion {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ffff00 0%, #ff8800 40%, #ff4400 70%, transparent 100%);
+            animation: explode 0.5s ease-out forwards;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        @keyframes explode {
+            0% { transform: scale(0); opacity: 1; }
+            50% { transform: scale(2); opacity: 0.8; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .flash {
+            animation: flash 0.3s;
+        }
+
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; background: #ff8800; }
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+
+        .modal-content {
+            background: linear-gradient(180deg, #4a3020 0%, #3a2010 100%);
+            border: 4px solid #8b4513;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            max-width: 85%;
+            box-shadow: 0 0 50px rgba(255,150,0,0.5);
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px #ff8800;
+        }
+
+        .modal-message {
+            font-size: 16px;
+            color: #ddd;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .modal-btn {
+            background: #ffd700;
+            border: 1px solid #cc8800;
+            border-radius: 6px;
+            padding: 10px 24px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #4a2800;
+            cursor: pointer;
+            margin: 5px;
+            transition: background 0.2s;
+        }
+
+        .modal-btn:active {
+            background: #cc8800;
+        }
+
+        .modal-btn.danger {
+            background: #ff4444;
+            border-color: #cc0000;
+            color: #fff;
+        }
+
+        .treasure-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 300;
+        }
+
+        .treasure-chest {
+            font-size: 120px;
+            animation: chestBounce 1s infinite;
+        }
+
+        @keyframes chestBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .gem-rain {
+            position: absolute;
+            font-size: 30px;
+            animation: fall 2s linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .achievement {
+            font-size: 24px;
+            color: #ffd700;
+            margin-top: 20px;
+            text-shadow: 0 0 20px #ff8800;
+            animation: achievementGlow 1s infinite;
+        }
+
+        @keyframes achievementGlow {
+            0%, 100% { text-shadow: 0 0 20px #ff8800; }
+            50% { text-shadow: 0 0 40px #ffd700, 0 0 60px #ff8800; }
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
+            border: 2px solid #654321;
+            overflow: hidden;
+            margin: 10px auto;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700 0%, #ffaa00 100%);
+            transition: width 0.5s;
+        }
+
+        .progress-label {
+            font-size: 12px;
+            color: #aaa;
+            text-align: center;
+        }
+
+        .cell.preview {
+            animation: previewPulse 0.5s infinite;
+        }
+
+        .cell.preview:after {
+            content: "💎";
+            position: absolute;
+            font-size: 16px;
+            opacity: 0.5;
+        }
+
+        @keyframes previewPulse {
+            0%, 100% { box-shadow: 0 0 5px rgba(255,255,255,0.3); }
+            50% { box-shadow: 0 0 15px rgba(255,255,255,0.6); }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div class="mine-bg">
+            <div class="rock-texture" style="top: 10%; left: 5%; width: 60px; height: 80px;"></div>
+            <div class="rock-texture" style="top: 60%; right: 8%; width: 50px; height: 70px;"></div>
+            <div class="lantern" style="top: 15%; left: 8%;"></div>
+            <div class="lantern" style="top: 25%; right: 10%;"></div>
+            <div class="dynamite-crate" style="bottom: 20%; left: 5%;"></div>
+            <div class="dynamite-crate" style="bottom: 15%; right: 8%;"></div>
+        </div>
+
+        <div id="startScreen">
+            <h1 class="game-title">⛏️ 矿洞爆破大师 ⛏️</h1>
+            <p class="game-subtitle">策略布阵 · 益智爆破</p>
+            
+            <div class="rules-panel">
+                <h3 class="rules-title">📜 游戏规则</h3>
+                
+                <div class="rock-legend">
+                    <div class="legend-item">
+                        <div class="legend-rock shale"></div>
+                        <div>页岩<br>耐久: 1</div>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-rock granite"></div>
+                        <div>花岗岩<br>耐久: 2</div>
+                    </div>
+                </div>
+
+                <div class="rule-item">在空格上放置炸弹（共5枚），每枚炸弹影响3x3范围</div>
+                <div class="rule-item">敲击预览（消耗1体力）可显示岩石下宝石的轮廓</div>
+                <div class="rule-item">宝石在爆炸中心（十字格）会降低完整度，两次就破碎！</div>
+                <div class="rule-item">收集所有宝石即可通关</div>
+                <div class="rule-item">体力归零或损坏超过2颗宝石则失败</div>
+            </div>
+
+            <button class="start-btn" onclick="startGame()">开始爆破</button>
+        </div>
+
+        <div id="gameScreen">
+            <div class="top-bar">
+                <button class="back-btn" onclick="backToStart()">◀ 返回</button>
+                <div class="level-indicator">
+                    <div class="level-name" id="levelName">矿洞爆破挑战</div>
+                    <div class="level-desc" id="levelDesc">收集所有宝石即可通关</div>
+                </div>
+                <div style="width: 60px;"></div>
+            </div>
+            <div class="status-bar">
+                <div class="status-item">
+                    <span class="status-icon">🧨</span>
+                    <span>炸弹: </span>
+                    <span class="status-value" id="bombCount">5</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-icon">⚡</span>
+                    <span>体力: </span>
+                    <span class="status-value" id="stamina">10</span>
+                </div>
+            </div>
+
+            <div class="game-area" id="gameArea">
+                <div style="margin-bottom: 10px; text-align: center;">
+                    <span style="color: #ffd700; font-size: 14px;">💎 目标宝石: <span id="gemTarget">3</span> | 已收集: <span id="gemCollected">0</span></span>
+                    <span style="color: #ff6666; margin-left: 15px; font-size: 14px;">💔 已损坏: <span id="gemBroken">0</span>/2</span>
+                </div>
+                
+                <div class="grid-container" id="gridContainer">
+                    <div class="grid" id="gameGrid"></div>
+                </div>
+
+                <div style="margin-top: 15px;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="treasureProgress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-label">🏆 宝箱进度 - 收集宝石填满宝箱！</div>
+                </div>
+            </div>
+
+            <div class="bottom-controls">
+                <button class="control-btn preview-btn" id="previewBtn" onclick="togglePreview()">
+                    敲击预览 (<span id="previewCost">1</span>)
+                </button>
+                <button class="control-btn detonate-btn" id="detonateBtn" onclick="detonate()">
+                    引爆
+                </button>
+                <button class="control-btn reset-btn" onclick="resetLevel()">
+                    重新装填
+                </button>
+            </div>
+        </div>
+
+        <div class="modal" id="resultModal">
+            <div class="modal-content">
+                <div class="modal-title" id="modalTitle">🎉 关卡完成！</div>
+                <div class="modal-message" id="modalMessage">你成功收集了所有宝石！</div>
+                <button class="modal-btn" id="modalBtn" onclick="nextLevel()">继续冒险 →</button>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script>
+const gameConfig = {
+    levels: [
+        {
+            name: "矿洞爆破挑战",
+            description: "收集所有宝石即可通关",
+            gridSize: 6,
+            bombs: 5,
+            gems: 3,
+            shaleRatio: 0.7,
+            graniteRatio: 0.3,
+            obsidianRatio: 0
+        }
+    ],
+    stamina: 10,
+    maxBrokenGems: 2,
+    staminaPerGem: 2,
+    previewCost: 1,
+    gemColors: ['gem-red', 'gem-blue', 'gem-green']
+};
+
+let gameState = {
+    currentLevel: 0,
+    grid: [],
+    gridSize: 6,
+    bombsRemaining: 5,
+    stamina: 10,
+    gemsCollected: 0,
+    gemsBroken: 0,
+    totalGems: 3,
+    previewMode: false,
+    isDetonating: false,
+    bombsPlaced: [],
+    totalGemsInTreasure: 0
+};
+
+function startGame() {
+    document.getElementById('startScreen').style.display = 'none';
+    document.getElementById('gameScreen').style.display = 'flex';
+    gameState.currentLevel = 0;
+    gameState.totalGemsInTreasure = 0;
+    initLevel();
+}
+
+function initLevel() {
+    const level = gameConfig.levels[gameState.currentLevel];
+    
+    gameState.gridSize = level.gridSize;
+    gameState.bombsRemaining = level.bombs;
+    gameState.stamina = gameConfig.stamina;
+    gameState.gemsCollected = 0;
+    gameState.gemsBroken = 0;
+    gameState.totalGems = level.gems;
+    gameState.previewMode = false;
+    gameState.isDetonating = false;
+    gameState.bombsPlaced = [];
+
+    generateGrid();
+    updateUI();
+}
+
+function generateGrid() {
+    const level = gameConfig.levels[gameState.currentLevel];
+    const grid = [];
+    
+    for (let row = 0; row < gameState.gridSize; row++) {
+        grid[row] = [];
+        for (let col = 0; col < gameState.gridSize; col++) {
+            grid[row][col] = {
+                type: 'empty',
+                rockType: null,
+                durability: 0,
+                hasGem: false,
+                gemColor: null,
+                gemDamage: 0,
+                gemRevealed: false,
+                hasBomb: false,
+                preview: false
+            };
+        }
+    }
+
+    const totalCells = gameState.gridSize * gameState.gridSize;
+    const rockCount = Math.floor(totalCells * 0.5);
+    
+    for (let i = 0; i < rockCount; i++) {
+        let row, col;
+        do {
+            row = Math.floor(Math.random() * gameState.gridSize);
+            col = Math.floor(Math.random() * gameState.gridSize);
+        } while (grid[row][col].type !== 'empty');
+        
+        const rand = Math.random();
+        let rockType, durability;
+        
+        if (rand < level.shaleRatio) {
+            rockType = 'shale';
+            durability = 1;
+        } else if (rand < level.shaleRatio + level.graniteRatio) {
+            rockType = 'granite';
+            durability = 2;
+        } else {
+            rockType = 'obsidian';
+            durability = 3;
+        }
+        
+        grid[row][col].type = 'rock';
+        grid[row][col].rockType = rockType;
+        grid[row][col].durability = durability;
+    }
+
+    let gemsPlaced = 0;
+    while (gemsPlaced < level.gems) {
+        const row = Math.floor(Math.random() * gameState.gridSize);
+        const col = Math.floor(Math.random() * gameState.gridSize);
+        
+        if (!grid[row][col].hasGem && grid[row][col].type === 'rock') {
+            grid[row][col].hasGem = true;
+            grid[row][col].gemColor = gameConfig.gemColors[Math.floor(Math.random() * 3)];
+            gemsPlaced++;
+        }
+    }
+
+    gameState.grid = grid;
+    renderGrid();
+}
+
+function renderGrid() {
+    const gridElement = document.getElementById('gameGrid');
+    gridElement.style.gridTemplateColumns = `repeat(${gameState.gridSize}, 40px)`;
+    gridElement.innerHTML = '';
+
+    for (let row = 0; row < gameState.gridSize; row++) {
+        for (let col = 0; col < gameState.gridSize; col++) {
+            const cell = gameState.grid[row][col];
+            const cellElement = document.createElement('div');
+            cellElement.className = 'cell';
+            cellElement.dataset.row = row;
+            cellElement.dataset.col = col;
+
+            if (cell.hasBomb) {
+                cellElement.classList.add('bomb');
+                cellElement.textContent = '🧨';
+            } else if (cell.type === 'rock') {
+                cellElement.classList.add('rock-' + cell.rockType);
+                cellElement.innerHTML = `<span class="durability">${cell.durability}</span>`;
+                
+                if (cell.preview && cell.hasGem && !cell.gemRevealed) {
+                    cellElement.classList.add('preview');
+                }
+            } else if (cell.type === 'empty' && cell.hasGem && cell.gemRevealed) {
+                cellElement.classList.add('gem');
+                const gemIcon = document.createElement('span');
+                gemIcon.className = `gem-icon ${cell.gemColor}`;
+                gemIcon.textContent = '💎';
+                if (cell.gemDamage > 0) {
+                    gemIcon.classList.add('gem-cracked');
+                }
+                cellElement.appendChild(gemIcon);
+            } else {
+                cellElement.classList.add('empty');
+            }
+
+            cellElement.addEventListener('click', () => handleCellClick(row, col));
+            gridElement.appendChild(cellElement);
+        }
+    }
+}
+
+function handleCellClick(row, col) {
+    if (gameState.isDetonating) return;
+
+    const cell = gameState.grid[row][col];
+
+    if (gameState.previewMode) {
+        if (cell.type === 'rock' && !cell.preview) {
+            if (gameState.stamina >= gameConfig.previewCost) {
+                gameState.stamina -= gameConfig.previewCost;
+                cell.preview = true;
+                renderGrid();
+                updateUI();
+            }
+        }
+    } else if (cell.type === 'empty' && !cell.hasGem) {
+        if (cell.hasBomb) {
+            cell.hasBomb = false;
+            gameState.bombsRemaining++;
+            gameState.bombsPlaced = gameState.bombsPlaced.filter(
+                b => !(b.row === row && b.col === col)
+            );
+        } else if (gameState.bombsRemaining > 0) {
+            cell.hasBomb = true;
+            gameState.bombsRemaining--;
+            gameState.bombsPlaced.push({ row, col });
+        }
+        renderGrid();
+        updateUI();
+    } else if (cell.type === 'empty' && cell.hasGem && cell.gemRevealed) {
+        collectGem(row, col);
+    }
+}
+
+function togglePreview() {
+    gameState.previewMode = !gameState.previewMode;
+    const btn = document.getElementById('previewBtn');
+    if (gameState.previewMode) {
+        btn.style.boxShadow = '0 0 20px rgba(68,136,255,0.8)';
+    } else {
+        btn.style.boxShadow = '';
+    }
+}
+
+function detonate() {
+    if (gameState.isDetonating || gameState.bombsPlaced.length === 0) return;
+    
+    gameState.isDetonating = true;
+    document.getElementById('detonateBtn').disabled = true;
+    
+    document.getElementById('gameContainer').classList.add('shake');
+    
+    const explosionPromises = gameState.bombsPlaced.map((bomb, index) => {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                createExplosion(bomb.row, bomb.col);
+                applyExplosionDamage(bomb.row, bomb.col);
+                resolve();
+            }, index * 200);
+        });
+    });
+
+    Promise.all(explosionPromises).then(() => {
+        setTimeout(() => {
+            document.getElementById('gameContainer').classList.remove('shake');
+            gameState.bombsPlaced = [];
+            gameState.isDetonating = false;
+            document.getElementById('detonateBtn').disabled = false;
+            
+            renderGrid();
+            updateUI();
+            checkWinCondition();
+        }, 500);
+    });
+}
+
+function createExplosion(row, col) {
+    const gridElement = document.getElementById('gameGrid');
+    const cells = gridElement.querySelectorAll('.cell');
+    const cellIndex = row * gameState.gridSize + col;
+    const cell = cells[cellIndex];
+    
+    if (cell) {
+        const explosion = document.createElement('div');
+        explosion.className = 'explosion';
+        explosion.style.left = '-10px';
+        explosion.style.top = '-10px';
+        cell.appendChild(explosion);
+        
+        setTimeout(() => explosion.remove(), 500);
+    }
+}
+
+function applyExplosionDamage(bombRow, bombCol) {
+    for (let dr = -1; dr <= 1; dr++) {
+        for (let dc = -1; dc <= 1; dc++) {
+            const row = bombRow + dr;
+            const col = bombCol + dc;
+            
+            if (row >= 0 && row < gameState.gridSize && 
+                col >= 0 && col < gameState.gridSize) {
+                
+                const cell = gameState.grid[row][col];
+                const isCenterCross = dr === 0 || dc === 0;
+                
+                if (cell.type === 'rock') {
+                    cell.durability--;
+                    if (cell.durability <= 0) {
+                        cell.type = 'empty';
+                        if (cell.hasGem) {
+                            cell.gemRevealed = true;
+                            if (isCenterCross) {
+                                cell.gemDamage++;
+                            }
+                        }
+                    }
+                } else if (cell.hasGem && cell.gemRevealed && isCenterCross) {
+                    cell.gemDamage++;
+                }
+            }
+        }
+    }
+}
+
+function collectGem(row, col) {
+    const cell = gameState.grid[row][col];
+    
+    if (cell.gemDamage >= 2) {
+        gameState.gemsBroken++;
+    } else {
+        gameState.gemsCollected++;
+        gameState.totalGemsInTreasure++;
+    }
+    
+    cell.hasGem = false;
+    cell.gemRevealed = false;
+    
+    renderGrid();
+    updateUI();
+    checkWinCondition();
+}
+
+function checkWinCondition() {
+    const allGemsRevealed = gameState.gemsCollected === gameState.totalGems;
+    const tooManyBroken = gameState.gemsBroken >= gameConfig.maxBrokenGems;
+    const noStamina = gameState.stamina <= 0 && gameState.gemsCollected < gameState.totalGems;
+    
+    if (allGemsRevealed) {
+        showResult(true);
+    } else if (tooManyBroken || noStamina) {
+        showResult(false);
+    }
+}
+
+function showResult(isWin) {
+    const modal = document.getElementById('resultModal');
+    const title = document.getElementById('modalTitle');
+    const message = document.getElementById('modalMessage');
+    const btn = document.getElementById('modalBtn');
+    
+    if (isWin) {
+        title.textContent = '🎉 挑战成功！';
+        message.textContent = `你成功收集了 ${gameState.gemsCollected} 颗宝石，完成了矿洞爆破挑战！`;
+        btn.textContent = '完成';
+        btn.onclick = closeGame;
+    } else {
+        title.textContent = '💥 爆破失败！';
+        if (gameState.gemsBroken >= gameConfig.maxBrokenGems) {
+            message.textContent = '损坏的宝石太多了，矿洞崩塌了...';
+        } else {
+            message.textContent = '体力耗尽，无法继续探索...';
+        }
+        btn.textContent = '重新装填';
+        btn.onclick = resetLevel;
+    }
+    
+    modal.style.display = 'flex';
+}
+
+function nextLevel() {
+    document.getElementById('resultModal').style.display = 'none';
+    gameState.currentLevel++;
+    initLevel();
+}
+
+function resetLevel() {
+    document.getElementById('resultModal').style.display = 'none';
+    initLevel();
+}
+
+function backToStart() {
+    document.getElementById('gameScreen').style.display = 'none';
+    document.getElementById('startScreen').style.display = 'flex';
+}
+
+function closeGame() {
+    const treasureOverlay = document.getElementById('treasureOverlay');
+    if (treasureOverlay) {
+        treasureOverlay.style.display = 'none';
+        treasureOverlay.querySelectorAll('.gem-rain').forEach(g => g.remove());
+    }
+    document.getElementById('resultModal').style.display = 'none';
+    document.getElementById('gameScreen').style.display = 'none';
+    document.getElementById('startScreen').style.display = 'flex';
+}
+
+function restartGame() {
+    const treasureOverlay = document.getElementById('treasureOverlay');
+    if (treasureOverlay) {
+        treasureOverlay.style.display = 'none';
+        treasureOverlay.querySelectorAll('.gem-rain').forEach(g => g.remove());
+    }
+    startGame();
+}
+
+function updateUI() {
+    const level = gameConfig.levels[gameState.currentLevel];
+    
+    document.getElementById('bombCount').textContent = gameState.bombsRemaining;
+    document.getElementById('stamina').textContent = gameState.stamina;
+    document.getElementById('levelName').textContent = level.name;
+    document.getElementById('levelDesc').textContent = level.description;
+    document.getElementById('gemTarget').textContent = gameState.totalGems;
+    document.getElementById('gemCollected').textContent = gameState.gemsCollected;
+    document.getElementById('gemBroken').textContent = gameState.gemsBroken;
+    
+    const progress = (gameState.gemsCollected / gameState.totalGems) * 100;
+    document.getElementById('treasureProgress').style.width = progress + '%';
+    
+    document.getElementById('previewBtn').disabled = gameState.stamina < gameConfig.previewCost;
+}
+    </script>

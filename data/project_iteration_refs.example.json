@@ -1,0 +1,13 @@
+{
+  "_comment": "项目 ID → 本次迭代相关数据列表。path 仅允许 workbench/docs/ 下的 .md 文件。",
+  "proj_example": [
+    {
+      "id": "sample-doc",
+      "title": "示例文档标题",
+      "path": "workbench/docs/示例.md",
+      "kind": "markdown",
+      "tags": ["数据库"],
+      "updatedAt": "2026-08-27"
+    }
+  ]
+}

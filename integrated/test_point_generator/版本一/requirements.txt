@@ -1,0 +1,5 @@
+xmind>=1.2.0
+pywinauto>=0.6.8
+pyautogui>=0.9.54
+openpyxl>=3.1.0
+pyyaml>=6.0

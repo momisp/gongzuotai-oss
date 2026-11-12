@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>农场打地鼠</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #87CEEB;
+        }
+
+        #gameContainer {
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            max-height: 800px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        #background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        #startScreen {
+            background: rgba(0,0,0,0.5);
+        }
+
+        .game-title {
+            font-size: 64px;
+            font-weight: bold;
+            color: #FFF;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .rules-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            width: 80%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .rules-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .rules-list {
+            list-style: none;
+            padding-left: 25px;
+            font-size: 16px;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .rules-list li {
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .rules-list li::before {
+            content: '✓';
+            position: absolute;
+            left: -25px;
+            color: #228B22;
+            font-weight: bold;
+        }
+
+        .button {
+            width: 280px;
+            height: 80px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            background: linear-gradient(135deg, #FFA500, #FF8C00);
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            border-radius: 40px;
+            box-shadow: 0 8px 0 #CD6600, 0 10px 20px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .button:hover, .button:active {
+            transform: scale(1.05);
+            box-shadow: 0 6px 0 #CD6600, 0 8px 16px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #FF8C00, #FF7F50);
+        }
+
+        .button:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #CD6600, 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        #gameScreen {
+            display: none;
+        }
+
+        .progress-container {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            right: 20px;
+            height: 20px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            z-index: 20;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #228B22, #32CD32, #9ACD32);
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            font-weight: bold;
+            color: #333;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+        }
+
+        .ui-top {
+            position: absolute;
+            top: 120px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 20;
+        }
+
+        .ui-card {
+            background: rgba(255,255,255,0.9);
+            border-radius: 10px;
+            padding: 10px 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .ui-label {
+            font-size: 14px;
+            color: #8B4513;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .ui-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #228B22;
+        }
+
+        #levelDisplay {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #8B4513;
+            z-index: 20;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        #holesContainer {
+            position: absolute;
+            bottom: 100px;
+            left: 20px;
+            right: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            z-index: 15;
+        }
+
+        .hole {
+            position: relative;
+            height: 120px;
+            background: radial-gradient(circle, #5D2906 0%, #3D1E06 100%);
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: inset 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .mole {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 80%;
+            transition: top 0.2s ease;
+            cursor: pointer;
+            z-index: 3;
+        }
+
+        .mole img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .mole.show {
+            top: 10%;
+        }
+
+        .hit-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            pointer-events: none;
+            z-index: 100;
+            animation: hit 0.5s ease forwards;
+        }
+
+        @keyframes hit {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0;
+            }
+        }
+
+        #endScreen {
+            display: none;
+            background: rgba(0,0,0,0.6);
+        }
+
+        .end-title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #FFF;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .end-stats {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            width: 80%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .stat-label {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .stat-value {
+            color: #228B22;
+            font-weight: bold;
+        }
+
+        .celebration {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #FFD700;
+            animation: confetti-fall 3s ease-in forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-title {
+                font-size: 36px;
+            }
+            
+            .rules-card {
+                padding: 15px;
+            }
+            
+            .rules-list {
+                font-size: 14px;
+            }
+            
+            .button {
+                width: 220px;
+                height: 70px;
+            }
+            
+            #holesContainer {
+                gap: 15px;
+                bottom: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <img id="background" src="modifyImage/background.jpg" alt="农场背景">
+        
+        <div id="startScreen" class="screen">
+            <h1 class="game-title">农场打地鼠</h1>
+            <div class="rules-card">
+                <div class="rules-title">游戏规则</div>
+                <ul class="rules-list">
+                    <li>点击冒头的地鼠即可得分</li>
+                    <li>普通地鼠 +10 分，金色地鼠 +30 分</li>
+                    <li>小心鼹鼠警察！敲到会扣10分</li>
+                    <li>限时30秒，达到300分即可立即通关</li>
+                    <li>地鼠出现速度快，考验你的反应能力哦！</li>
+                </ul>
+            </div>
+            <button id="startButton" class="button">
+                开始打地鼠
+            </button>
+        </div>
+
+        <div id="gameScreen" class="screen">
+            <div id="levelDisplay">农场打地鼠</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+                <div class="progress-text" id="progressText">0/300</div>
+            </div>
+            <div class="ui-top">
+                <div class="ui-card">
+                    <div class="ui-label">分数</div>
+                    <div class="ui-value" id="scoreDisplay">0</div>
+                </div>
+                <div class="ui-card">
+                    <div class="ui-label">时间</div>
+                    <div class="ui-value" id="timeDisplay">30</div>
+                </div>
+            </div>
+            <div id="holesContainer">
+                <div class="hole"><div class="mole" data-hole="0"></div></div>
+                <div class="hole"><div class="mole" data-hole="1"></div></div>
+                <div class="hole"><div class="mole" data-hole="2"></div></div>
+                <div class="hole"><div class="mole" data-hole="3"></div></div>
+                <div class="hole"><div class="mole" data-hole="4"></div></div>
+                <div class="hole"><div class="mole" data-hole="5"></div></div>
+                <div class="hole"><div class="mole" data-hole="6"></div></div>
+                <div class="hole"><div class="mole" data-hole="7"></div></div>
+                <div class="hole"><div class="mole" data-hole="8"></div></div>
+            </div>
+        </div>
+
+        <div id="endScreen" class="screen">
+            <h2 class="end-title" id="endTitle">游戏结束</h2>
+            <div class="end-stats">
+                <div class="stat-row">
+                    <span class="stat-label">最终得分：</span>
+                    <span class="stat-value" id="finalScore">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">目标分数：</span>
+                    <span class="stat-value" id="targetScore">300</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">剩余时间：</span>
+                    <span class="stat-value" id="remainingTime">0</span>
+                </div>
+            </div>
+            <button id="restartButton" class="button">
+                再敲一局
+            </button>
+            <div class="celebration" id="celebration"></div>
+        </div>
+    </div>
+
+    <script>
+        // 全局配置
+        window.gameConfig = {
+            targetScore: 300,
+            minSpeed: 400,
+            maxSpeed: 1000,
+            showTime: 800,
+            gameTime: 30,
+            normalMoleScore: 10,
+            goldMoleScore: 30,
+            policePenalty: 10,
+            moleTypes: [
+                { type: "normal", image: "modifyImage/normal_mole.png", probability: 0.7 },
+                { type: "gold", image: "modifyImage/gold_mole.png", probability: 0.2 },
+                { type: "police", image: "modifyImage/police_mole.png", probability: 0.1 }
+            ]
+        };
+
+        let targetScore = window.gameConfig.targetScore;
+        let score = 0;
+        let timeLeft = window.gameConfig.gameTime;
+        let gameActive = false;
+        let gameInterval = null;
+        let moleIntervals = [];
+        let activeHoles = new Set();
+
+        // DOM元素
+        const startScreen = document.getElementById('startScreen');
+        const gameScreen = document.getElementById('gameScreen');
+        const endScreen = document.getElementById('endScreen');
+        const startButton = document.getElementById('startButton');
+        const restartButton = document.getElementById('restartButton');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const timeDisplay = document.getElementById('timeDisplay');
+        const levelDisplay = document.getElementById('levelDisplay');
+        const endTitle = document.getElementById('endTitle');
+        const finalScore = document.getElementById('finalScore');
+        const targetScoreDisplay = document.getElementById('targetScore');
+        const remainingTime = document.getElementById('remainingTime');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const holesContainer = document.getElementById('holesContainer');
+        const celebration = document.getElementById('celebration');
+        const moles = document.querySelectorAll('.mole');
+
+        // 初始化游戏
+        function initGame() {
+            score = 0;
+            timeLeft = window.gameConfig.gameTime;
+            updateUI();
+            startGame();
+        }
+
+        // 开始游戏
+        function startGame() {
+            gameActive = true;
+            activeHoles.clear();
+            levelDisplay.textContent = `农场打地鼠`;
+            
+            // 启动计时器
+            gameInterval = setInterval(() => {
+                timeLeft--;
+                timeDisplay.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    endGame(false);
+                }
+            }, 1000);
+
+            // 启动地鼠出现逻辑
+            spawnMoles();
+        }
+
+        // 生成地鼠
+        function spawnMoles() {
+            if (!gameActive) return;
+            
+            const spawnDelay = Math.random() * (window.gameConfig.maxSpeed - window.gameConfig.minSpeed) + window.gameConfig.minSpeed;
+            
+            setTimeout(() => {
+                if (gameActive) {
+                    showRandomMole();
+                    spawnMoles();
+                }
+            }, spawnDelay);
+        }
+
+        // 随机显示地鼠
+        function showRandomMole() {
+            if (activeHoles.size >= 3) return; // 最多同时3个地鼠
+            
+            let holeIndex;
+            do {
+                holeIndex = Math.floor(Math.random() * 9);
+            } while (activeHoles.has(holeIndex));
+            
+            activeHoles.add(holeIndex);
+            const mole = moles[holeIndex];
+            
+            // 随机选择地鼠类型
+            const rand = Math.random();
+            let cumulativeProb = 0;
+            let selectedType = null;
+            
+            for (const type of window.gameConfig.moleTypes) {
+                cumulativeProb += type.probability;
+                if (rand <= cumulativeProb) {
+                    selectedType = type;
+                    break;
+                }
+            }
+            
+            mole.innerHTML = `<img src="${selectedType.image}" alt="${selectedType.type}">`;
+            mole.dataset.type = selectedType.type;
+            mole.classList.add('show');
+            
+            setTimeout(() => {
+                if (gameActive && mole.classList.contains('show')) {
+                    mole.classList.remove('show');
+                    activeHoles.delete(holeIndex);
+                }
+            }, window.gameConfig.showTime);
+        }
+
+        // 点击地鼠
+        moles.forEach((mole, index) => {
+            mole.addEventListener('click', (e) => {
+                if (!gameActive || !mole.classList.contains('show')) return;
+                
+                e.preventDefault();
+                const type = mole.dataset.type;
+                
+                // 显示击中效果
+                showHitEffect(mole, type);
+                
+                // 处理分数
+                if (type === 'normal') {
+                    score += window.gameConfig.normalMoleScore;
+                } else if (type === 'gold') {
+                    score += window.gameConfig.goldMoleScore;
+                } else if (type === 'police') {
+                    score -= window.gameConfig.policePenalty;
+                    score = Math.max(0, score); // 分数不低于0
+                }
+                
+                // 隐藏地鼠
+                mole.classList.remove('show');
+                activeHoles.delete(index);
+                
+                updateUI();
+                
+                // 检查是否达到目标分数，立即通关
+                if (score >= targetScore) {
+                    endGame(true);
+                }
+            });
+        });
+
+        // 显示击中效果
+        function showHitEffect(mole, type) {
+            const effect = document.createElement('div');
+            effect.className = 'hit-effect';
+            
+            if (type === 'police') {
+                effect.innerHTML = '<span style="font-size: 48px;">💔</span>';
+            } else {
+                effect.innerHTML = '<span style="font-size: 48px;">✨</span>';
+            }
+            
+            mole.parentElement.appendChild(effect);
+            
+            setTimeout(() => {
+                effect.remove();
+            }, 500);
+        }
+
+        // 结束游戏
+        function endGame(victory) {
+            clearInterval(gameInterval);
+            gameActive = false;
+            
+            // 隐藏所有地鼠
+            moles.forEach(mole => mole.classList.remove('show'));
+            activeHoles.clear();
+            
+            // 显示结束界面
+            gameScreen.style.display = 'none';
+            endScreen.style.display = 'flex';
+            
+            finalScore.textContent = score;
+            remainingTime.textContent = `${timeLeft}秒`;
+            
+            if (victory) {
+                endTitle.textContent = '🎉 恭喜通关！';
+                createConfetti();
+            } else {
+                endTitle.textContent = '💪 再接再厉！';
+            }
+        }
+
+        // 更新UI
+        function updateUI() {
+            scoreDisplay.textContent = score;
+            timeDisplay.textContent = timeLeft;
+            
+            // 更新进度条
+            const progress = Math.min((score / targetScore) * 100, 100);
+            progressBar.style.width = progress + '%';
+            progressText.textContent = `${score}/${targetScore}`;
+        }
+
+        // 创建彩纸效果
+        function createConfetti() {
+            const colors = ['#FFD700', '#FF6347', '#4169E1', '#32CD32', '#FF1493', '#FFA500'];
+            const celebrationContainer = document.getElementById('celebration');
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                celebrationContainer.appendChild(confetti);
+            }
+            
+            setTimeout(() => {
+                celebrationContainer.innerHTML = '';
+            }, 3000);
+        }
+
+        // 按钮事件
+        startButton.addEventListener('click', () => {
+            startScreen.style.display = 'none';
+            gameScreen.style.display = 'flex';
+            initGame();
+        });
+
+        restartButton.addEventListener('click', () => {
+            endScreen.style.display = 'none';
+            gameScreen.style.display = 'flex';
+            initGame();
+        });
+
+        // 阻止页面滚动
+        document.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+    </script>
+</body>
+</html>

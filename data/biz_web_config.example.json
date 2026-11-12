@@ -1,0 +1,16 @@
+{
+  "_comment": "复制为 biz_web_config.json。商务网页端（非 OA、非新商务）。",
+  "system": "biz_web_promote",
+  "baseUrl": "http://dev.example.com",
+  "origin": "http://dev.example.com",
+  "needVerifyPath": "/business/index/needverifycode.html",
+  "loginPath": "/business/index/login.html",
+  "addPromotePath": "/business/promote/add.html",
+  "deviceId": "b2e3f89f-5453-456a-a87e-109dc9baa45c",
+  "createDefaults": {
+    "accountPrefix": "会长L1",
+    "uniqueAccount": true,
+    "password": "111111",
+    "register_type": "0"
+  }
+}

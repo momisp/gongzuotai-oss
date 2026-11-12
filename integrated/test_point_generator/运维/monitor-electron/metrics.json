@@ -1,0 +1,48 @@
+{
+  "windowTitle": "运维控制台",
+  "metrics": [
+    {
+      "id": "m1",
+      "name": "大派对2 · 云监控",
+      "account": "aa1007777119",
+      "url": "https://cloudmonitornext.console.aliyun.com/app-group/244715179/resource"
+    },
+    {
+      "id": "m2",
+      "name": "短信 · 控制台",
+      "account": "hsxc95",
+      "url": "https://dysms.console.aliyun.com/overview"
+    },
+    {
+      "id": "m7",
+      "name": "宙包 · 短信 · 控制台",
+      "account": "zyyz95",
+      "url": "https://dysms.console.aliyun.com/overview"
+    },
+    {
+      "id": "m3",
+      "name": "OSS · 资源包",
+      "account": "aa1007777120",
+      "url": "https://oss.console.aliyun.com/package"
+    },
+    {
+      "id": "m4",
+      "name": "CDN · 资源",
+      "account": "aa1007777120",
+      "url": "https://cdn.console.aliyun.com/resource"
+    },
+    {
+      "id": "m5",
+      "name": "SSL · CAS",
+      "account": "aa1007777119",
+      "url": "https://yundun.console.aliyun.com/?p=cas"
+    },
+    {
+      "id": "m6",
+      "name": "大派对后台 · HTTPS证书",
+      "account": "dpd.yuzou99",
+      "url": "https://dpd.yuzou99.com/admin/platform/login",
+      "openCertExpiry": true
+    }
+  ]
+}

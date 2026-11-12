@@ -1,0 +1,368 @@
+/**
+ * 工作台视觉试做 v1 —— 对齐 AI Story（DaisyUI light + primary #14b8a6）
+ * 去掉本文件引用即可回退。
+ */
+:root {
+  --wb-primary: #14b8a6;
+  --wb-primary-focus: #0d9488;
+  --wb-primary-soft: #ccfbf1;
+  --wb-primary-content: #ffffff;
+  --wb-secondary: #d926a9;
+  --wb-accent: #37cdbe;
+  --wb-neutral: #291334;
+  --wb-base-100: #ffffff;
+  --wb-base-200: #f2f2f2;
+  --wb-base-300: #e5e6e6;
+  --wb-base-content: #1f2937;
+  --wb-muted: #6b7280;
+  --wb-success: #36d399;
+  --wb-warning: #fbbd23;
+  --wb-error: #f87272;
+  --wb-radius: 14px;
+  --wb-radius-sm: 10px;
+  --wb-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.06);
+  --wb-shadow-lg: 0 10px 36px rgba(20, 184, 166, 0.16);
+}
+
+body {
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: var(--wb-base-content);
+  background:
+    radial-gradient(1100px 520px at 8% -8%, rgba(20, 184, 166, 0.18), transparent 55%),
+    radial-gradient(900px 480px at 100% 0%, rgba(55, 205, 190, 0.12), transparent 48%),
+    linear-gradient(160deg, #f3fffc 0%, #f7f8fa 42%, #eef8f6 100%);
+  background-attachment: fixed;
+}
+
+.layout {
+  gap: 0;
+  min-height: 100vh;
+}
+
+/* ---------- 侧栏（AI Story 偏清爽深色 + 青绿强调） ---------- */
+.sidebar {
+  width: 248px;
+  padding: 18px 12px;
+  background: #111827;
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 8px 0 30px rgba(15, 23, 42, 0.18);
+  backdrop-filter: blur(16px);
+}
+
+.logo {
+  margin: 4px 8px 16px;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: var(--wb-radius);
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.85), rgba(13, 148, 136, 0.75));
+  color: #fff;
+  font-size: 17px;
+  letter-spacing: 0.02em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.logo::after {
+  content: "对齐 AI Story · teal";
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  opacity: 0.82;
+}
+
+.sidebar nav {
+  padding: 4px 0;
+  display: grid;
+  gap: 2px;
+}
+
+.nav-item,
+.nav-group-head,
+.nav-sub-item {
+  margin: 0 4px;
+  border-left: 0 !important;
+  border-radius: 12px;
+  transition: background 0.15s, color 0.15s, transform 0.15s;
+}
+
+.nav-item {
+  padding: 10px 14px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.nav-item:hover,
+.nav-group-head:hover,
+.nav-sub-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.nav-item.active,
+.nav-sub-item.active {
+  background: var(--wb-primary);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(20, 184, 166, 0.35);
+}
+
+.nav-group-head {
+  padding: 10px 14px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.nav-sub-item {
+  padding: 8px 14px 8px 28px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ---------- 主区 ---------- */
+.main {
+  padding: 28px 32px 40px;
+  background: transparent;
+  backdrop-filter: none;
+}
+
+.main.main-embedded {
+  background: var(--wb-base-100);
+}
+
+h1 {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #111827;
+}
+
+.subtitle,
+.hint {
+  color: var(--wb-muted) !important;
+}
+
+/* ---------- 卡片 / 面板 ---------- */
+.card,
+.item,
+.project-center-list,
+.project-center-detail,
+.project-create-panel,
+.ops-report-panel,
+.ai-story-status,
+.ai-story-llm,
+.ai-story-help,
+.aq-sprite,
+.aq-runner,
+.vs-sidebar,
+.vs-main,
+.links-col,
+.qa-list .qa-item,
+.wa-preflight,
+.cb-list,
+.embedded-toolbar {
+  border: 1px solid rgba(229, 231, 235, 0.95) !important;
+  border-radius: var(--wb-radius) !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  box-shadow: var(--wb-shadow) !important;
+  backdrop-filter: blur(10px);
+}
+
+.card {
+  padding: 22px 20px;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--wb-shadow-lg) !important;
+  border-color: rgba(20, 184, 166, 0.35) !important;
+}
+
+.card-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: linear-gradient(145deg, rgba(20, 184, 166, 0.16), rgba(55, 205, 190, 0.12));
+}
+
+.card-name {
+  margin-top: 4px;
+  color: #111827;
+}
+
+.card-cat {
+  color: var(--wb-muted);
+}
+
+.item:hover,
+.project-card:hover,
+.project-card.is-active {
+  border-color: rgba(20, 184, 166, 0.4) !important;
+  background: #f0fdfa !important;
+}
+
+.project-card.is-active {
+  box-shadow: 0 0 0 1px rgba(20, 184, 166, 0.25);
+}
+
+/* ---------- 按钮 ---------- */
+.btn {
+  min-height: 36px;
+  padding: 7px 16px;
+  border: 1px solid var(--wb-base-300);
+  border-radius: 999px;
+  background: var(--wb-base-100);
+  color: var(--wb-base-content);
+  font-weight: 600;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
+  transition: transform 0.12s, box-shadow 0.12s, background 0.12s, border-color 0.12s;
+}
+
+.btn:hover {
+  background: var(--wb-base-200);
+  border-color: #99f6e4;
+  transform: translateY(-1px);
+}
+
+.btn.primary {
+  background: var(--wb-primary);
+  border-color: var(--wb-primary);
+  color: var(--wb-primary-content);
+  box-shadow: 0 8px 18px rgba(20, 184, 166, 0.28);
+}
+
+.btn.primary:hover {
+  background: var(--wb-primary-focus);
+  border-color: var(--wb-primary-focus);
+}
+
+.btn.danger {
+  border-color: rgba(248, 114, 114, 0.45);
+  color: #e11d48;
+}
+
+.btn.danger:hover {
+  background: #fff1f2;
+}
+
+.btn-sm {
+  min-height: 30px;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+/* ---------- 表单 ---------- */
+.search,
+input[type="text"],
+input[type="search"],
+input[type="password"],
+input[type="number"],
+textarea,
+select,
+.project-form-grid input,
+.project-form-grid select {
+  border: 1px solid var(--wb-base-300) !important;
+  border-radius: var(--wb-radius-sm) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: var(--wb-base-content);
+  box-shadow: none;
+}
+
+.search:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--wb-primary) !important;
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.18) !important;
+}
+
+.tag {
+  border-radius: 999px;
+  background: rgba(20, 184, 166, 0.12);
+  color: #0f766e;
+  font-weight: 600;
+}
+
+/* ---------- 覆盖旧紫色残留 ---------- */
+.nav-item.active,
+.nav-sub-item.active,
+.btn.primary,
+.aq-engine-chip.is-active,
+.links-nav-item.active,
+.qa-cat-chip.active {
+  border-color: var(--wb-primary) !important;
+}
+
+.search:focus,
+.project-card:hover,
+.project-card.is-active {
+  border-color: var(--wb-primary) !important;
+}
+
+.tag,
+.aq-tag,
+.project-stat {
+  /* soft teal tint where old purple soft bg remained */
+}
+
+.project-stat {
+  background: #f0fdfa !important;
+  border-color: #ccfbf1 !important;
+}
+
+.ai-story-llm {
+  border-color: rgba(20, 184, 166, 0.28) !important;
+  background: linear-gradient(180deg, #f0fdfa, #fff) !important;
+}
+
+.ai-story-badge.is-on {
+  background: rgba(54, 211, 153, 0.18) !important;
+  color: #059669 !important;
+}
+
+.ai-story-badge.is-off {
+  background: rgba(251, 189, 35, 0.18) !important;
+  color: #b45309 !important;
+}
+
+/* ---------- 首页 ---------- */
+#page-home h1 {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#page-home h1::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--wb-primary);
+  box-shadow: 0 0 0 6px rgba(20, 184, 166, 0.18);
+}
+
+#page-home .subtitle {
+  margin-bottom: 22px;
+}
+
+/* ---------- 嵌入页 ---------- */
+.embedded-toolbar {
+  margin: 10px 12px 0;
+  padding: 10px 14px !important;
+}
+
+.embedded-body {
+  margin: 10px 12px 12px;
+  border-radius: var(--wb-radius);
+  overflow: hidden;
+  border: 1px solid var(--wb-base-300);
+  box-shadow: var(--wb-shadow);
+}
+
+.main::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+.main::-webkit-scrollbar-thumb,
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(20, 184, 166, 0.35);
+  border-radius: 999px;
+}

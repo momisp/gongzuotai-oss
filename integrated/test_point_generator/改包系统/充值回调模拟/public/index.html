@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>充值回调模拟 · 入口</title>
+  <style>
+    :root {
+      --primary: #1890ff;
+      --primary-hover: #40a9ff;
+      --text: #1a1a1a;
+      --text-secondary: #666;
+      --border: #e0e0e0;
+      --bg-page: #f5f7fa;
+      --bg-card: #fff;
+      --radius: 12px;
+      --shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC",
+        "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background: linear-gradient(145deg, #e8eef5 0%, #f5f7fa 50%, #dde7f3 100%);
+    }
+    button {
+      font: inherit;
+    }
+    .wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px 28px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+    .sub {
+      margin: 0 0 24px;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(24, 144, 255, 0.12);
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    .btn-primary {
+      width: 100%;
+      padding: 14px 24px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(24, 144, 255, 0.35);
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+    .fine {
+      margin: 20px 0 0;
+      font-size: 0.78rem;
+      color: #888;
+      line-height: 1.55;
+      text-align: left;
+    }
+    code {
+      font-size: 0.85em;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: rgba(24, 144, 255, 0.08);
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <span class="tag">内网专用</span>
+      <h1>充值回调模拟</h1>
+      <p class="sub">
+        进入加载页，等待服务就绪后将自动打开充值模拟。同事请使用「提供服务那台电脑」的局域网地址访问本页。
+      </p>
+      <button type="button" class="btn-primary" id="go">
+        进入充值模拟
+      </button>
+      <p class="fine">
+        <strong>同事只用浏览器：</strong>在地址栏输入 <code>http://服务器局域网IP:端口/</code>（端口见提供服务电脑的 <code>.env</code> 里 <code>PORT</code>，默认 3780）。服务端需已设置 <code>HOST=0.0.0.0</code> 并放行防火墙。
+      </p>
+      <p class="fine">
+        <strong>在本机启动服务：</strong>网页无法直接执行 <code>.bat</code>。可在项目目录双击 <code>启动充值模拟.bat</code> 或执行 <code>npm start</code>；就绪后点上方按钮进入加载页。
+      </p>
+    </div>
+  </div>
+  <script>
+    document.getElementById("go").addEventListener("click", function () {
+      window.location.href = "/launcher";
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+{
+  "name": "崩坏：星穹铁道",
+  "note": "从 hkrpg-ann-api.mihoyo.com 拉取，过滤 >200 天的长期公告；最后更新 2026-11-11 18:59",
+  "homepage": "https://sr.mihoyo.com/news",
+  "events": [
+    {
+      "name": "4.7版本商店上新",
+      "category": "公告",
+      "start": "2026-10-30 20:55",
+      "end": "2026-12-23 06:00",
+      "source": "崩坏：星穹铁道 · 米哈游官网公告",
+      "url": "https://sr.mihoyo.com/news",
+      "detailUrl": "https://webstatic.mihoyo.com/hkrpg/announcement/index.html?ann_id=1455&game=hkrpg&game_biz=hkrpg_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/18/acfd32460f794d28cf1843f4edd3bb7f_5235677613383238943_transformed.png",
+      "desc": ""
+    },
+    {
+      "name": "4.7版本「无名勋礼」更新",
+      "category": "公告",
+      "start": "2026-11-07 12:00",
+      "end": "2026-12-21 03:59",
+      "source": "崩坏：星穹铁道 · 米哈游官网公告",
+      "url": "https://sr.mihoyo.com/news",
+      "detailUrl": "https://webstatic.mihoyo.com/hkrpg/announcement/index.html?ann_id=1471&game=hkrpg&game_biz=hkrpg_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/18/043c4f2127d6eafd133208afb12817a4_8947628110242564078_transformed.png",
+      "desc": "「无名勋礼」更新说明"
+    },
+    {
+      "name": "「此刻，将群星付之一笑」任务说明",
+      "category": "公告",
+      "start": "2026-11-09 13:00",
+      "end": "2026-12-23 06:00",
+      "source": "崩坏：星穹铁道 · 米哈游官网公告",
+      "url": "https://sr.mihoyo.com/news",
+      "detailUrl": "https://webstatic.mihoyo.com/hkrpg/announcement/index.html?ann_id=1449&game=hkrpg&game_biz=hkrpg_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/18/83db354074b6a174d3f94fbeeb576dea_6951685534900300281_transformed.png",
+      "desc": ""
+    },
+    {
+      "name": "4.7版本新增关卡",
+      "category": "公告",
+      "start": "2026-11-09 13:15",
+      "end": "2026-12-23 06:00",
+      "source": "崩坏：星穹铁道 · 米哈游官网公告",
+      "url": "https://sr.mihoyo.com/news",
+      "detailUrl": "https://webstatic.mihoyo.com/hkrpg/announcement/index.html?ann_id=1450&game=hkrpg&game_biz=hkrpg_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/19/1d3aa4889b1967c798bad5927c567330_2142890192192143555_transformed.png",
+      "desc": ""
+    },
+    {
+      "name": "「奇库寻遗」：参与活动获取+15五星遗器！",
+      "category": "公告",
+      "start": "2026-11-09 13:30",
+      "end": "2026-12-23 03:59",
+      "source": "崩坏：星穹铁道 · 米哈游官网公告",
+      "url": "https://sr.mihoyo.com/news",
+      "detailUrl": "https://webstatic.mihoyo.com/hkrpg/announcement/index.html?ann_id=1451&game=hkrpg&game_biz=hkrpg_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/10/19/4187fe27da68f2046316bc1b73897d2a_2469687126022181837_transformed.png",
+      "desc": "「奇库寻遗」活动说明"
+    },
+    {
+      "name": "周边上新优惠开启 手办服饰新品首发",
+      "category": "公告",
+      "start": "2026-11-10 18:00",
+      "end": "2026-11-17 18:00",
+      "source": "崩坏：星穹铁道 · 米哈游官网公告",
+      "url": "https://sr.mihoyo.com/news",
+      "detailUrl": "https://webstatic.mihoyo.com/hkrpg/announcement/index.html?ann_id=1479&game=hkrpg&game_biz=hkrpg_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/11/09/0cce1f9fe1c56d60209f2b20e0afeb50_7695786040720454722_transformed.jpg",
+      "desc": ""
+    },
+    {
+      "name": "4.7版本「此刻，将群星付之一笑」版本更新说明",
+      "category": "公告",
+      "start": "2026-11-11 07:00",
+      "end": "2026-12-23 07:00",
+      "source": "崩坏：星穹铁道 · 米哈游官网公告",
+      "url": "https://sr.mihoyo.com/news",
+      "detailUrl": "https://webstatic.mihoyo.com/hkrpg/announcement/index.html?ann_id=1474&game=hkrpg&game_biz=hkrpg_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/11/06/f85d331abd025aebd7b4ed31c98c99cc_7308201105107744989_transformed.png",
+      "desc": "4.7版本更新说明"
+    },
+    {
+      "name": "4.7版本游戏优化及已知问题说明",
+      "category": "公告",
+      "start": "2026-11-11 07:00",
+      "end": "2026-12-23 07:00",
+      "source": "崩坏：星穹铁道 · 米哈游官网公告",
+      "url": "https://sr.mihoyo.com/news",
+      "detailUrl": "https://webstatic.mihoyo.com/hkrpg/announcement/index.html?ann_id=1488&game=hkrpg&game_biz=hkrpg_cn&lang=zh-cn",
+      "image": "",
+      "desc": ""
+    },
+    {
+      "name": "4.7版本「此刻，将群星付之一笑」激励计划现已开启",
+      "category": "公告",
+      "start": "2026-11-11 12:00",
+      "end": "2026-11-18 00:00",
+      "source": "崩坏：星穹铁道 · 米哈游官网公告",
+      "url": "https://sr.mihoyo.com/news",
+      "detailUrl": "https://webstatic.mihoyo.com/hkrpg/announcement/index.html?ann_id=1482&game=hkrpg&game_biz=hkrpg_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/11/10/6f7cdb40c95f56ef70e9aa147099d71c_8421823010818372336_transformed.png",
+      "desc": ""
+    },
+    {
+      "name": "此刻，将群星付之一笑丨4.7版本攻略征集活动",
+      "category": "公告",
+      "start": "2026-11-11 13:00",
+      "end": "2026-11-18 13:00",
+      "source": "崩坏：星穹铁道 · 米哈游官网公告",
+      "url": "https://sr.mihoyo.com/news",
+      "detailUrl": "https://webstatic.mihoyo.com/hkrpg/announcement/index.html?ann_id=1481&game=hkrpg&game_biz=hkrpg_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/11/10/2bccb31048cbf9d65da2f773d581117b_2081673184373144770_transformed.jpg",
+      "desc": ""
+    },
+    {
+      "name": "4.7版本游戏工具更新一览",
+      "category": "公告",
+      "start": "2026-11-11 14:00",
+      "end": "2026-11-16 00:00",
+      "source": "崩坏：星穹铁道 · 米哈游官网公告",
+      "url": "https://sr.mihoyo.com/news",
+      "detailUrl": "https://webstatic.mihoyo.com/hkrpg/announcement/index.html?ann_id=1490&game=hkrpg&game_biz=hkrpg_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/11/11/5714e0387506c3c44a11dcffd279e15a_7810632194726907807_transformed.jpg",
+      "desc": ""
+    },
+    {
+      "name": "「欢迎光临欢愉酒馆」微博网页活动现已上线",
+      "category": "公告",
+      "start": "2026-11-11 15:00",
+      "end": "2026-11-18 15:00",
+      "source": "崩坏：星穹铁道 · 米哈游官网公告",
+      "url": "https://sr.mihoyo.com/news",
+      "detailUrl": "https://webstatic.mihoyo.com/hkrpg/announcement/index.html?ann_id=1484&game=hkrpg&game_biz=hkrpg_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/11/10/e8b767486c85cd71bc758380d89b852a_2795003679001521421_transformed.jpg",
+      "desc": ""
+    },
+    {
+      "name": "「急招！欢愉令使」小红书网页活动现已上线",
+      "category": "公告",
+      "start": "2026-11-11 15:00",
+      "end": "2026-11-18 15:00",
+      "source": "崩坏：星穹铁道 · 米哈游官网公告",
+      "url": "https://sr.mihoyo.com/news",
+      "detailUrl": "https://webstatic.mihoyo.com/hkrpg/announcement/index.html?ann_id=1483&game=hkrpg&game_biz=hkrpg_cn&lang=zh-cn",
+      "image": "https://sdk-webstatic.mihoyo.com/upload/ann/2026/11/10/ced058f5e2919cd7da387e5eeab0a3a4_7096044265814720108_transformed.png",
+      "desc": ""
+    }
+  ]
+}

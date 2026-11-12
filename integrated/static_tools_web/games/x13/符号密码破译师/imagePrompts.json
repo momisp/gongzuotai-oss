@@ -1,0 +1,38 @@
+[
+  {
+    "id": "background",
+    "prompt": "赛博复古风暗紫色与荧光绿为主色调的背景，闪烁的代码雨与老式终端机界面，带有轻微的像素噪点，90年代黑客风格，细节丰富",
+    "filename": "background.png",
+    "size": "1440x2560"
+  },
+  {
+    "id": "startButton",
+    "prompt": "赛博复古风暗绿色半透明老式终端按键按钮，带有端正的“开始破译”白色像素字体，融入暗紫色科技背景风格，边缘柔和，低饱和度微光效果，与代码雨界面风格统一，纯白色背景且无阴影",
+    "filename": "alpha_start_button.png",
+    "size": "1440x2560"
+  },
+  {
+    "id": "passwordCard",
+    "prompt": "赛博复古风带有荧光纹路的电路板样式密码卡片，边缘有金属质感，荧光绿线条点缀，纯白色背景且无阴影",
+    "filename": "alpha_password_card.png",
+    "size": "1440x2560"
+  },
+  {
+    "id": "hintButton",
+    "prompt": "赛博复古风荧光紫色的提示按钮，带有问号图标，老式终端按键样式，纯白色背景且无阴影",
+    "filename": "alpha_hint_button.png",
+    "size": "1440x2560"
+  },
+  {
+    "id": "batteryIcon",
+    "prompt": "赛博复古风荧光绿的电量图标，老式数码显示风格，纯白色背景且无阴影",
+    "filename": "alpha_battery_icon.png",
+    "size": "1440x2560"
+  },
+  {
+    "id": "successIcon",
+    "prompt": "赛博复古风荧光绿的成功解锁图标，电路板纹路样式，纯白色背景且无阴影",
+    "filename": "alpha_success_icon.png",
+    "size": "1440x2560"
+  }
+]

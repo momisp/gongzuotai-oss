@@ -1,0 +1,28 @@
+# Generated Skills
+.claude/skills/*/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temp
+/tmp/
+*.tmp
+
+# Environment
+.env
+.env.local

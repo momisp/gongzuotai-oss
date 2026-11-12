@@ -1,0 +1,22 @@
+{
+  "updated_at": "2026-11-12T08:55:46",
+  "source": "official",
+  "games": {
+    "genshin": {
+      "ok": false,
+      "error": "fetch failed"
+    },
+    "starrail": {
+      "ok": false,
+      "error": "fetch failed"
+    },
+    "zzz": {
+      "ok": false,
+      "error": "fetch failed"
+    },
+    "bh3": {
+      "ok": true,
+      "count": 180
+    }
+  }
+}

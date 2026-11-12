@@ -1,0 +1,33 @@
+{
+  "_comment": "复制为 channel_web_config.json。会长网页端 channelsite（/tg），非商务 /business。真实身份证图路径/手机号勿提交。",
+  "system": "channel_web_promote",
+  "baseUrl": "http://dev.example.com",
+  "origin": "http://dev.example.com",
+  "deviceId": "00000000-0000-0000-0000-000000000000",
+  "newPassword": "CHANGE_ME",
+  "idCardFront": "",
+  "idCardBack": "",
+  "needVerifyPath": "/channelsite/index/needverifycode.html",
+  "loginPath": "/channelsite/index/login.html",
+  "baseInfoPath": "/channelsite/promote/base_info.html",
+  "sendSmsPath": "/channelsite/index/send_sms.html",
+  "updateInfoPath": "/channelsite/index/updateinfo.html",
+  "contractPath": "/channelsite/contract/contract_afresh.html",
+  "applyGamePath": "/channelsite/game/apply.html",
+  "addChildPath": "/channelsite/promote/add_chlid.html",
+  "agreementPath": "/channelsite/promote/agreement_rule.html",
+  "useUniversalSms": true,
+  "smsUniversalCode": "CHANGE_ME",
+  "gameId": "0",
+  "profileDefaults": {
+    "_comment": "须与可过实名的测试身份一致；假姓名/假身份证会「实名认证失败」",
+    "real_name": "测试实名",
+    "id_card_no": "110101199001011234",
+    "mobile_phone": "13800000000",
+    "address": "测试省测试市测试区测试路1号",
+    "email": "test@example.com",
+    "settment_type": "1",
+    "alipay_name": "测试实名",
+    "alipay_account": "test@example.com"
+  }
+}

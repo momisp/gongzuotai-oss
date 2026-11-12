@@ -1,0 +1,15 @@
+[
+  {
+    "_comment": "复制为 project_assets.json。真实本机路径、测试环境 URL 勿提交。",
+    "id": "demo-asset",
+    "name": "示例资料",
+    "project": "示例项目",
+    "env_group": "测试环境",
+    "iter_group": "v0",
+    "kind": "url",
+    "path": "",
+    "url": "https://example.com",
+    "note": "",
+    "tags": []
+  }
+]

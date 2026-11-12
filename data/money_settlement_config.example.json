@@ -1,0 +1,49 @@
+{
+  "_comment": "复制为 money_settlement_config.json。总后台/会长提现凭据勿提交仓库。byTarget 按平台覆写域名/会长/游戏。",
+  "baseUrl": "http://dev.example.com",
+  "origin": "http://dev.example.com",
+  "adminUser": "admin",
+  "adminPassword": "CHANGE_ME",
+  "guildAccount": "测试会长账号",
+  "guildLoginPassword": "CHANGE_ME",
+  "guildWithdrawPassword": "CHANGE_ME",
+  "promoteId": 0,
+  "gameId": 0,
+  "headless": true,
+  "browserChannel": "chrome",
+  "adminStorageState": "data/admin_storage_state.json",
+  "byTarget": {
+    "lx": {
+      "baseUrl": "http://dev.example.com",
+      "promoteId": 0,
+      "guildAccount": "测试会长账号",
+      "guildAccountPrefix": "会长自动",
+      "guildLoginPassword": "CHANGE_ME",
+      "gameId": 0,
+      "playerAccountPrefix": "autotest"
+    },
+    "yq": {
+      "baseUrl": "http://yq.example.com",
+      "promoteId": 0,
+      "guildAccount": "游趣会长自动1",
+      "guildAccountPrefix": "游趣会长自动",
+      "guildLoginPassword": "CHANGE_ME",
+      "gameId": 0,
+      "playerAccountPrefix": "yqautotest",
+      "adminStorageState": "data/admin_storage_state_yq.json"
+    },
+    "hw": {
+      "baseUrl": "http://hw.example.com",
+      "promoteId": 0,
+      "guildAccount": "汇玩会长自动1",
+      "guildAccountPrefix": "汇玩会长自动",
+      "guildLoginPassword": "CHANGE_ME",
+      "gameId": 0,
+      "serverId": "0",
+      "serverName": "验数一区",
+      "playerAccountPrefix": "hwautotest",
+      "adminLoginPath": "/yuzhou/public/login.html",
+      "adminStorageState": "data/admin_storage_state_hw.json"
+    }
+  }
+}

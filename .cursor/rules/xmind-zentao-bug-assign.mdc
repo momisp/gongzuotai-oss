@@ -1,0 +1,17 @@
+---
+description: 从 XMind 提 Bug 时的指派规则（人名映射仅本机配置）
+alwaysApply: true
+---
+
+# XMind → 禅道 Bug 指派
+
+从测后 XMind（粉红 `#FF9595` 等）提禅道 Bug 时：
+
+1. **文案里带了开发者名字**（节点标题、子节点、备注均可）：指派给该开发者。
+2. **没有写开发者名字**：指派默认前端账号（见本地映射配置）。
+3. 提标题时去掉附带的人名，人名只用于指派；可在步骤备注里写「XMind 标注开发者」
+
+人名 → 账号映射**不要写进仓库**，放本机：
+
+- 复制 `data/dev_assignee_map.example.json` → `data/dev_assignee_map.json`
+- 实现：`workbench/xmind_product_bugs.py` 的 `load_dev_assignee_map` / `detect_assignee`

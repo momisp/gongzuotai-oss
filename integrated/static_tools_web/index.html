@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="JSON、Base64、时间戳、哈希、JWT、正则、颜色、进制等纯前端工具" />
+  <meta name="theme-color" content="#2c3e50" />
+  <title>工具小站</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./assets/icon-192x192.png" />
+  <script>
+    try {
+      if (sessionStorage.getItem("tools-site-splash-v1") === "1") {
+        document.documentElement.classList.add("splash-seen");
+      }
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div id="splash" class="splash" aria-hidden="false" aria-label="加载中">
+    <div class="splash-bg">
+      <span class="splash-blob splash-blob--1"></span>
+      <span class="splash-blob splash-blob--2"></span>
+      <span class="splash-blob splash-blob--3"></span>
+    </div>
+    <div class="splash-symbols" aria-hidden="true">
+      <span class="splash-symbol" style="--i:0">{ }</span>
+      <span class="splash-symbol" style="--i:1">#</span>
+      <span class="splash-symbol" style="--i:2">⚡</span>
+      <span class="splash-symbol" style="--i:3">◷</span>
+      <span class="splash-symbol" style="--i:4">▣</span>
+      <span class="splash-symbol" style="--i:5">∞</span>
+      <span class="splash-symbol" style="--i:6">λ</span>
+      <span class="splash-symbol" style="--i:7">0x</span>
+    </div>
+    <div class="splash-inner">
+      <div class="splash-logo-wrap">
+        <span class="splash-ring"></span>
+        <img src="./assets/icon-192x192.png" alt="" class="splash-logo" width="88" height="88" />
+      </div>
+      <h1 class="splash-title">工具小站</h1>
+      <p class="splash-tagline">开发者工具集 · 纯前端运行</p>
+      <div class="splash-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="splash-progress-bar"></div>
+      </div>
+      <p class="splash-skip-hint">点击任意处跳过</p>
+    </div>
+  </div>
+
+  <div class="container container-wide">
+    <header>
+      <h1>工具小站</h1>
+      <p>常用开发小工具，纯前端；PWA 离线需通过 HTTP(s) 打开。桌面版见项目 <code>desktop</code> 目录（Electron，含本机性能监控）。</p>
+    </header>
+
+    <div class="tool-nav-bar">
+      <p class="tool-nav-label">选择分类</p>
+      <div id="toolCategoryTabs" class="tool-category-tabs" role="tablist" aria-label="工具分类"></div>
+      <label class="tool-search-wrap">
+        <span class="visually-hidden">搜索工具</span>
+        <input type="search" id="toolSearch" class="tool-search" placeholder="搜索工具名称或说明…" autocomplete="off" />
+      </label>
+    </div>
+
+    <div id="tool-nav" class="tool-nav" aria-label="工具列表"></div>
+
+    <div id="tool-container" class="tool-host" aria-live="polite"></div>
+
+    <footer>
+      <p>工具小站 · 静态页面</p>
+    </footer>
+  </div>
+
+  <script src="./js/lib/md5.min.js"></script>
+  <script src="./js/tools/json-formatter.js"></script>
+  <script src="./js/tools/base64-encoder.js"></script>
+  <script src="./js/tools/timestamp-converter.js"></script>
+  <script src="./js/tools/case-converter.js"></script>
+  <script src="./js/tools/url-tool.js"></script>
+  <script src="./js/tools/html-tool.js"></script>
+  <script src="./js/tools/hex-tool.js"></script>
+  <script src="./js/tools/hash-tool.js"></script>
+  <script src="./js/tools/jwt-tool.js"></script>
+  <script src="./js/tools/regex-tool.js"></script>
+  <script src="./js/tools/color-tool.js"></script>
+  <script src="./js/tools/cssunit-tool.js"></script>
+  <script src="./js/tools/cron-tool.js"></script>
+  <script src="./js/tools/uuid-tool.js"></script>
+  <script src="./js/tools/random-tool.js"></script>
+  <script src="./js/tools/pick-tool.js"></script>
+  <script src="./js/tools/bili-subs-tool.js"></script>
+  <script src="./js/tools/bili-story-tool.js"></script>
+  <script src="./js/tools/diff-tool.js"></script>
+  <script src="./js/tools/query-tool.js"></script>
+  <script src="./js/tools/ua-tool.js"></script>
+  <script src="./js/tools/image-tool.js"></script>
+  <script src="./js/tools/textcode-tool.js"></script>
+  <script src="./js/tools/radix-tool.js"></script>
+  <script src="./js/tools/units-tool.js"></script>
+  <script src="./js/tools/sysmon-tool.js"></script>
+  <script src="./js/tools/netrank-tool.js"></script>
+  <script src="./js/tools/amap-mark-tool.js"></script>
+  <script src="./js/games-manifest.js"></script>
+  <script src="./js/tools/timeline-tool.js"></script>
+  <script src="./js/tools/gamedocs-tool.js"></script>
+  <script src="./js/tools/minigames-tool.js"></script>
+  <script src="./js/tools/herself-tool.js"></script>
+  <script src="./js/tools/opscmd-tool.js"></script>
+  <script src="./js/tools/animpreview-tool.js"></script>
+  <script src="./js/lib/gsap.min.js"></script>
+  <script src="./js/lib/ScrollTrigger.min.js"></script>
+  <script src="./js/ui-motion.js"></script>
+  <script src="./js/splash.js"></script>
+  <script src="./js/main.js"></script>
+</body>
+</html>

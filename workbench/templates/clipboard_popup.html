@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>历史复制</title>
+  <style>
+    :root {
+      --bg: #f4f5f8;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #9ca3af;
+      --line: #e8e8ef;
+      --accent: #4f46e5;
+      --accent-soft: #eef2ff;
+      --account: #0f766e;
+      --account-soft: #ecfdf5;
+      --account-line: #99f6e4;
+      --hl: #fef08a;
+      --hl-text: #854d0e;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overscroll-behavior: contain;
+    }
+    .shell {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 0;
+    }
+    .head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      background: var(--card);
+      border-bottom: 1px solid var(--line);
+      flex-shrink: 0;
+    }
+    .head h1 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+    .head input {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 13px;
+      outline: none;
+      background: #fafafa;
+    }
+    .head input:focus { border-color: #a5b4fc; background: #fff; }
+    .hint {
+      padding: 6px 14px;
+      font-size: 12px;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+    .body {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .section {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .section-account {
+      flex: 0 0 auto;
+      max-height: 48%;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #f0fdfa 0%, var(--bg) 100%);
+    }
+    .section-history {
+      flex: 1;
+      min-height: 0;
+    }
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 6px 14px 2px;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: 650;
+      letter-spacing: 0.02em;
+      color: #334155;
+    }
+    .section-account .section-title { color: var(--account); }
+    .section-count {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .list {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      overscroll-behavior: contain;
+      padding: 4px 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    #accountList {
+      gap: 2px;
+      padding: 2px 8px 8px;
+    }
+    .item {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 10px 12px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .item:hover, .item.active {
+      border-color: #a5b4fc;
+      background: #f8f7ff;
+    }
+    .item.active { outline: 2px solid rgba(79, 70, 229, 0.25); }
+    .item.account-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      grid-template-columns: unset;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border-color: #d1fae5;
+      min-height: 28px;
+    }
+    .item.account-item:hover, .item.account-item.active {
+      border-color: #5eead4;
+      background: #f0fdfa;
+      outline: 1px solid rgba(15, 118, 110, 0.2);
+    }
+    .acc-val {
+      flex: 1;
+      min-width: 0;
+      font-size: 12px;
+      line-height: 1.35;
+      color: var(--account);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      user-select: text;
+      cursor: text;
+    }
+    .acc-val.empty { color: var(--muted); }
+    .acc-val mark.hl {
+      background: var(--hl);
+      color: var(--hl-text);
+      padding: 0 1px;
+      border-radius: 2px;
+      font-weight: 600;
+    }
+    .acc-actions {
+      display: flex;
+      gap: 2px;
+      flex-shrink: 0;
+      opacity: 0.55;
+    }
+    .item.account-item:hover .acc-actions,
+    .item.account-item.active .acc-actions {
+      opacity: 1;
+    }
+    .thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background: #f3f4f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      overflow: hidden;
+      color: #6b7280;
+      flex-shrink: 0;
+      user-select: none;
+    }
+    .preview {
+      font-size: 13px;
+      line-height: 1.4;
+      word-break: break-word;
+      white-space: pre-wrap;
+      max-height: 4.2em;
+      overflow: auto;
+      user-select: text;
+      cursor: text;
+    }
+    .preview mark.hl {
+      background: var(--hl);
+      color: var(--hl-text);
+      padding: 0 2px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+    .meta {
+      margin-top: 3px;
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      user-select: none;
+    }
+    .type {
+      background: var(--accent-soft);
+      color: #4338ca;
+      padding: 0 5px;
+      border-radius: 3px;
+    }
+    .chip {
+      border: 1px solid var(--account-line);
+      background: #fff;
+      color: var(--account);
+      border-radius: 4px;
+      padding: 0 5px;
+      font-size: 10px;
+      cursor: pointer;
+      line-height: 1.6;
+      height: 20px;
+    }
+    .chip:hover { background: var(--account-soft); }
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 12px 16px;
+      font-size: 12px;
+    }
+    .float-tip {
+      position: fixed;
+      z-index: 40;
+      max-width: 280px;
+      padding: 6px 9px;
+      border-radius: 6px;
+      background: #111827;
+      color: #f9fafb;
+      font-size: 11px;
+      line-height: 1.45;
+      box-shadow: 0 6px 18px rgba(0,0,0,.18);
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity .12s, transform .12s;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .float-tip.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%) translateY(8px);
+      background: #111827;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      opacity: 0;
+      transition: .18s;
+      pointer-events: none;
+      z-index: 20;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="head">
+      <h1>📋 历史复制</h1>
+      <input id="search" type="search" placeholder="搜索账号 / 历史…  ↑↓ 选择  Enter 复制  Esc 关闭" autofocus>
+    </div>
+    <div class="hint" id="hint">加载中…</div>
+    <div class="body">
+      <section class="section section-account">
+        <div class="section-head">
+          <div class="section-title">账号记录</div>
+          <div class="section-count" id="accountCount"></div>
+        </div>
+        <div class="list" id="accountList"></div>
+      </section>
+      <section class="section section-history">
+        <div class="section-head">
+          <div class="section-title">剪贴板历史</div>
+          <div class="section-count" id="historyCount"></div>
+        </div>
+        <div class="list" id="list"></div>
+      </section>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+  <div class="float-tip" id="floatTip"></div>
+  <script>
+    let accounts = [];
+    let items = [];
+    let highlights = [];
+    /** 统一焦点：账号在前，历史在后 */
+    let focusKind = "account"; // account | history
+    let active = 0;
+    let toastTimer = null;
+    let searchTimer = null;
+    let lastFingerprint = "";
+    let userScrolling = false;
+    let scrollIdleTimer = null;
+
+    function esc(s) {
+      return String(s || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function toast(msg) {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove("show"), 1200);
+    }
+
+    function typeLabel(t) {
+      return t === "image" ? "图片" : t === "files" ? "文件" : "文字";
+    }
+
+    function typeIcon(t) {
+      return t === "image" ? "🖼" : t === "files" ? "📎" : "Aa";
+    }
+
+    function fileUrl(rel) {
+      return "/api/clipboard/file?path=" + encodeURIComponent(rel || "");
+    }
+
+    function fingerprint(list) {
+      return list.map((it) => `${it.id}:${it.count || 1}:${it.created_at || ""}`).join("|");
+    }
+
+    function focusTotal() {
+      return accounts.length + items.length;
+    }
+
+    function clampFocus() {
+      const total = focusTotal();
+      if (!total) {
+        focusKind = "account";
+        active = 0;
+        return;
+      }
+      if (focusKind === "account") {
+        if (!accounts.length) {
+          focusKind = "history";
+          active = Math.min(active, Math.max(0, items.length - 1));
+        } else {
+          active = Math.min(active, accounts.length - 1);
+        }
+      } else {
+        if (!items.length) {
+          focusKind = "account";
+          active = Math.min(active, Math.max(0, accounts.length - 1));
+        } else {
+          active = Math.min(active, items.length - 1);
+        }
+      }
+    }
+
+    function moveFocus(delta) {
+      const total = focusTotal();
+      if (!total) return;
+      let flat = focusKind === "account" ? active : accounts.length + active;
+      flat = (flat + delta + total) % total;
+      if (flat < accounts.length) {
+        focusKind = "account";
+        active = flat;
+      } else {
+        focusKind = "history";
+        active = flat - accounts.length;
+      }
+      renderAll({ scrollToActive: true });
+    }
+
+    function highlightPreview(text) {
+      const raw = String(text || "");
+      if (!raw || !highlights.length) return esc(raw);
+      const lowers = highlights.map((h) => String(h).toLowerCase());
+      let out = "";
+      let i = 0;
+      const lower = raw.toLowerCase();
+      while (i < raw.length) {
+        let hit = null;
+        let hitLen = 0;
+        for (let hi = 0; hi < highlights.length; hi++) {
+          const token = highlights[hi];
+          const tlen = token.length;
+          if (tlen < 4) continue;
+          if (lower.startsWith(lowers[hi], i) && tlen > hitLen) {
+            hit = raw.slice(i, i + tlen);
+            hitLen = tlen;
+          }
+        }
+        if (hit) {
+          out += `<mark class="hl">${esc(hit)}</mark>`;
+          i += hitLen;
+        } else {
+          out += esc(raw[i]);
+          i += 1;
+        }
+      }
+      return out;
+    }
+
+    function accountTitle(it) {
+      const plat = it.platform ? `（${it.platform}）` : "";
+      return `${it.name || "未命名"}${plat}`;
+    }
+
+    function accountTipText(it) {
+      const lines = [];
+      const head = [it.role, accountTitle(it)].filter(Boolean).join(" · ");
+      if (head) lines.push(head);
+      if (it.username) lines.push(`账号：${it.username}`);
+      if (it.password) lines.push(`密码：${it.password}`);
+      if (it.note) lines.push(it.note);
+      return lines.join("\n") || "账号记录";
+    }
+
+    function accountDisplayValue(it) {
+      if (it.url) return { text: it.url, empty: false };
+      if (it.username) return { text: it.username, empty: false };
+      if (it.note) return { text: it.note, empty: true };
+      return { text: accountTitle(it), empty: true };
+    }
+
+    function hideFloatTip() {
+      document.getElementById("floatTip").classList.remove("show");
+    }
+
+    function showFloatTip(anchor, text) {
+      const tip = document.getElementById("floatTip");
+      tip.textContent = text || "";
+      if (!text) {
+        tip.classList.remove("show");
+        return;
+      }
+      tip.classList.add("show");
+      const rect = anchor.getBoundingClientRect();
+      const tipW = tip.offsetWidth || 160;
+      const tipH = tip.offsetHeight || 40;
+      let left = rect.left + 8;
+      let top = rect.bottom + 6;
+      if (left + tipW > window.innerWidth - 8) left = window.innerWidth - tipW - 8;
+      if (left < 8) left = 8;
+      if (top + tipH > window.innerHeight - 8) top = Math.max(8, rect.top - tipH - 6);
+      tip.style.left = left + "px";
+      tip.style.top = top + "px";
+    }
+
+    function bindAccountTips(box) {
+      box.querySelectorAll(".account-item").forEach((el) => {
+        const tipFor = () => {
+          const i = Number(el.getAttribute("data-i"));
+          const it = accounts[i];
+          return it ? accountTipText(it) : "";
+        };
+        el.addEventListener("mouseenter", () => showFloatTip(el, tipFor()));
+        el.addEventListener("mousemove", () => showFloatTip(el, tipFor()));
+        el.addEventListener("mouseleave", hideFloatTip);
+      });
+    }
+
+    function renderAccounts(opts) {
+      const shouldScroll = !!(opts && opts.scrollToActive);
+      const box = document.getElementById("accountList");
+      const prevTop = box.scrollTop;
+      document.getElementById("accountCount").textContent =
+        accounts.length ? `${accounts.length} 条` : "无";
+      hideFloatTip();
+      if (!accounts.length) {
+        box.innerHTML = '<div class="empty">暂无账号记录（或无搜索匹配）</div>';
+        return;
+      }
+      box.innerHTML = accounts.map((it, i) => {
+        const isActive = focusKind === "account" && i === active;
+        const url = it.url || "";
+        const user = it.username || "";
+        const pass = it.password || "";
+        const shown = accountDisplayValue(it);
+        const chips = [];
+        if (user) chips.push(`<button type="button" class="chip" data-copy="${esc(user)}" onclick="onChipCopy(event)">账</button>`);
+        if (pass) chips.push(`<button type="button" class="chip" data-copy="${esc(pass)}" onclick="onChipCopy(event)">密</button>`);
+        if (user && pass) chips.push(`<button type="button" class="chip" data-copy="${esc(user + '\\t' + pass)}" onclick="onChipCopy(event)">账密</button>`);
+        const valHtml = shown.empty
+          ? esc(shown.text)
+          : (url ? highlightPreview(shown.text) : esc(shown.text));
+        return `<div class="item account-item${isActive ? " active" : ""}" data-kind="account" data-i="${i}" onclick="onAccountClick(event, ${i})">
+          <div class="acc-val${shown.empty ? " empty" : ""}">${valHtml}</div>
+          ${chips.length ? `<div class="acc-actions">${chips.join("")}</div>` : ""}
+        </div>`;
+      }).join("");
+      bindAccountTips(box);
+      if (shouldScroll && focusKind === "account") {
+        const activeEl = box.querySelector(".item.active");
+        if (activeEl) activeEl.scrollIntoView({ block: "nearest" });
+      } else {
+        box.scrollTop = prevTop;
+      }
+    }
+
+    function renderHistory(opts) {
+      const shouldScroll = !!(opts && opts.scrollToActive);
+      const box = document.getElementById("list");
+      const prevTop = box.scrollTop;
+      document.getElementById("historyCount").textContent =
+        items.length ? `${items.length} 条` : "无";
+      if (!items.length) {
+        box.innerHTML = '<div class="empty">暂无记录。先在别处复制一点内容。</div>';
+        lastFingerprint = "";
+        return;
+      }
+      box.innerHTML = items.map((it, i) => {
+        const type = it.type || "text";
+        const isActive = focusKind === "history" && i === active;
+        let thumb = `<div class="thumb">${typeIcon(type)}</div>`;
+        if (type === "image" && (it.thumb || it.file)) {
+          thumb = `<div class="thumb"><img src="${fileUrl(it.thumb || it.file)}" alt=""></div>`;
+        }
+        const previewHtml = type === "text"
+          ? highlightPreview(it.preview || "")
+          : esc(it.preview || "");
+        return `<div class="item${isActive ? " active" : ""}" data-kind="history" data-i="${i}" onclick="onItemClick(event, ${i})">
+          ${thumb}
+          <div>
+            <div class="preview">${previewHtml}</div>
+            <div class="meta"><span class="type">${typeLabel(type)}</span><span>${esc(it.created_at || "")}</span></div>
+          </div>
+        </div>`;
+      }).join("");
+      lastFingerprint = fingerprint(items);
+      if (shouldScroll && focusKind === "history") {
+        const activeEl = box.querySelector(".item.active");
+        if (activeEl) activeEl.scrollIntoView({ block: "nearest" });
+      } else {
+        box.scrollTop = prevTop;
+      }
+    }
+
+    function renderAll(opts) {
+      clampFocus();
+      renderAccounts(opts);
+      renderHistory(opts);
+    }
+
+    function updateHint() {
+      const a = accounts.length;
+      const h = items.length;
+      if (!a && !h) {
+        document.getElementById("hint").textContent = "无匹配结果";
+        return;
+      }
+      document.getElementById("hint").textContent =
+        `账号 ${a} · 历史 ${h} · 悬停看角色说明；点行复制网址，右侧「账/密」精确取 · ↑↓ / Enter`;
+    }
+
+    async function load(opts) {
+      const force = !!(opts && opts.force);
+      const q = document.getElementById("search").value.trim();
+      const [accRes, histRes] = await Promise.all([
+        fetch("/api/clipboard/accounts?q=" + encodeURIComponent(q)).then((r) => r.json()),
+        fetch("/api/clipboard/items?limit=80&q=" + encodeURIComponent(q)).then((r) => r.json()),
+      ]);
+      accounts = accRes.entries || [];
+      highlights = accRes.highlights || highlights || [];
+      const next = histRes.items || [];
+      const fp = fingerprint(next);
+      updateHint();
+      if (!force && fp === lastFingerprint && document.getElementById("list").children.length) {
+        items = next;
+        renderAll({ scrollToActive: !!(opts && opts.scrollToActive) });
+        return;
+      }
+      items = next;
+      renderAll({ scrollToActive: !!(opts && opts.scrollToActive) });
+    }
+
+    async function copyTextValue(text, label) {
+      const value = String(text || "");
+      if (!value) {
+        toast("无可复制内容");
+        return;
+      }
+      const res = await fetch("/api/clipboard/copy-text", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: value }),
+      }).then((r) => r.json());
+      if (!res.ok) {
+        toast(res.error || "失败");
+        return;
+      }
+      toast(label || "已复制，可粘贴了");
+      setTimeout(() => window.close(), 280);
+    }
+
+    async function restore(i) {
+      const it = items[i];
+      if (!it) return;
+      focusKind = "history";
+      active = i;
+      renderAll({ scrollToActive: true });
+      const res = await fetch("/api/clipboard/restore", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: it.id }),
+      }).then((r) => r.json());
+      if (!res.ok) {
+        toast(res.error || "失败");
+        return;
+      }
+      toast(res.warning || "已复制，可粘贴了");
+      setTimeout(() => window.close(), 280);
+    }
+
+    function defaultAccountCopy(it) {
+      if (it.url) return { text: it.url, label: "已复制网址" };
+      if (it.username && it.password) return { text: `${it.username}\t${it.password}`, label: "已复制账密" };
+      if (it.username) return { text: it.username, label: "已复制账号" };
+      if (it.note) return { text: it.note, label: "已复制备注" };
+      return null;
+    }
+
+    function onAccountClick(e, i) {
+      if (e && e.target && e.target.closest && e.target.closest(".chip")) return;
+      const sel = window.getSelection && window.getSelection();
+      if (sel && String(sel.toString() || "").trim()) return;
+      const it = accounts[i];
+      if (!it) return;
+      focusKind = "account";
+      active = i;
+      renderAll({ scrollToActive: true });
+      const pack = defaultAccountCopy(it);
+      if (!pack) {
+        toast("该条目暂无可复制字段");
+        return;
+      }
+      copyTextValue(pack.text, pack.label);
+    }
+
+    function onChipCopy(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const btn = e.currentTarget;
+      const text = btn.getAttribute("data-copy") || "";
+      const label = `已复制${btn.textContent || ""}`;
+      copyTextValue(text.replace(/\\t/g, "\t"), label);
+    }
+
+    function onItemClick(e, i) {
+      const sel = window.getSelection && window.getSelection();
+      if (sel && String(sel.toString() || "").trim()) return;
+      if (e && e.target && e.target.closest && e.target.closest(".preview") && e.detail > 1) return;
+      restore(i);
+    }
+
+    function activateEnter() {
+      if (focusKind === "account") {
+        const it = accounts[active];
+        if (!it) return;
+        const pack = defaultAccountCopy(it);
+        if (!pack) {
+          toast("该条目暂无可复制字段");
+          return;
+        }
+        copyTextValue(pack.text, pack.label);
+      } else {
+        restore(active);
+      }
+    }
+
+    document.getElementById("search").addEventListener("input", () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => load({ force: true }), 180);
+    });
+
+    ["accountList", "list"].forEach((id) => {
+      const el = document.getElementById(id);
+      el.addEventListener("scroll", () => {
+        userScrolling = true;
+        clearTimeout(scrollIdleTimer);
+        scrollIdleTimer = setTimeout(() => { userScrolling = false; }, 800);
+      }, { passive: true });
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        window.close();
+        return;
+      }
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        moveFocus(1);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        moveFocus(-1);
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        activateEnter();
+      }
+    });
+
+    load({ force: true, scrollToActive: true });
+    setInterval(() => {
+      if (document.getElementById("search").value) return;
+      if (userScrolling) return;
+      if (window.getSelection && String(window.getSelection().toString() || "").trim()) return;
+      load({ force: false, scrollToActive: false });
+    }, 2500);
+  </script>
+</body>
+</html>

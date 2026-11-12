@@ -1,0 +1,48 @@
+# v1 全量回归 · 页面可见指标 V2-03（由 tools/v1_regression_build.py 生成，勿手改）
+# 接线状态 partial：L3=已确证（2026-11-12 实测） / L1=口径待钉
+# 数据来源：Go 新新商务直查 game_lx + game_yq + game_hw 三库原始表（非 sw9 / 非 sw8 日报）
+id: v1reg_v2_03
+name: "矩阵数字与筛选"
+scene: v1_full_regression
+mode: passthrough
+format: text
+regId: "V2-03"
+group: "商务绩效统计"
+priority: "P2"
+role: "按权限"
+switches: "-"
+assertType: "四层一致（首轮人工建基线）"
+tolerance: "0.01"
+wiring: partial
+confirm: "v2待建基线"
+source:
+  db: game_lx+game_yq+game_hw
+  liveDatabase: game_lx
+  table: "待开发确认"
+  field: "待开发确认"
+  csvSourceRef: "待开发确认"
+  conditionSummary: "按页筛选 ｜三库直查 UNION ALL；旧日报 tab_sw_report_day 在 sw6/sw8，口径不同勿用"
+  fixtureValueYuan: 0.00
+  # liveSql 待钉：口径（层级范围 / 身份证去重 / 游戏过滤 / 统计日 T）未与开发确认，不写以免造假差异单
+formula:
+  text: "待确认"
+  expr: "GET /sw/performance → $.data.matrixTotal.open"
+  note: "期望口径：筛选与展开不串数；容差 0.01；断言 四层一致（首轮人工建基线）"
+api:
+  method: GET
+  path: "/sw/performance"
+  baseUrl: http://sw2.example.com/api
+  jsonPath: "$.data.matrixTotal.open"
+  headers:
+    Accept: application/json
+    x-token: "***"
+  doc: https://s.apifox.cn/4477b53a-ed4a-4dbd-a7be-6eda1d109944
+  v1CaptureRef: "-"
+  csvRawPath: "/sw/performance"
+  jsonPathConfirmed: true
+ui:
+  page: "http://sw2.example.com/#/Performance/BusinessPerformance"
+  region: "商务绩效统计 · 矩阵数字与筛选 · 矩阵数字与筛选"
+  locator: "区域=矩阵数字与筛选"
+  fixtureText: "-"
+  capture: dom

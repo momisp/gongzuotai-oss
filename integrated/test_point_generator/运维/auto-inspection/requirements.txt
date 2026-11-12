@@ -1,0 +1,11 @@
+# 阿里云 OpenAPI（经典 SDK，兼容性好）
+aliyun-python-sdk-core>=2.14.0
+aliyun-python-sdk-ecs>=4.24.0
+aliyun-python-sdk-cms>=7.0.0
+
+PyYAML>=6.0
+python-dotenv>=1.0.0
+requests>=2.28.0
+APScheduler>=3.10.0
+openpyxl>=3.1.0
+cryptography>=41.0.0

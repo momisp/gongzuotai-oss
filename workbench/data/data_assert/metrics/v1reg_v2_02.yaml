@@ -1,0 +1,49 @@
+# v1 全量回归 · 页面可见指标 V2-02（由 tools/v1_regression_build.py 生成，勿手改）
+# 接线状态 unwired：L3=待抓包 / L1=口径待钉
+# 数据来源：Go 新新商务直查 game_lx + game_yq + game_hw 三库原始表（非 sw9 / 非 sw8 日报）
+id: v1reg_v2_02
+name: "目标值与进度百分比"
+scene: v1_full_regression
+mode: passthrough
+format: text
+regId: "V2-02"
+group: "本月目标条"
+priority: "P2"
+role: "按权限"
+switches: "-"
+assertType: "四层一致（首轮人工建基线）"
+tolerance: "0.01"
+wiring: unwired
+confirm: "v2待建基线"
+source:
+  db: game_lx+game_yq+game_hw
+  liveDatabase: game_lx
+  table: "待开发确认"
+  field: "待开发确认"
+  csvSourceRef: "待开发确认"
+  conditionSummary: "按页筛选 ｜三库直查 UNION ALL；旧日报 tab_sw_report_day 在 sw6/sw8，口径不同勿用"
+  fixtureValueYuan: 0.00
+  # liveSql 待钉：口径（层级范围 / 身份证去重 / 游戏过滤 / 统计日 T）未与开发确认，不写以免造假差异单
+formula:
+  text: "待确认"
+  expr: "GET /sw/goals → $.data.TODO"
+  note: "期望口径：有目标显示进度 无目标合法空态；容差 0.01；断言 四层一致（首轮人工建基线）"
+api:
+  method: GET
+  path: "/sw/goals"
+  baseUrl: http://sw2.example.com/api
+  jsonPath: "$.data.TODO"
+  headers:
+    Accept: application/json
+    x-token: "***"
+  doc: https://s.apifox.cn/4477b53a-ed4a-4dbd-a7be-6eda1d109944
+  v1CaptureRef: "-"
+  csvRawPath: "/sw/goals"
+  jsonPathConfirmed: false
+  jsonPathNote: "2026-11-12 实测 /sw/goals/mine 超管与一级均返回 data=null（环境未设目标），设目标后再钉字段"
+ui:
+  page: "http://sw2.example.com/#/layout/dashboard"
+  region: "本月目标条 · 目标值与进度百分比 · 目标值与进度百分比"
+  locator: "区域=目标值与进度百分比"
+  fixtureText: "-"
+  capture: dom

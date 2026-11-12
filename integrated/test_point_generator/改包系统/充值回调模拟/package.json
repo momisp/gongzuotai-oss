@@ -1,0 +1,15 @@
+{
+  "name": "recharge-callback-simulator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "内网专用：按玩家账号查最新订单并模拟支付回调",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mysql2": "^3.14.0"
+  }
+}

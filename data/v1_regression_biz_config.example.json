@@ -1,0 +1,57 @@
+{
+  "_comment": "复制为 v1_regression_biz_config.json。writeEnabled=false 时只预演不写。凭据与复用账号勿提交仓库。",
+  "writeEnabled": false,
+  "dryRunEvidence": true,
+  "reuseExisting": true,
+  "swBaseUrl": "http://sw2.example.com/api",
+  "oaBaseUrl": "http://oa.example.com/api",
+  "oaReachable": true,
+  "oaAuthReady": true,
+  "oaLogin": {
+    "username": "CHANGE_ME",
+    "password": "CHANGE_ME"
+  },
+  "oaToken": "",
+  "admin": {
+    "username": "admin",
+    "password": "CHANGE_ME"
+  },
+  "db": {
+    "configDb": "sw9",
+    "gameDbs": ["game_lx", "game_yq", "game_hw"],
+    "sourceDbMap": { "lx": "game_lx", "yq": "game_yq", "hw": "game_hw" }
+  },
+  "seed": {
+    "prefix": "v1reg",
+    "password": "CHANGE_ME",
+    "phone": "13800000000",
+    "realName": "v1回归造数",
+    "l1": { "userName": "v1reg_l1_auto", "realName": "v1回归一级" },
+    "l2": { "userName": "v1reg_l2_auto", "realName": "v1回归二级" },
+    "l3": { "userName": "v1reg_l3_auto", "realName": "v1回归三级" },
+    "channel": {
+      "account": "v1regch00001",
+      "registerType": 0,
+      "sourceDb": "lx"
+    }
+  },
+  "reuse": {
+    "l1": { "userId": 0, "userName": "CHANGE_ME", "password": "CHANGE_ME", "level": 1, "parentId": 0 },
+    "l2": { "userId": 0, "userName": "CHANGE_ME", "password": "CHANGE_ME", "level": 2, "parentId": 0 },
+    "l3": { "userId": 0, "userName": "CHANGE_ME", "password": "CHANGE_ME", "level": 3, "parentId": 0 }
+  },
+  "bind": {
+    "sourceDb": "lx",
+    "account": "CHANGE_ME",
+    "password": "CHANGE_ME",
+    "platformBusierId": 0,
+    "duplicateRisk": true
+  },
+  "audit": {
+    "userId": "0",
+    "sourceDb": "lx",
+    "platformBusierId": 0,
+    "confirmDuplicate": false,
+    "rejectReason": "自动化造数，审核驳回用例"
+  }
+}

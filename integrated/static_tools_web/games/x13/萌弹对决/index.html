@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>萌弹对决</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; touch-action: manipulation; }
+    body {
+      min-height: 100vh; display: flex; justify-content: center; align-items: center;
+      background: linear-gradient(180deg, #a8d8ff 0%, #ffeef8 100%);
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    }
+    #wrap {
+      width: 100%; max-width: 480px; height: 100vh; max-height: 820px;
+      position: relative; overflow: hidden; border-radius: 18px;
+      box-shadow: 0 12px 40px rgba(80,120,180,0.25);
+    }
+    .screen { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; transition: opacity 0.35s; }
+    .hidden { opacity: 0; pointer-events: none; }
+    #startScreen { background: linear-gradient(160deg, #dff4ff, #fff0f5); text-align: center; }
+    #startScreen h1 { font-size: 2rem; color: #ff6b9d; margin-bottom: 12px; }
+    .tips { background: rgba(255,255,255,0.85); border-radius: 14px; padding: 16px; margin: 16px 0 24px; text-align: left; font-size: 0.88rem; color: #555; }
+    .tips li { margin: 6px 0; list-style: none; }
+    .tips li::before { content: "🎯 "; }
+    .btn {
+      border: none; border-radius: 999px; padding: 12px 24px; font-size: 0.95rem; font-weight: bold; color: #fff;
+      background: linear-gradient(135deg, #ff8fab, #ff6b9d); cursor: pointer;
+      box-shadow: 0 4px 14px rgba(255,107,157,0.4);
+    }
+    .btn-blue { background: linear-gradient(135deg, #4dabf7, #339af0); box-shadow: 0 4px 14px rgba(51,154,240,0.35); }
+    .btn-sm { padding: 6px 10px; font-size: 0.78rem; border-radius: 8px; }
+    #gameScreen { padding: 0; }
+    canvas { display: block; width: 100%; height: 100%; }
+    #hud { position: absolute; left: 8px; right: 8px; top: 8px; pointer-events: none; z-index: 2; }
+    .hud-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+    .hp-bar { flex: 1; height: 12px; background: rgba(255,255,255,0.55); border-radius: 8px; overflow: hidden; border: 2px solid #fff; }
+    .hp-fill { height: 100%; transition: width 0.25s; }
+    .hp-you { background: linear-gradient(90deg, #69db7c, #40c057); }
+    .hp-ai { background: linear-gradient(90deg, #ff8787, #fa5252); }
+    .badge { background: rgba(255,255,255,0.92); padding: 3px 8px; border-radius: 10px; font-size: 0.72rem; font-weight: bold; color: #495057; }
+
+    /* 弹弹堂风格瞄准小窗 */
+    #ddtPanel {
+      position: absolute; right: 8px; bottom: 8px; width: 148px;
+      background: linear-gradient(180deg, rgba(255,252,240,0.97), rgba(255,245,220,0.97));
+      border: 2px solid #d4a574; border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18), inset 0 1px 0 #fff;
+      padding: 8px; z-index: 5; font-size: 0.72rem; color: #5c4033;
+    }
+    #ddtPanel.disabled { opacity: 0.5; pointer-events: none; }
+    .panel-title {
+      text-align: center; font-weight: bold; color: #c92a2a; margin-bottom: 6px;
+      border-bottom: 1px dashed #e8c9a0; padding-bottom: 4px; font-size: 0.8rem;
+    }
+    .wind-box {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #fff; border: 1px solid #e8c9a0; border-radius: 8px; padding: 4px 6px; margin-bottom: 6px;
+    }
+    .wind-arrow { font-size: 1.1rem; color: #339af0; font-weight: bold; min-width: 24px; text-align: center; }
+    .wind-num { font-size: 1rem; font-weight: bold; color: #e67700; }
+    .angle-row, .move-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; gap: 4px; }
+    .angle-row button, .move-row button {
+      width: 28px; height: 28px; border: 1px solid #d4a574; border-radius: 6px;
+      background: #fff8e7; cursor: pointer; font-size: 0.85rem; color: #5c4033;
+    }
+    .angle-row button:active, .move-row button:active { background: #ffe8cc; }
+    .angle-display { flex: 1; text-align: center; font-weight: bold; }
+    .angle-display b { color: #c92a2a; font-size: 1rem; }
+    .power-section { margin-bottom: 6px; }
+    .power-label { display: flex; justify-content: space-between; margin-bottom: 3px; }
+    .power-label b { color: #c92a2a; }
+    .power-track {
+      height: 14px; background: #eee; border-radius: 8px; border: 1px solid #d4a574; overflow: hidden; position: relative;
+    }
+    .power-fill {
+      height: 100%; width: 50%; border-radius: 7px;
+      background: linear-gradient(90deg, #ffd43b, #ff922b, #fa5252);
+      transition: width 0.08s;
+    }
+    input[type="range"].power-slider {
+      width: 100%; margin-top: 4px; accent-color: #ff922b; height: 4px;
+    }
+    .formula-box {
+      background: rgba(255,255,255,0.7); border: 1px solid #e8c9a0; border-radius: 8px;
+      padding: 5px 6px; margin-bottom: 6px; line-height: 1.55;
+    }
+    .formula-title { font-weight: bold; color: #862e9c; margin-bottom: 2px; font-size: 0.75rem; }
+    .formula-line { display: flex; justify-content: space-between; align-items: center; }
+    .formula-line b { color: #c92a2a; }
+    .formula-line button { padding: 1px 5px; font-size: 0.65rem; border-radius: 4px; border: 1px solid #d4a574; background: #fff; cursor: pointer; }
+    #fireBtn { width: 100%; padding: 10px; font-size: 0.85rem; }
+    #moveRemain { font-size: 0.7rem; color: #868e96; text-align: center; margin-bottom: 4px; }
+
+    #modal { position: absolute; inset: 0; background: rgba(0,0,0,0.45); display: none; align-items: center; justify-content: center; z-index: 20; }
+    #modal.show { display: flex; }
+    .modal-box { background: #fff; border-radius: 18px; padding: 28px 24px; text-align: center; max-width: 85%; }
+    .modal-box h2 { color: #ff6b9d; margin-bottom: 10px; }
+    .modal-box p { color: #666; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <div id="wrap">
+    <div id="startScreen" class="screen">
+      <h1>🌈 萌弹对决</h1>
+      <p>Q 版弹射 · 弹弹堂式操作</p>
+      <ul class="tips">
+        <li>← → 移动角色，每回合可移动一定距离</li>
+        <li>小窗调整角度/力度，注意风速与公式助手</li>
+        <li>半抛20°、高抛65°、定角30° 可一键套用推荐力度</li>
+        <li>炮口会随角度旋转，虚线为预测弹道</li>
+      </ul>
+      <button class="btn" id="startBtn">开始对战</button>
+    </div>
+
+    <div id="gameScreen" class="screen hidden">
+      <canvas id="cv"></canvas>
+      <div id="hud">
+        <div class="hud-row">
+          <span class="badge">你</span>
+          <div class="hp-bar"><div class="hp-fill hp-you" id="hpYou" style="width:100%"></div></div>
+          <span class="badge" id="turnBadge">你的回合</span>
+        </div>
+        <div class="hud-row">
+          <span class="badge">AI</span>
+          <div class="hp-bar"><div class="hp-fill hp-ai" id="hpAi" style="width:100%"></div></div>
+        </div>
+      </div>
+
+      <div id="ddtPanel">
+        <div class="panel-title">🎯 瞄准小窗</div>
+        <div class="wind-box">
+          <span>风速</span>
+          <span class="wind-arrow" id="windArrow">·</span>
+          <span class="wind-num" id="windNum">0</span>
+        </div>
+        <div class="angle-row">
+          <button type="button" id="angleDown" title="角度-1">▼</button>
+          <div class="angle-display">角度 <b id="angleNum">45</b>°</div>
+          <button type="button" id="angleUp" title="角度+1">▲</button>
+        </div>
+        <div class="power-section">
+          <div class="power-label"><span>力度</span><b id="powerNum">50</b></div>
+          <div class="power-track"><div class="power-fill" id="powerFill"></div></div>
+          <input type="range" class="power-slider" id="powerSlider" min="10" max="100" value="50" />
+        </div>
+        <div class="move-row">
+          <button type="button" id="moveL">◀</button>
+          <span id="moveRemain">移动力 80</span>
+          <button type="button" id="moveR">▶</button>
+        </div>
+        <div class="formula-box">
+          <div class="formula-title">📐 公式助手</div>
+          <div>水平距 <b id="distVal">0</b> px</div>
+          <div class="formula-line">半抛20° <b id="halfPow">-</b><button type="button" data-preset="half">套用</button></div>
+          <div class="formula-line">高抛65° <b id="highPow">-</b><button type="button" data-preset="high">套用</button></div>
+          <div class="formula-line">定角30° <b id="fix30Pow">-</b><button type="button" data-preset="fix30">套用</button></div>
+        </div>
+        <button class="btn btn-blue" id="fireBtn" type="button">发射 (Space)</button>
+      </div>
+    </div>
+
+    <div id="modal">
+      <div class="modal-box">
+        <h2 id="modalTitle">胜利！</h2>
+        <p id="modalMsg">太棒了～</p>
+        <button class="btn" id="modalBtn">再来一局</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+(function () {
+  /* 弹弹堂经典物理系数（社区常用近似） */
+  const DDT = {
+    G: 0.5,
+    WIND_K: 0.2,
+    POWER_K: 2,
+    blastRadius: 28,
+    blastDamage: 22,
+    maxHp: 100,
+    terrainRes: 6,
+    groundBase: 0.62,
+    moveMax: 80,
+    moveStep: 8,
+    barrelLen: 28,
+    muzzleOff: { x: 0, y: -6 }
+  };
+
+  let W, H, cv, ctx;
+  let terrain = [];
+  let wind = 0;
+  let turn = "player";
+  let projectile = null;
+  let particles = [];
+  let animId = 0;
+  let gameOver = false;
+  let angle = 45;
+  let power = 50;
+  let moveLeft = DDT.moveMax;
+  let aiAimAngle = 45;
+
+  const player = { hp: 100, x: 0, y: 0, color: "#69db7c", face: "#ffe066" };
+  const ai = { hp: 100, x: 0, y: 0, color: "#ff8787", face: "#ffd8a8" };
+
+  const el = (id) => document.getElementById(id);
+
+  function initCanvas() {
+    cv = el("cv");
+    ctx = cv.getContext("2d");
+    const wrap = el("wrap");
+    W = cv.width = wrap.clientWidth;
+    H = cv.height = wrap.clientHeight;
+  }
+
+  function buildTerrain() {
+    const n = Math.ceil(W / DDT.terrainRes) + 1;
+    terrain = [];
+    for (let i = 0; i < n; i++) {
+      const t = i / n;
+      terrain.push(
+        DDT.groundBase +
+          Math.sin(t * Math.PI * 2.2) * 0.08 +
+          Math.sin(t * Math.PI * 5 + 1) * 0.04 +
+          (t > 0.35 && t < 0.55 ? 0.06 : 0)
+      );
+    }
+  }
+
+  function terrainYAt(x) {
+    const idx = x / DDT.terrainRes;
+    const i0 = Math.floor(idx);
+    const i1 = Math.min(i0 + 1, terrain.length - 1);
+    const f = idx - i0;
+    return (terrain[i0] * (1 - f) + terrain[i1] * f) * H;
+  }
+
+  function snapFighter(f) {
+    f.y = terrainYAt(f.x) - 18;
+  }
+
+  function placeFighters() {
+    player.x = W * 0.18;
+    ai.x = W * 0.82;
+    snapFighter(player);
+    snapFighter(ai);
+  }
+
+  function newWind() {
+    wind = Math.round((Math.random() * 2 - 1) * 10);
+    updateWindUI();
+    refreshFormula();
+  }
+
+  function updateWindUI() {
+    const arrow = el("windArrow");
+    const num = el("windNum");
+    num.textContent = Math.abs(wind);
+    if (wind > 0) arrow.textContent = "→";
+    else if (wind < 0) arrow.textContent = "←";
+    else arrow.textContent = "·";
+  }
+
+  function updateHpUI() {
+    el("hpYou").style.width = Math.max(0, player.hp) + "%";
+    el("hpAi").style.width = Math.max(0, ai.hp) + "%";
+  }
+
+  function updateAimUI() {
+    el("angleNum").textContent = angle;
+    el("powerNum").textContent = power;
+    el("powerFill").style.width = power + "%";
+    el("powerSlider").value = power;
+    el("moveRemain").textContent = "移动力 " + moveLeft;
+    refreshFormula();
+  }
+
+  /** 弹弹堂常用力度估算：力度 ≈ 距离/(3×cos/sinθ) ± 风力×2 */
+  function formulaPower(dist, angleDeg, windVal, dir) {
+    const rad = (angleDeg * Math.PI) / 180;
+    const denom = 3 * (angleDeg >= 45 ? Math.sin(rad) : Math.cos(rad));
+    const base = dist / Math.max(0.01, denom);
+    const windAdj = windVal * dir * 2;
+    return Math.max(10, Math.min(100, Math.round(base + windAdj)));
+  }
+
+  function getHorizDist() {
+    return Math.abs(ai.x - player.x);
+  }
+
+  function refreshFormula() {
+    if (turn !== "player") return;
+    const dist = Math.round(getHorizDist());
+    const dir = 1;
+    el("distVal").textContent = dist;
+    el("halfPow").textContent = formulaPower(dist, 20, wind, dir);
+    el("highPow").textContent = formulaPower(dist, 65, wind, dir);
+    el("fix30Pow").textContent = formulaPower(dist, 30, wind, dir);
+  }
+
+  function applyPreset(type) {
+    const dist = getHorizDist();
+    if (type === "half") { angle = 20; power = formulaPower(dist, 20, wind, 1); }
+    else if (type === "high") { angle = 65; power = formulaPower(dist, 65, wind, 1); }
+    else if (type === "fix30") { angle = 30; power = formulaPower(dist, 30, wind, 1); }
+    updateAimUI();
+  }
+
+  function setTurn(t) {
+    turn = t;
+    const panel = el("ddtPanel");
+    if (t === "player") {
+      el("turnBadge").textContent = "你的回合";
+      panel.classList.remove("disabled");
+      moveLeft = DDT.moveMax;
+      updateAimUI();
+    } else {
+      el("turnBadge").textContent = "AI 瞄准…";
+      panel.classList.add("disabled");
+    }
+  }
+
+  function initVelocity(powerVal, angleDeg, dir) {
+    const rad = (angleDeg * Math.PI) / 180;
+    const v = powerVal * DDT.POWER_K;
+    return {
+      vx: v * Math.cos(rad) * dir,
+      vy: -v * Math.sin(rad)
+    };
+  }
+
+  function muzzlePos(from, facing, aimDeg) {
+    const rad = (aimDeg * Math.PI) / 180;
+    const bx = facing * 14;
+    const by = -2;
+    return {
+      x: from.x + bx + Math.cos(rad) * facing * DDT.barrelLen,
+      y: from.y + by - Math.sin(rad) * DDT.barrelLen
+    };
+  }
+
+  function fire(from, aimDeg, powerVal, dir) {
+    const m = muzzlePos(from, dir, aimDeg);
+    const vel = initVelocity(powerVal, aimDeg, dir);
+    projectile = { x: m.x, y: m.y, vx: vel.vx, vy: vel.vy, life: 0 };
+  }
+
+  function simulateTrajectory(from, aimDeg, powerVal, dir, maxSteps) {
+    const m = muzzlePos(from, dir, aimDeg);
+    const vel = initVelocity(powerVal, aimDeg, dir);
+    let x = m.x, y = m.y, vx = vel.vx, vy = vel.vy;
+    const pts = [{ x, y }];
+    for (let i = 0; i < (maxSteps || 120); i++) {
+      vx += wind * DDT.WIND_K;
+      vy += DDT.G;
+      x += vx;
+      y += vy;
+      if (x < 0 || x > W || y > H + 20) break;
+      if (y >= terrainYAt(x)) { pts.push({ x, y }); break; }
+      if (i % 4 === 0) pts.push({ x, y });
+    }
+    return pts;
+  }
+
+  function simulateShot(from, aimDeg, powerVal, dir) {
+    const pts = simulateTrajectory(from, aimDeg, powerVal, dir, 400);
+    return pts[pts.length - 1] || { x: from.x, y: from.y };
+  }
+
+  function moveFighter(f, delta) {
+    if (moveLeft <= 0 && f === player) return;
+    const nx = f.x + delta;
+    const minX = 24;
+    const maxX = ai.x - 36;
+    f.x = Math.max(minX, Math.min(maxX, nx));
+    snapFighter(f);
+    if (f === player) {
+      moveLeft = Math.max(0, moveLeft - Math.abs(delta));
+      updateAimUI();
+    }
+  }
+
+  function deformTerrain(cx, cy, radius) {
+    for (let i = 0; i < terrain.length; i++) {
+      const tx = i * DDT.terrainRes;
+      if (Math.abs(tx - cx) > radius) continue;
+      terrain[i] = Math.min(0.92, terrain[i] + (1 - Math.abs(tx - cx) / radius) * (radius / H) * 0.35);
+    }
+    snapFighter(player);
+    snapFighter(ai);
+  }
+
+  function spawnExplosion(x, y) {
+    for (let i = 0; i < 18; i++) {
+      const a = Math.random() * Math.PI * 2;
+      particles.push({
+        x, y, vx: Math.cos(a) * (1 + Math.random() * 4), vy: Math.sin(a) * (1 + Math.random() * 4) - 2,
+        life: 30 + Math.random() * 20, color: i % 2 ? "#ffd43b" : "#ff922b", size: 3 + Math.random() * 5
+      });
+    }
+  }
+
+  function damageAt(x, y) {
+    [player, ai].forEach((t) => {
+      const d = Math.hypot(t.x - x, t.y - y);
+      if (d < DDT.blastRadius + 15) {
+        t.hp = Math.max(0, t.hp - Math.round(DDT.blastDamage * (1 - d / (DDT.blastRadius + 15))));
+      }
+    });
+    updateHpUI();
+  }
+
+  function explode(x, y) {
+    const ey = Math.max(y, terrainYAt(x) - 2);
+    deformTerrain(x, ey, DDT.blastRadius);
+    spawnExplosion(x, ey);
+    damageAt(x, ey);
+    projectile = null;
+    checkWin();
+    if (!gameOver) setTimeout(endTurn, 900);
+  }
+
+  function checkWin() {
+    if (player.hp <= 0 || ai.hp <= 0) {
+      gameOver = true;
+      const win = player.hp > 0;
+      setTimeout(() => {
+        el("modalTitle").textContent = win ? "🎉 你赢了！" : "😿 再试一次";
+        el("modalMsg").textContent = win ? "公式大师！" : "再算一算风速和半抛～";
+        el("modal").classList.add("show");
+      }, 400);
+    }
+  }
+
+  function endTurn() {
+    if (gameOver) return;
+    if (turn === "player") {
+      setTurn("ai");
+      newWind();
+      setTimeout(aiTurn, 700);
+    } else {
+      newWind();
+      setTurn("player");
+    }
+  }
+
+  function aiTurn() {
+    if (gameOver) return;
+    let best = { score: Infinity, angle: 45, power: 50 };
+    for (let a = 15; a <= 80; a += 2) {
+      for (let p = 20; p <= 100; p += 3) {
+        const hit = simulateShot(ai, a, p, -1);
+        const err = Math.hypot(hit.x - player.x, hit.y - player.y);
+        if (err < best.score) best = { score: err, angle: a, power: p };
+      }
+    }
+    best.angle += (Math.random() - 0.5) * 6;
+    best.power += (Math.random() - 0.5) * 8;
+    best.angle = Math.max(10, Math.min(85, Math.round(best.angle)));
+    best.power = Math.max(15, Math.min(100, Math.round(best.power)));
+    aiAimAngle = best.angle;
+    fire(ai, best.angle, best.power, -1);
+  }
+
+  function updateProjectile() {
+    if (!projectile) return;
+    const p = projectile;
+    p.vx += wind * DDT.WIND_K;
+    p.vy += DDT.G;
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life++;
+    if (p.x < -20 || p.x > W + 20 || p.y > H + 30 || p.life > 600) { explode(p.x, p.y); return; }
+    if (p.y >= terrainYAt(p.x)) explode(p.x, p.y);
+  }
+
+  function updateParticles() {
+    particles = particles.filter((p) => {
+      p.x += p.vx; p.y += p.vy; p.vy += 0.08; p.life--;
+      return p.life > 0;
+    });
+  }
+
+  function drawSky() {
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, "#9be7ff"); g.addColorStop(0.55, "#dff9fb"); g.addColorStop(1, "#fff0f6");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+    [[0.15, 0.12, 1], [0.65, 0.08, 0.8], [0.42, 0.17, 0.55]].forEach(([tx, ty, s]) => drawCloud(W * tx, H * ty, s));
+  }
+
+  function drawCloud(x, y, scale) {
+    ctx.fillStyle = "rgba(255,255,255,0.85)";
+    const r = 18 * scale;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.arc(x + r * 0.9, y - r * 0.2, r * 0.75, 0, Math.PI * 2);
+    ctx.arc(x + r * 1.7, y, r * 0.85, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function drawTerrain() {
+    ctx.fillStyle = "#8ce99a";
+    ctx.beginPath(); ctx.moveTo(0, H);
+    for (let i = 0; i < terrain.length; i++) ctx.lineTo(i * DDT.terrainRes, terrain[i] * H);
+    ctx.lineTo(W, H); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "#69db7c";
+    ctx.beginPath(); ctx.moveTo(0, H);
+    for (let i = 0; i < terrain.length; i++) ctx.lineTo(i * DDT.terrainRes, terrain[i] * H - 4);
+    ctx.lineTo(W, H); ctx.closePath(); ctx.fill();
+  }
+
+  function drawTrajectoryPreview() {
+    if (turn !== "player" || projectile || gameOver) return;
+    const pts = simulateTrajectory(player, angle, power, 1);
+    ctx.fillStyle = "rgba(255, 107, 157, 0.55)";
+    pts.forEach((p, i) => {
+      if (i === 0) return;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, i === pts.length - 1 ? 4 : 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+
+  function drawFighter(f, facing, aimDeg) {
+    const x = f.x, y = f.y;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.fillStyle = "rgba(0,0,0,0.12)";
+    ctx.beginPath(); ctx.ellipse(0, 14, 20, 6, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = f.color;
+    ctx.beginPath(); ctx.roundRect(-16, -4, 32, 22, 10); ctx.fill();
+    ctx.fillStyle = f.face;
+    ctx.beginPath(); ctx.arc(0, -18, 18, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#fff";
+    ctx.beginPath();
+    ctx.ellipse(facing * 6, -20, 5, 6, 0, 0, Math.PI * 2);
+    ctx.ellipse(facing * -2, -20, 4, 5, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#333";
+    ctx.beginPath();
+    ctx.arc(facing * 7, -20, 2.2, 0, Math.PI * 2);
+    ctx.arc(facing * -1, -20, 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#ffb8c9"; ctx.globalAlpha = 0.55;
+    ctx.beginPath();
+    ctx.ellipse(facing * 12, -14, 4, 2.5, 0, 0, Math.PI * 2);
+    ctx.ellipse(facing * -8, -14, 4, 2.5, 0, 0, Math.PI * 2);
+    ctx.fill(); ctx.globalAlpha = 1;
+
+    /* 炮塔底座 */
+    ctx.fillStyle = "#868e96";
+    ctx.beginPath(); ctx.arc(facing * 10, 0, 7, 0, Math.PI * 2); ctx.fill();
+
+    /* 炮管随角度旋转 */
+    ctx.save();
+    ctx.translate(facing * 10, 0);
+    ctx.rotate(-facing * aimDeg * Math.PI / 180);
+    ctx.fillStyle = "#495057";
+    ctx.fillRect(0, -4, DDT.barrelLen, 8);
+    ctx.fillStyle = "#343a40";
+    ctx.beginPath(); ctx.arc(DDT.barrelLen, 0, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+
+    ctx.restore();
+  }
+
+  function drawProjectile() {
+    if (!projectile) return;
+    const p = projectile;
+    ctx.fillStyle = "#495057";
+    ctx.beginPath(); ctx.arc(p.x, p.y, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#ffd43b";
+    ctx.beginPath(); ctx.arc(p.x - p.vx, p.y - p.vy, 4, 0, Math.PI * 2); ctx.fill();
+  }
+
+  function drawParticles() {
+    particles.forEach((p) => {
+      ctx.globalAlpha = Math.min(1, p.life / 25);
+      ctx.fillStyle = p.color;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+  }
+
+  function loop() {
+    drawSky();
+    drawTerrain();
+    drawTrajectoryPreview();
+    drawFighter(player, 1, angle);
+    drawFighter(ai, -1, turn === "ai" && projectile ? aiAimAngle : aiAimAngle);
+    updateProjectile();
+    drawProjectile();
+    updateParticles();
+    drawParticles();
+    if (!gameOver) animId = requestAnimationFrame(loop);
+  }
+
+  function playerFire() {
+    if (turn !== "player" || projectile || gameOver) return;
+    fire(player, angle, power, 1);
+  }
+
+  function startGame() {
+    el("startScreen").classList.add("hidden");
+    el("gameScreen").classList.remove("hidden");
+    el("modal").classList.remove("show");
+    initCanvas();
+    player.hp = DDT.maxHp;
+    ai.hp = DDT.maxHp;
+    angle = 45; power = 50;
+    gameOver = false;
+    projectile = null;
+    particles = [];
+    buildTerrain();
+    placeFighters();
+    newWind();
+    updateHpUI();
+    updateAimUI();
+    setTurn("player");
+    cancelAnimationFrame(animId);
+    loop();
+  }
+
+  el("startBtn").addEventListener("click", startGame);
+  el("modalBtn").addEventListener("click", startGame);
+  el("angleUp").addEventListener("click", () => { if (turn !== "player" || projectile) return; angle = Math.min(90, angle + 1); updateAimUI(); });
+  el("angleDown").addEventListener("click", () => { if (turn !== "player" || projectile) return; angle = Math.max(0, angle - 1); updateAimUI(); });
+  el("powerSlider").addEventListener("input", (e) => { power = +e.target.value; updateAimUI(); });
+  el("moveL").addEventListener("click", () => { if (turn !== "player" || projectile) return; moveFighter(player, -DDT.moveStep); });
+  el("moveR").addEventListener("click", () => { if (turn !== "player" || projectile) return; moveFighter(player, DDT.moveStep); });
+  el("fireBtn").addEventListener("click", playerFire);
+  document.querySelectorAll("[data-preset]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (turn !== "player" || projectile) return;
+      applyPreset(btn.getAttribute("data-preset"));
+    });
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if (el("gameScreen").classList.contains("hidden")) return;
+    if (e.code === "Space") { e.preventDefault(); playerFire(); }
+    if (e.code === "ArrowLeft") { e.preventDefault(); moveFighter(player, -DDT.moveStep); }
+    if (e.code === "ArrowRight") { e.preventDefault(); moveFighter(player, DDT.moveStep); }
+    if (e.code === "ArrowUp") { e.preventDefault(); angle = Math.min(90, angle + 1); updateAimUI(); }
+    if (e.code === "ArrowDown") { e.preventDefault(); angle = Math.max(0, angle - 1); updateAimUI(); }
+  });
+
+  window.addEventListener("resize", () => {
+    if (el("gameScreen").classList.contains("hidden")) return;
+    initCanvas(); buildTerrain(); placeFighters();
+  });
+})();
+  </script>
+</body>
+</html>

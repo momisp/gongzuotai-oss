@@ -1,0 +1,1528 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人工作台</title>
+  <link rel="stylesheet" href="/static/style.css?v=74">
+  <link rel="stylesheet" href="/static/theme-daisy-v1.css?v=3">
+  <link rel="stylesheet" href="/static/network_capture.css?v=1">
+</head>
+<body class="theme-daisy-v1">
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo">个人工作台</div>
+      <div class="global-search">
+        <!-- 诱饵字段：挡住浏览器把「保存的密码/账号」填进搜索框 -->
+        <input type="text" name="wb_username_trap" autocomplete="username" tabindex="-1" aria-hidden="true" class="autofill-trap">
+        <input type="password" name="wb_password_trap" autocomplete="current-password" tabindex="-1" aria-hidden="true" class="autofill-trap">
+        <input id="global-search-input" type="text" name="wb_global_q" role="searchbox"
+          placeholder="搜索项目 / QA / 网址… (Ctrl+K)"
+          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+          data-lpignore="true" data-1p-ignore="true" data-form-type="other"
+          readonly>
+        <div id="global-search-panel" class="global-search-panel hidden"></div>
+      </div>
+      <nav id="nav"></nav>
+    </aside>
+    <main class="main">
+      <section id="page-home" class="page active">
+        <div class="today-home-head">
+          <div class="today-home-head-text">
+            <h1>今日工作台</h1>
+            <p class="subtitle">按项目继续测试 · 少找入口，多干活</p>
+          </div>
+          <button type="button" class="btn primary today-timeline-btn" onclick="openActiveTestTimeline()" title="查看当前测试时间轴">
+            进行中测试
+            <span id="today-inserted-badge" class="today-inserted-badge hidden">插入</span>
+          </button>
+        </div>
+        <div id="today-continue-route" class="today-continue-route"></div>
+
+        <div class="today-split">
+          <div class="today-split-main">
+            <div class="today-section">
+              <div class="today-section-head">
+                <h2>最近项目</h2>
+                <button type="button" class="btn" onclick="openTool('projects')">全部项目</button>
+              </div>
+              <div id="today-project-cards" class="today-project-grid"></div>
+            </div>
+
+            <div class="today-section">
+              <div class="today-section-head">
+                <h2>常用快捷</h2>
+              </div>
+              <div id="today-quick-actions" class="card-grid"></div>
+            </div>
+
+            <div class="today-section">
+              <div class="today-section-head">
+                <h2>服务状态</h2>
+              </div>
+              <div id="workbench-health" class="workbench-health"></div>
+            </div>
+
+            <div class="today-section">
+              <div class="today-section-head">
+                <h2>后台任务开关</h2>
+              </div>
+              <div id="runtime-toggles" class="runtime-toggles"></div>
+              <div id="workbench-selfcheck-wrap" class="workbench-selfcheck-wrap"></div>
+            </div>
+          </div>
+
+          <aside class="today-split-side" aria-label="测试流程">
+            <div class="today-section today-process-panel">
+              <div class="today-section-head">
+                <h2>测试流程</h2>
+                <button type="button" class="btn" onclick="renderTodayProcessPanel()">刷新</button>
+              </div>
+              <p class="hint today-process-hint">阶段交付物按《测试信息 → 测试流程》；产出目录建议：<code>F:\OA-test\项目安装包\&lt;项目&gt;\测试过程产出</code></p>
+              <div id="today-process-stages" class="today-process-stages"></div>
+              <div class="today-section-head" style="margin-top:18px">
+                <h2>项目进度</h2>
+              </div>
+              <div id="today-process-tracks" class="today-process-tracks"></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="page-projects" class="page">
+        <div class="links-top-bar">
+          <div>
+            <h1>项目中心</h1>
+            <p class="subtitle">统一关联资产、排期、测试点、数据验证与冒烟复跑</p>
+          </div>
+          <button class="btn primary" onclick="showProjectCreateForm()">+ 新建项目</button>
+        </div>
+
+        <div id="project-create-panel" class="project-create-panel hidden">
+          <div class="project-form-grid">
+            <label>
+              <span>项目名称</span>
+              <input id="project-form-name" placeholder="例如：新商务">
+            </label>
+            <label>
+              <span>别名（逗号分隔）</span>
+              <input id="project-form-aliases" placeholder="旧名称、禅道名称等">
+            </label>
+            <label>
+              <span>关联已有资产库（可多选）</span>
+              <select id="project-form-assets" multiple></select>
+            </label>
+            <label>
+              <span>关联已有排期表（可多选）</span>
+              <select id="project-form-gantt" multiple></select>
+            </label>
+          </div>
+          <div class="project-form-actions">
+            <button class="btn primary" onclick="createProject()">创建并关联</button>
+            <button class="btn" onclick="hideProjectCreateForm()">取消</button>
+          </div>
+          <p class="hint">无需手填任何 ID；系统会保存稳定项目 ID，并自动回填同原型的测试点和数据验证记录。</p>
+        </div>
+
+        <div class="project-center-layout">
+          <aside class="project-center-list">
+            <div class="links-col-title">项目</div>
+            <div id="project-center-items" class="project-card-list"></div>
+          </aside>
+          <div id="project-center-detail" class="project-center-detail">
+            <p class="empty">请选择项目查看关联内容</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-file-paths" class="page">
+        <div class="links-top-bar">
+          <h1>文件路径收藏</h1>
+          <input type="search" id="search-file-paths" class="search links-search-top" placeholder="搜索名称、分类、标签、备注...">
+          <button class="btn primary" onclick="showForm('file-paths')">+ 新增路径</button>
+        </div>
+        <div class="links-layout">
+          <aside class="links-col">
+            <div class="links-col-title">分类</div>
+            <div id="fp-categories-list" class="links-nav-list"></div>
+          </aside>
+          <aside class="links-col">
+            <div class="links-col-title">子分类</div>
+            <div id="fp-subcategories-list" class="links-nav-list"></div>
+          </aside>
+          <div class="links-col links-col-main">
+            <div id="list-file-paths" class="item-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-qa-notes" class="page">
+        <div class="links-top-bar">
+          <h1>QA 问题集</h1>
+          <input type="search" id="search-qa-notes" class="search links-search-top" placeholder="搜索标题、问题、解决办法、标签...">
+          <button class="btn primary" onclick="showForm('qa-notes')">+ 记录问题</button>
+        </div>
+        <p class="subtitle">把日常踩坑与解决办法记下来，方便以后检索复用</p>
+        <div class="qa-toolbar">
+          <div id="qa-categories" class="qa-cat-chips" role="tablist"></div>
+          <span id="qa-count" class="adb-module-time"></span>
+        </div>
+        <div id="list-qa-notes" class="qa-list"></div>
+      </section>
+
+      <section id="page-test-info" class="page">
+        <div class="links-top-bar">
+          <h1>测试信息</h1>
+          <input type="search" id="search-test-info" class="search links-search-top" placeholder="搜索书名、文件名、分类、阶段、说明…">
+          <button class="btn" type="button" onclick="scanTestInfoLocal()">扫描本机</button>
+          <button class="btn" type="button" onclick="rebuildTestInfoCourse()">重建课程索引</button>
+          <button class="btn" type="button" onclick="rebuildTestInfoBackend()">重建后端索引</button>
+          <button class="btn" type="button" onclick="rebuildTestInfoFrontend()">重建前端索引</button>
+          <button class="btn" type="button" onclick="loadTestInfoPage()">刷新</button>
+        </div>
+        <p class="subtitle">知识手册 · 后端/前端 0→1 · 软测课程 · 本机与网络资料。可按阶段筛选查阅。</p>
+        <div class="ti-layout">
+          <aside class="ti-side">
+            <div class="links-col-title">分类</div>
+            <div id="ti-categories" class="links-nav-list"></div>
+            <div id="ti-scan-meta" class="adb-module-time ti-scan-meta"></div>
+          </aside>
+          <div class="ti-main">
+            <div id="ti-tracks" class="ti-tracks hidden"></div>
+            <div id="list-test-info" class="item-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-maker-lab" class="page">
+        <div class="links-top-bar">
+          <h1>硬件制作</h1>
+          <input type="search" id="search-maker-lab" class="search links-search-top" placeholder="搜索标题、摘要、文件名…">
+          <button class="btn" type="button" onclick="loadMakerLabPage()">刷新</button>
+        </div>
+        <p class="subtitle">用小项目阶梯捡回机电知识；含控制板入门、三定点逗猫，以及 2026 高校赛事地图（智能车 / RoboMaster / ROBOCON）。</p>
+        <div id="ml-meta" class="adb-module-time ti-scan-meta"></div>
+        <div id="list-maker-lab" class="item-list"></div>
+      </section>
+
+      <section id="page-project-assets" class="page">
+        <div class="links-top-bar">
+          <h1>项目资产</h1>
+          <label class="dim-mode-label">
+            <span>浏览维度</span>
+            <select id="project-assets-dim" class="dim-mode-select" onchange="setProjectAssetsDim(this.value)">
+              <option value="env">正常模式（环境）</option>
+              <option value="iter">迭代维度（版本）</option>
+            </select>
+          </label>
+          <input type="search" id="search-project-assets" class="search links-search-top" placeholder="搜索项目、环境/版本、路径、说明...">
+          <button class="btn primary" onclick="showForm('project-assets')">+ 新增资产</button>
+        </div>
+        <div class="pa-tabs">
+          <button type="button" class="pa-tab is-active" data-pa-tab="assets" onclick="switchPaTab('assets')">资产</button>
+          <button type="button" class="pa-tab" data-pa-tab="testpoints" onclick="switchPaTab('testpoints')">测试点</button>
+        </div>
+        <div id="pa-gantt-summary" class="pa-gantt-summary hidden"></div>
+        <div id="pa-panel-assets">
+        <div class="links-layout">
+          <aside class="links-col">
+            <div class="links-col-title" id="pa-col1-title">项目</div>
+            <div id="pa-projects-list" class="links-nav-list"></div>
+          </aside>
+          <aside class="links-col">
+            <div class="links-col-title" id="pa-col2-title">环境</div>
+            <div id="pa-groups-list" class="links-nav-list"></div>
+          </aside>
+          <div class="links-col links-col-main">
+            <div id="list-project-assets" class="item-list"></div>
+          </div>
+        </div>
+        </div>
+        <div id="pa-panel-testpoints" class="hidden">
+          <div class="tp-toolbar">
+            <div class="tp-toolbar-row">
+              <label class="tp-label">来源</label>
+              <select id="tp-source-select" class="tp-select" onchange="onTpSourceChange()">
+                <option value="">当前分组下的 xmind 文件…</option>
+              </select>
+              <button type="button" class="btn" onclick="parseTpFromSelected()">解析选中</button>
+              <label class="btn tp-upload-btn">
+                上传 xmind
+                <input type="file" id="tp-xmind-file" accept=".xmind" hidden onchange="parseTpFromUpload(this)">
+              </label>
+            </div>
+            <div class="tp-toolbar-row tp-toolbar-meta">
+              <span id="tp-meta" class="tp-meta">请选择或上传 xmind 文件进行解析</span>
+              <div class="tp-toolbar-actions">
+                <button type="button" class="btn primary" id="tp-copy-btn" onclick="copyTpPage()" disabled>复制本页</button>
+                <button type="button" class="btn" id="tp-prev-btn" onclick="tpChangePage(-1)" disabled>上一页</button>
+                <span id="tp-page-info" class="tp-page-info"></span>
+                <button type="button" class="btn" id="tp-next-btn" onclick="tpChangePage(1)" disabled>下一页</button>
+              </div>
+            </div>
+          </div>
+          <ol id="tp-list" class="tp-list"></ol>
+        </div>
+      </section>
+
+      <section id="page-links" class="page">
+        <div class="links-top-bar">
+          <h1>常用网址</h1>
+          <input type="search" id="search-links" class="search links-search-top" placeholder="搜索名称、分类、能解决什么问题...">
+          <button class="btn primary" onclick="showForm('links')">+ 新增网址</button>
+        </div>
+        <div class="links-layout">
+          <aside class="links-col">
+            <div class="links-col-title">分类</div>
+            <div id="link-categories-list" class="links-nav-list"></div>
+          </aside>
+          <aside class="links-col">
+            <div class="links-col-title">子分类</div>
+            <div id="link-subcategories-list" class="links-nav-list"></div>
+          </aside>
+          <div class="links-col links-col-main">
+            <div id="list-links" class="item-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-converters" class="page">
+        <h1>数据转换工具</h1>
+        <div class="converter-tabs">
+          <button class="tab active" data-tool="base64-encode">Base64 编码</button>
+          <button class="tab" data-tool="base64-decode">Base64 解码</button>
+          <button class="tab" data-tool="time-to-ts">时间转时间戳</button>
+          <button class="tab" data-tool="ts-to-time">时间戳转时间</button>
+          <button class="tab" data-tool="json-format">JSON 格式化</button>
+          <button class="tab" data-tool="url-encode">URL 编码</button>
+          <button class="tab" data-tool="url-decode">URL 解码</button>
+        </div>
+        <div class="converter-panel">
+          <textarea id="converter-input" rows="6" placeholder="输入内容..."></textarea>
+          <div class="converter-actions">
+            <button class="btn primary" id="btn-convert">转换</button>
+            <button class="btn" onclick="copyText('converter-output')">复制结果</button>
+          </div>
+          <textarea id="converter-output" rows="6" readonly placeholder="输出结果..."></textarea>
+        </div>
+      </section>
+
+      <section id="page-reports" class="page">
+        <h1>测试报告生成</h1>
+        <div class="form-row">
+          <label>报告类型</label>
+          <select id="report-type">
+            <option value="test_report">测试报告</option>
+            <option value="performance_report">性能测试报告</option>
+            <option value="bug_rate_report">Bug 率统计报告</option>
+          </select>
+        </div>
+        <div id="report-fields"></div>
+        <button class="btn primary" onclick="generateReport()">生成报告</button>
+        <textarea id="report-output" rows="16" readonly placeholder="生成的 Markdown 报告..."></textarea>
+        <button class="btn" onclick="copyText('report-output')">复制报告</button>
+      </section>
+
+      <section id="page-test-scripts" class="page">
+        <div id="ts-hub" class="ts-view">
+          <h1>测试脚本工具</h1>
+          <p class="subtitle">脚本入口 · ADB 远程装包 · 网络抓包 · 充值回调 · 用例转换</p>
+          <div id="ts-cards" class="card-grid"></div>
+        </div>
+        <div id="ts-adb" class="ts-view hidden">
+          <div class="page-header">
+            <h1>远程装包</h1>
+            <div class="page-header-actions">
+              <button class="btn" type="button" onclick="showTestScriptHub()">← 返回入口</button>
+            </div>
+          </div>
+          <p class="subtitle">安卓（ADB）· iOS（USB / IPA）· 左侧选设备 · 右侧装包与传文件</p>
+
+          <div class="platform-tabs" role="tablist">
+            <button type="button" class="platform-tab is-active" id="tab-platform-android" data-platform="android" onclick="switchDevicePlatform('android')">安卓</button>
+            <button type="button" class="platform-tab" id="tab-platform-ios" data-platform="ios" onclick="switchDevicePlatform('ios')">iOS</button>
+          </div>
+
+          <div id="platform-android" class="platform-panel">
+          <div class="adb-split">
+            <aside class="adb-side">
+              <div class="adb-side-header">
+                <div class="adb-side-title">已连接设备</div>
+                <span id="adb-status-text" class="adb-module-time">检测中…</span>
+              </div>
+              <div class="adb-side-toolbar">
+                <button class="btn btn-sm" type="button" onclick="refreshAdbDevices()">刷新</button>
+                <button class="btn btn-sm primary" type="button" id="btn-adb-connect-all" onclick="runAdbConnectAllUsb()">全部 USB 转无线</button>
+              </div>
+              <div class="adb-side-config">
+                <label>TCP 端口</label>
+                <input type="number" id="adb-tcp-port" class="adb-input" value="28866" min="1" max="65535" title="无线端口">
+                <label class="adb-check" title="连接前断开全部旧 TCP（多机时慎用）">
+                  <input type="checkbox" id="adb-disconnect-first">
+                  断开旧连接
+                </label>
+              </div>
+              <div id="adb-devices" class="adb-devices">加载中…</div>
+            </aside>
+
+            <div class="adb-main">
+              <div id="adb-detail-empty" class="adb-detail-empty">
+                <div class="adb-empty-title">请选择左侧设备</div>
+                <div class="adb-empty-hint">支持多台 USB / 无线设备；点选后可在此为该机转无线、安装 APK。已转无线的设备会记住，切页回来自动重连。</div>
+              </div>
+
+              <div id="adb-detail" class="adb-detail hidden">
+                <div class="adb-module adb-detail-head">
+                  <div class="adb-module-header">
+                    <div>
+                      <div class="adb-module-title" id="adb-detail-title">设备</div>
+                      <div class="adb-device-meta" id="adb-detail-meta">—</div>
+                    </div>
+                    <div class="adb-module-meta">
+                      <span id="adb-detail-badge" class="adb-badge">—</span>
+                      <button class="btn btn-sm primary" type="button" id="btn-adb-connect" onclick="runAdbWirelessConnect()">转无线</button>
+                      <button class="btn btn-sm" type="button" id="btn-adb-disconnect" onclick="runAdbDisconnect()">断开无线</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="adb-detail-grid">
+                  <div class="adb-detail-col">
+                    <div class="adb-module adb-mirror-module">
+                      <div class="adb-module-header">
+                        <div class="adb-module-title">屏幕投屏 / 操控</div>
+                        <div class="adb-module-meta">
+                          <span id="adb-mirror-status" class="adb-module-time">未投屏</span>
+                          <button class="btn btn-sm primary" type="button" id="btn-adb-mirror-start" onclick="startAdbMirror()">页面投屏</button>
+                          <button class="btn btn-sm" type="button" id="btn-adb-mirror-stop" onclick="stopAdbMirror()" disabled>停止投屏</button>
+                          <button class="btn btn-sm" type="button" id="btn-adb-scrcpy" onclick="openAdbScrcpy()">打开 scrcpy</button>
+                          <button class="btn btn-sm" type="button" id="btn-adb-scrcpy-stop" onclick="stopAdbScrcpy()" disabled>关闭 scrcpy</button>
+                        </div>
+                      </div>
+                      <div class="adb-module-body adb-mirror-body">
+                        <div class="adb-mirror-toolbar">
+                          <button class="btn btn-sm" type="button" onclick="adbMirrorKey('back')">返回</button>
+                          <button class="btn btn-sm" type="button" onclick="adbMirrorKey('home')">主页</button>
+                          <button class="btn btn-sm" type="button" onclick="adbMirrorKey('recents')">任务</button>
+                        </div>
+                        <div id="adb-mirror-viewport" class="adb-mirror-viewport">
+                          <div id="adb-mirror-placeholder" class="adb-mirror-placeholder">点击「页面投屏」在浏览器内显示画面；或「打开 scrcpy」使用高清独立窗口</div>
+                          <img id="adb-mirror-img" class="adb-mirror-img hidden" alt="设备屏幕" draggable="false">
+                        </div>
+                        <div class="adb-mirror-hint">在画面上点击/拖拽可操控设备 · 页面投屏约 8–12 帧，高清流畅请用 scrcpy</div>
+                      </div>
+                    </div>
+
+                    <div class="adb-module">
+                      <div class="adb-module-header">
+                        <div class="adb-module-title">安装 APK</div>
+                        <div class="adb-module-meta">
+                          <span id="adb-latest-meta" class="adb-module-time">—</span>
+                        </div>
+                      </div>
+                      <div class="adb-module-body">
+                        <div class="adb-form-row adb-form-row-wide">
+                          <label>共享 APK 目录</label>
+                          <input type="text" id="adb-share-dir" class="adb-input adb-input-grow" placeholder="例如 F:\share\apks">
+                          <button class="btn btn-sm" type="button" onclick="saveAdbConfig()">保存配置</button>
+                          <button class="btn btn-sm" type="button" onclick="refreshAdbLatestApk()">查看最新包</button>
+                        </div>
+                        <div class="adb-actions">
+                          <button class="btn primary" type="button" id="btn-adb-install-latest" onclick="installAdbLatestApk()">安装共享目录最新 APK</button>
+                          <label class="btn" id="btn-adb-pick-apk">
+                            选择/拖拽 APK
+                            <input type="file" id="adb-apk-file" accept=".apk,application/vnd.android.package-archive" hidden>
+                          </label>
+                        </div>
+                        <div id="adb-dropzone" class="adb-dropzone">将 .apk 拖到此处，或点上方按钮选择文件（装到当前选中设备）</div>
+                        <div id="adb-install-progress" class="adb-install-progress hidden"></div>
+                      </div>
+                    </div>
+
+                    <div class="adb-module">
+                      <div class="adb-module-header">
+                        <div class="adb-module-title">抓包代理</div>
+                        <div class="adb-module-meta">
+                          <span id="adb-proxy-status" class="adb-proxy-status is-unknown" role="status" aria-live="polite">
+                            <span class="adb-proxy-status-dot" aria-hidden="true"></span>
+                            <span class="adb-proxy-status-label">未检测</span>
+                            <span class="adb-proxy-status-detail"></span>
+                          </span>
+                        </div>
+                      </div>
+                      <div class="adb-module-body">
+                        <div class="adb-form-row adb-form-row-wide">
+                          <label for="adb-proxy-host">代理 IP</label>
+                          <input type="text" id="adb-proxy-host" class="adb-input adb-input-proxy-host" value="192.168.0.101" placeholder="192.168.0.101">
+                          <label for="adb-proxy-port">端口</label>
+                          <input type="number" id="adb-proxy-port" class="adb-input" value="9000" min="1" max="65535">
+                          <button class="btn btn-sm" type="button" onclick="saveAdbConfig()">保存</button>
+                        </div>
+                        <div class="adb-proxy-history-wrap">
+                          <div class="adb-proxy-history-label">历史记录 · 点击地址回填</div>
+                          <div id="adb-proxy-history" class="adb-proxy-history"></div>
+                        </div>
+                        <div class="adb-actions">
+                          <button class="btn primary" type="button" id="btn-adb-proxy-on" onclick="setAdbProxy()">开启代理</button>
+                          <button class="btn" type="button" id="btn-adb-proxy-off" onclick="clearAdbProxy()">关闭代理</button>
+                        </div>
+                        <div class="adb-mirror-hint">通过 adb 设置系统 HTTP 代理；HTTPS 还需在手机上安装抓包工具证书</div>
+                      </div>
+                    </div>
+
+                    <div class="adb-module adb-exchange-module">
+                      <div class="adb-module-header">
+                        <div class="adb-module-title">与手机交换</div>
+                        <div class="adb-module-meta">
+                          <span class="adb-module-time">链接 / 文字 / 剪贴板 / 截屏 / 相册 / 推文件</span>
+                        </div>
+                      </div>
+                      <div class="adb-module-body">
+                        <div class="adb-form-row adb-form-row-wide">
+                          <label for="adb-exchange-input">链接或文字</label>
+                          <input type="text" id="adb-exchange-input" class="adb-input adb-input-grow" placeholder="https://… 或任意文字">
+                          <button class="btn btn-sm primary" type="button" onclick="adbExchangeOpenUrl()">在手机浏览器打开</button>
+                          <button class="btn btn-sm" type="button" onclick="adbExchangeShareText()">分享文字到手机</button>
+                          <button class="btn btn-sm" type="button" onclick="adbExchangeGetClipboard()" title="读取手机当前剪贴板并填入上方输入框，同时复制到电脑">读取手机剪贴板</button>
+                        </div>
+                        <div class="adb-actions">
+                          <button class="btn primary" type="button" onclick="adbExchangeScreencap()">截屏到电脑</button>
+                          <button class="btn" type="button" onclick="adbExchangeListMedia()">刷新最近图片</button>
+                          <button class="btn" type="button" id="btn-adb-pull-media" onclick="adbExchangePullSelected()" disabled>拉取所选到电脑</button>
+                          <label class="btn" id="btn-adb-push-file">
+                            推送文件到手机
+                            <input type="file" id="adb-push-file" hidden>
+                          </label>
+                          <button class="btn" type="button" onclick="adbClearLogcat()" title="清空手机 logcat 缓冲区，便于复现崩溃后抓干净日志">清除日志</button>
+                          <button class="btn" type="button" id="btn-adb-dump-logcat" onclick="adbDumpLogcat()" title="导出 logcat 为 txt 并可下载；右侧用测试点生成同源 Key 分析崩溃">抓取日志到 txt</button>
+                        </div>
+                        <div id="adb-exchange-dropzone" class="adb-dropzone adb-exchange-dropzone">将任意文件拖到此处推送到手机 Download</div>
+                        <div id="adb-exchange-preview" class="adb-exchange-preview hidden"></div>
+                        <div id="adb-media-list" class="adb-media-list"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="adb-module adb-log-module">
+                    <div class="adb-module-header">
+                      <div class="adb-module-title">运行日志</div>
+                      <div class="adb-module-meta">
+                        <button class="btn btn-sm" type="button" onclick="clearAdbLog()">清空</button>
+                      </div>
+                    </div>
+                    <pre id="adb-log" class="adb-log" aria-live="polite"></pre>
+                    <div class="adb-crash-panel">
+                      <div class="adb-crash-head">
+                        <div class="adb-module-title">崩溃分析</div>
+                        <div class="adb-crash-actions">
+                          <a id="adb-logcat-download" class="btn btn-sm hidden" href="#" download>下载 txt</a>
+                          <button class="btn btn-sm" type="button" id="btn-adb-analyze-logcat" onclick="adbAnalyzeLogcat()" disabled>重新分析</button>
+                        </div>
+                      </div>
+                      <div id="adb-crash-analysis" class="adb-crash-analysis">抓取日志后，将复用「测试点生成」的 API Key 自动分析崩溃原因。</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+
+          <div id="platform-ios" class="platform-panel hidden">
+          <div class="adb-split">
+            <aside class="adb-side">
+              <div class="adb-side-header">
+                <div class="adb-side-title">已连接 iPhone</div>
+                <span id="ios-status-text" class="adb-module-time">检测中…</span>
+              </div>
+              <div class="adb-side-toolbar">
+                <button class="btn btn-sm" type="button" onclick="refreshIosDevices()">刷新</button>
+                <button class="btn btn-sm" type="button" onclick="iosEnableWifi()" title="需 USB 已连接">开启无线</button>
+                <button class="btn btn-sm" type="button" onclick="iosDiscoverWifi()">发现无线</button>
+              </div>
+              <div class="adb-side-config" style="flex-wrap:wrap;gap:6px">
+                <input type="text" id="ios-wifi-host" class="adb-input adb-input-grow" placeholder="手动 IP，如 192.168.1.8">
+                <button class="btn btn-sm primary" type="button" onclick="iosConnectWifi()">连接</button>
+              </div>
+              <div class="adb-module-hint" style="padding:8px 12px">USB / 无线 · 需信任本机 · IPA 须已签名 · 装前校验最低系统</div>
+              <div id="ios-devices" class="adb-devices">加载中…</div>
+            </aside>
+
+            <div class="adb-main">
+              <div id="ios-detail-empty" class="adb-detail-empty">
+                <div class="adb-empty-title">请选择左侧 iOS 设备</div>
+                <div class="adb-empty-hint">插线并信任后点刷新；可安装已签名 IPA、推拉文件；无线需先「开启无线」再「发现」</div>
+              </div>
+
+              <div id="ios-detail" class="adb-detail hidden">
+                <div class="adb-module adb-detail-head">
+                  <div class="adb-module-header">
+                    <div>
+                      <div class="adb-module-title" id="ios-detail-title">设备</div>
+                      <div class="adb-device-meta" id="ios-detail-meta">—</div>
+                    </div>
+                    <div class="adb-module-meta">
+                      <span id="ios-detail-badge" class="adb-badge">USB</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="adb-detail-grid">
+                  <div class="adb-detail-col">
+                    <div class="adb-module">
+                      <div class="adb-module-header">
+                        <div class="adb-module-title">安装 IPA</div>
+                        <div class="adb-module-meta">
+                          <span id="ios-latest-meta" class="adb-module-time">—</span>
+                        </div>
+                      </div>
+                      <div class="adb-module-body">
+                        <div id="ios-ipa-info" class="adb-module-hint" style="margin-bottom:8px">查看最新包后显示 bundle / 版本 / 最低系统</div>
+                        <div class="adb-form-row adb-form-row-wide">
+                          <label>共享 IPA 目录</label>
+                          <input type="text" id="ios-share-dir" class="adb-input adb-input-grow" placeholder="例如 F:\share\ipas">
+                          <button class="btn btn-sm" type="button" onclick="saveIosConfig()">保存配置</button>
+                          <button class="btn btn-sm" type="button" onclick="refreshIosLatestIpa()">查看最新包</button>
+                        </div>
+                        <div class="adb-actions">
+                          <button class="btn primary" type="button" id="btn-ios-install-latest" onclick="installIosLatestIpa()">安装共享目录最新 IPA</button>
+                          <button class="btn" type="button" onclick="installIosLatestIpa(true)" title="先按 bundleId 卸载再装">卸载后重装最新</button>
+                          <label class="btn" id="btn-ios-pick-ipa">
+                            选择/拖拽 IPA
+                            <input type="file" id="ios-ipa-file" accept=".ipa,application/octet-stream" hidden>
+                          </label>
+                        </div>
+                        <label class="adb-check" style="margin-top:8px;display:inline-flex;gap:6px;align-items:center">
+                          <input type="checkbox" id="ios-force-install">
+                          忽略最低系统校验强制安装
+                        </label>
+                        <div id="ios-dropzone" class="adb-dropzone">将 .ipa 拖到此处，或点上方按钮选择文件（装到当前选中设备）</div>
+                        <div id="ios-install-progress" class="adb-install-progress hidden"></div>
+                        <div id="ios-install-bar" class="ios-install-bar hidden"><div id="ios-install-bar-fill" class="ios-install-bar-fill"></div></div>
+                      </div>
+                    </div>
+
+                    <div class="adb-module">
+                      <div class="adb-module-header">
+                        <div class="adb-module-title">已装应用</div>
+                        <div class="adb-module-meta">
+                          <button class="btn btn-sm" type="button" onclick="iosRefreshApps()">刷新列表</button>
+                        </div>
+                      </div>
+                      <div class="adb-module-body">
+                        <div class="adb-form-row adb-form-row-wide">
+                          <input type="text" id="ios-apps-filter" class="adb-input adb-input-grow" placeholder="筛选名称 / bundleId" oninput="iosRenderAppsFilter()">
+                        </div>
+                        <div id="ios-apps-list" class="adb-media-list"></div>
+                      </div>
+                    </div>
+
+                    <div class="adb-module adb-exchange-module">
+                      <div class="adb-module-header">
+                        <div class="adb-module-title">与手机交换</div>
+                        <div class="adb-module-meta">
+                          <span class="adb-module-time">截屏 · 推文件 · 相册缩略图 · 批量拉取</span>
+                        </div>
+                      </div>
+                      <div class="adb-module-body">
+                        <div class="adb-actions">
+                          <button class="btn primary" type="button" onclick="iosExchangeScreencap()" title="截取当前屏幕并保存到电脑">截屏到电脑</button>
+                          <label class="btn" id="btn-ios-push-file">
+                            推送文件到手机
+                            <input type="file" id="ios-push-file" hidden>
+                          </label>
+                          <button class="btn" type="button" onclick="iosExchangeListMedia()">刷新最近图片</button>
+                          <button class="btn" type="button" onclick="iosMediaSelectAll()">全选</button>
+                          <button class="btn" type="button" id="btn-ios-pull-media" onclick="iosExchangePullSelected()" disabled>拉取所选到电脑</button>
+                          <button class="btn" type="button" onclick="iosExchangeListDir()">浏览远程目录</button>
+                        </div>
+                        <div class="adb-form-row adb-form-row-wide">
+                          <label for="ios-remote-path">远程路径</label>
+                          <input type="text" id="ios-remote-path" class="adb-input adb-input-grow" value="/Downloads/Workbench" placeholder="/Downloads/Workbench">
+                        </div>
+                        <div id="ios-exchange-dropzone" class="adb-dropzone adb-exchange-dropzone">将任意文件拖到此处推送到手机 Downloads/Workbench</div>
+                        <div id="ios-exchange-preview" class="adb-exchange-preview hidden"></div>
+                        <div id="ios-media-list" class="adb-media-list ios-media-grid"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="adb-module adb-log-module">
+                    <div class="adb-module-header">
+                      <div class="adb-module-title">运行日志</div>
+                      <div class="adb-module-meta">
+                        <button class="btn btn-sm" type="button" onclick="clearIosLog()">清空</button>
+                      </div>
+                    </div>
+                    <pre id="ios-log" class="adb-log" aria-live="polite"></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-auto-qa" class="page">
+        <div class="page-header">
+          <h1>业务自动化</h1>
+          <div class="page-header-actions">
+            <button class="btn primary" type="button" onclick="openAutoControlPanel()">自动化控制面板</button>
+            <button class="btn primary" type="button" onclick="openBizFlowPage()">打开主流程台</button>
+            <button class="btn primary" type="button" onclick="openBizRolePage()">打开角色台</button>
+            <button class="btn primary" type="button" onclick="openSeedScriptPage()">打开造数脚本</button>
+            <button class="btn" type="button" onclick="openAutoQaRequirements()">需求文档</button>
+            <button class="btn" type="button" onclick="loadAutoQaPage()">刷新方案</button>
+          </div>
+        </div>
+        <p class="subtitle">浏览器网页走 Playwright · 桌面软件 / 游戏客户端走 Airtest · 接口自动化预留 Apifox</p>
+        <div class="bf-entry-row">
+        <div class="bf-entry-card" id="bf-entry-card">
+          <div>
+            <h2>▶ 跨端主流程台（点这里）</h2>
+            <p class="hint">会弹出专门操作台：选平台/静默·展示、跑步骤、看造数表。下面「新商务·浏览器主路径」等模块卡片不是这个入口。</p>
+          </div>
+          <button class="btn primary" type="button" onclick="openBizFlowPage()">打开主流程台</button>
+        </div>
+        <div class="bf-entry-card br-entry-card" id="br-entry-card">
+          <div>
+            <h2>▶ 角色业务台（点这里）</h2>
+            <p class="hint">新开浏览器页，不弹窗。按运维 / 商务 / 会长 / 玩家分框看系统、账号，以及对照主流程的步骤。</p>
+          </div>
+          <button class="btn primary" type="button" onclick="openBizRolePage()">打开角色台</button>
+        </div>
+        <div class="bf-entry-card ss-entry-card" id="ss-entry-card">
+          <div>
+            <h2>▶ 造数脚本（点这里）</h2>
+            <p class="hint">新开浏览器页。按新商务 / 商务 / 会长 / 用户分框造数；库时间可一键查询、一键更换。sw6 只查不改。</p>
+          </div>
+          <button class="btn primary" type="button" onclick="openSeedScriptPage()">打开造数脚本</button>
+        </div>
+        <div class="bf-entry-card" id="ac-entry-card">
+          <div>
+            <h2>▶ 自动化控制面板（点这里）</h2>
+            <p class="hint">新开浏览器页。看排队/当前执行/吞吐；一键跑「充值→分佣」档 A，档 B 结算提现脚手架遇 stub 停止。</p>
+          </div>
+          <button class="btn primary" type="button" onclick="openAutoControlPanel()">打开控制面板</button>
+        </div>
+        </div>
+        <div id="aq-eval-banner" class="aq-eval-banner"></div>
+        <div class="aq-engine-strip">
+          <div><strong>🌐 Playwright</strong><span>网页自动化 · 直接复用测试点生成的脚本</span></div>
+          <div><strong>🖥️ Airtest</strong><span>桌面软件 / 游戏 / 移动端图形自动化</span></div>
+          <div><strong>🔌 Apifox</strong><span>接口场景 · 后续接入触发器</span></div>
+        </div>
+        <section class="aq-runner">
+          <div class="aq-runner-head">
+            <div>
+              <h2>自动化模块</h2>
+              <p class="hint">模块可单独执行，后续可挂入跨端主链路。</p>
+            </div>
+            <div class="page-header-actions">
+              <button class="btn primary" type="button" onclick="syncAutoQaPlaywright()">同步测试点 Playwright</button>
+              <button class="btn" type="button" onclick="showAutoQaAirtestForm()">+ Airtest 模块</button>
+            </div>
+          </div>
+          <div id="aq-airtest-form" class="aq-module-form hidden">
+            <input id="aq-air-name" placeholder="模块名称，例如：OA 客户端登录">
+            <select id="aq-air-line">
+              <option value="oa-pc">PC OA</option>
+              <option value="game-sdk">游戏 SDK / 玩家</option>
+              <option value="e2e-chain">跨端主链路</option>
+            </select>
+            <input id="aq-air-script" placeholder=".air 脚本路径，例如 D:\airtest\login.air">
+            <input id="aq-air-device" placeholder="设备串（可选），例如 Android:///127.0.0.1:5037/设备号">
+            <input id="aq-air-package" placeholder="启动包名（可选）">
+            <button class="btn primary" type="button" onclick="createAutoQaAirtestModule()">保存模块</button>
+            <button class="btn" type="button" onclick="hideAutoQaAirtestForm()">取消</button>
+          </div>
+          <div id="aq-modules" class="aq-module-grid"></div>
+          <div id="aq-run-result" class="aq-run-result hidden"></div>
+        </section>
+        <section class="aq-sprite">
+          <div class="aq-runner-head">
+            <div>
+              <h2>业务精灵</h2>
+              <p class="hint">业务答疑 · 自动化选型 · 推荐并确认执行模块</p>
+            </div>
+            <div class="page-header-actions">
+              <button class="btn" type="button" onclick="toggleAutoQaSpriteSettings()">模型设置</button>
+              <button class="btn primary" type="button" onclick="launchAutoQaDesktopSprite()">启动桌面精灵</button>
+            </div>
+          </div>
+          <div id="aq-sprite-settings" class="aq-sprite-settings hidden">
+            <input id="aq-sprite-base" placeholder="OpenAI 兼容 API 地址，例如 https://api.deepseek.com/v1">
+            <input id="aq-sprite-model" placeholder="模型，例如 deepseek-chat">
+            <input id="aq-sprite-key" type="password" placeholder="API Key（留空则复用测试点生成配置）">
+            <button class="btn" type="button" onclick="saveAutoQaSpriteSettings()">保存</button>
+          </div>
+          <p id="aq-sprite-mode-hint" class="hint aq-sprite-mode-hint"></p>
+          <div id="aq-sprite-chat" class="aq-sprite-chat"></div>
+          <div id="aq-sprite-recommendations" class="aq-sprite-recommendations"></div>
+          <div class="aq-sprite-input">
+            <textarea id="aq-sprite-input" rows="2" placeholder="例如：会长分享链接后，玩家归属怎么验证？"></textarea>
+            <button id="aq-sprite-send" class="btn primary" type="button" onclick="sendAutoQaSpriteMessage()">发送</button>
+          </div>
+        </section>
+        <div class="aq-layout">
+          <aside class="aq-side">
+            <div class="links-col-title">业务线</div>
+            <div id="aq-biz-list" class="links-nav-list"></div>
+          </aside>
+          <div class="aq-main">
+            <div id="aq-line-advice" class="aq-advice"></div>
+            <div id="aq-solutions" class="aq-solutions"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-biz-flow" class="page">
+        <div class="page-header">
+          <div>
+            <h1 id="bf-page-title">主流程台</h1>
+            <p class="subtitle" id="bf-page-sub">静默走接口看状态 · 展示模式弹出浏览器 · 造数落表可复制</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn" type="button" onclick="openTool('auto-qa')">返回业务自动化</button>
+            <button class="btn" type="button" onclick="loadBizFlowPage()">刷新</button>
+          </div>
+        </div>
+
+        <div class="bf-sticky-bar">
+        <div class="bf-toolbar">
+          <label class="bf-field">
+            <span>平台</span>
+            <select id="bf-target">
+              <option value="lx">龙翔</option>
+              <option value="yq">游趣</option>
+              <option value="hw">汇玩</option>
+            </select>
+          </label>
+          <label class="bf-field">
+            <span>模式</span>
+            <select id="bf-mode">
+              <option value="silent">静默（全接口）</option>
+              <option value="display">展示（浏览器可视化）</option>
+            </select>
+          </label>
+          <button class="btn primary" type="button" id="bf-start-btn" onclick="startBizFlowRun()">一键开跑（仅勾选步骤）</button>
+          <button class="btn" type="button" onclick="openBizFlowRunsModal()">运行记录</button>
+          <button class="btn" type="button" onclick="openBizFlowArtifactsModal()">造数记录</button>
+          <button class="btn" type="button" onclick="openBizFlowEnvModal()">环境变量</button>
+        </div>
+
+        <div class="bf-hint" id="bf-strategy-hint"></div>
+        </div>
+
+        <div class="bf-layout bf-layout-3">
+          <div class="bf-col bf-col-meta" id="bf-col-meta">
+            <div class="bf-panel-head">
+              <h2>入参 <span id="bf-meta-scope" class="bf-io-scope">F1</span></h2>
+            </div>
+            <div id="bf-meta-fields" class="bf-meta-fields"></div>
+            <div class="bf-meta-actions">
+              <button type="button" class="btn primary btn-sm" id="bf-meta-save-btn" onclick="saveBizFlowMeta()">保存测试数据</button>
+              <span id="bf-meta-save-hint" class="hint"></span>
+            </div>
+          </div>
+          <div class="bf-col bf-col-steps">
+            <div class="bf-panel-head">
+              <h2>步骤状态</h2>
+              <span class="hint" id="bf-run-meta">尚未创建运行</span>
+            </div>
+            <div class="bf-check-toolbar">
+              <button type="button" class="btn btn-sm" onclick="bfCheckAllSteps(true)">全选</button>
+              <button class="btn btn-sm" type="button" onclick="bfCheckAllSteps(false)">清空勾选</button>
+              <span class="hint" id="bf-check-count">未勾选 · 一键开跑前请先勾选</span>
+            </div>
+            <div id="bf-steps" class="bf-steps"></div>
+          </div>
+          <div class="bf-col bf-col-output" id="bf-col-output">
+            <div class="bf-panel-head">
+              <h2>产出 <span id="bf-output-scope" class="bf-io-scope">F1</span></h2>
+            </div>
+            <div id="bf-step-outputs" class="bf-step-outputs">
+              <p class="hint">点击中间步骤后，左右面板顶边会与该步骤平齐。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div id="bf-detail-modal" class="bf-detail-modal hidden">
+        <div class="bf-detail-backdrop" onclick="closeBizFlowDetail()"></div>
+        <div class="bf-detail-dialog" role="dialog" aria-modal="true">
+          <div class="bf-detail-head">
+            <strong id="bf-detail-title">步骤详情</strong>
+            <button type="button" class="btn btn-sm" onclick="closeBizFlowDetail()">关闭</button>
+          </div>
+          <div id="bf-detail-body" class="bf-detail-body"></div>
+        </div>
+      </div>
+
+      <div id="bf-runs-modal" class="bf-detail-modal hidden">
+        <div class="bf-detail-backdrop" onclick="closeBizFlowRunsModal()"></div>
+        <div class="bf-detail-dialog bf-runs-dialog" role="dialog" aria-modal="true">
+          <div class="bf-detail-head">
+            <strong>运行记录</strong>
+            <button type="button" class="btn btn-sm" onclick="closeBizFlowRunsModal()">关闭</button>
+          </div>
+          <div id="bf-runs" class="bf-runs"></div>
+        </div>
+      </div>
+
+      <div id="bf-env-modal" class="bf-detail-modal hidden">
+        <div class="bf-detail-backdrop" onclick="closeBizFlowEnvModal()"></div>
+        <div class="bf-detail-dialog bf-env-dialog" role="dialog" aria-modal="true">
+          <div class="bf-detail-head">
+            <div>
+              <strong>环境变量</strong>
+              <p class="hint" style="margin:4px 0 0">按环境查看/修改参数，保存后左侧入参会同步。跑流程的平台仍用工具栏「龙翔 / 游趣 / 汇玩」。</p>
+            </div>
+            <button type="button" class="btn btn-sm" onclick="closeBizFlowEnvModal()">关闭</button>
+          </div>
+          <div class="bf-env-layout">
+            <aside class="bf-env-nav" id="bf-env-nav"></aside>
+            <div class="bf-env-main">
+              <div class="bf-env-main-head">
+                <strong id="bf-env-title">OA 渠道</strong>
+                <span class="hint" id="bf-env-desc"></span>
+              </div>
+              <div class="bf-table-wrap">
+                <table class="bf-table bf-env-table">
+                  <thead>
+                    <tr>
+                      <th>变量名</th>
+                      <th>说明</th>
+                      <th>当前值</th>
+                    </tr>
+                  </thead>
+                  <tbody id="bf-env-tbody">
+                    <tr><td colspan="3" class="hint">加载中…</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="bf-env-actions">
+                <span class="hint" id="bf-env-save-hint"></span>
+                <button type="button" class="btn btn-sm" onclick="saveBizFlowEnv(false)">保存</button>
+                <button type="button" class="btn primary btn-sm" onclick="saveBizFlowEnv(true)">保存并关闭</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="bf-artifacts-modal" class="bf-detail-modal hidden">
+        <div class="bf-detail-backdrop" onclick="closeBizFlowArtifactsModal()"></div>
+        <div class="bf-detail-dialog bf-artifacts-dialog" role="dialog" aria-modal="true">
+          <div class="bf-detail-head">
+            <div>
+              <strong>造数记录表</strong>
+              <p class="hint" style="margin:4px 0 0">流程/库造出的账号与关键字段，可搜索、复制 TSV</p>
+            </div>
+            <button type="button" class="btn btn-sm" onclick="closeBizFlowArtifactsModal()">关闭</button>
+          </div>
+          <div class="bf-artifacts">
+            <div class="bf-art-actions">
+              <input id="bf-art-q" class="bf-search" placeholder="搜索账号 / 角色 / 备注" onkeydown="if(event.key==='Enter')loadBizFlowArtifacts()">
+              <button class="btn btn-sm" type="button" onclick="loadBizFlowArtifacts()">查询</button>
+              <button class="btn btn-sm" type="button" onclick="copyBizFlowArtifactsTsv()">复制表格</button>
+              <button class="btn btn-sm primary" type="button" onclick="showBizFlowArtifactForm()">+ 登记一条</button>
+            </div>
+            <div id="bf-art-form" class="bf-art-form hidden">
+              <input id="bf-art-role" placeholder="角色，如一级商务">
+              <input id="bf-art-account" placeholder="账号">
+              <input id="bf-art-password" placeholder="密码">
+              <input id="bf-art-note" placeholder="备注（可选）">
+              <button class="btn primary btn-sm" type="button" onclick="saveBizFlowArtifact()">保存</button>
+              <button class="btn btn-sm" type="button" onclick="hideBizFlowArtifactForm()">取消</button>
+            </div>
+            <div class="bf-table-wrap">
+              <table class="bf-table" id="bf-art-table">
+                <thead>
+                  <tr>
+                    <th>时间</th>
+                    <th>平台</th>
+                    <th>类型</th>
+                    <th>角色</th>
+                    <th>账号</th>
+                    <th>密码</th>
+                    <th>来源</th>
+                    <th>步骤</th>
+                    <th>备注</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="bf-art-tbody">
+                  <tr><td colspan="10" class="hint">暂无记录</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section id="page-wallpaper" class="page">
+        <div class="page-header">
+          <h1>壁纸管理</h1>
+          <div class="page-header-actions">
+            <button class="btn" type="button" onclick="wpRefresh()">刷新</button>
+            <button class="btn" type="button" onclick="wpRandomDesktop()" title="桌面随机；若开启「随机时同步锁屏」且同步目录有图，锁屏一起换">随机换桌面</button>
+            <button class="btn primary" type="button" onclick="wpDisable360()">关闭 360 画报干扰</button>
+          </div>
+        </div>
+        <p class="subtitle">本地图库 · 桌面壁纸 · 锁屏壁纸 · 选中加入「锁屏同步」后，随机换桌面时锁屏一起换</p>
+
+        <div id="wp-diagnose" class="wp-diagnose"></div>
+
+        <div class="wp-toolbar">
+          <div class="wp-field wp-field-grow">
+            <label for="wp-folder">壁纸目录</label>
+            <input type="text" id="wp-folder" class="adb-input" placeholder="例如 D:\壁纸">
+          </div>
+          <div class="wp-field">
+            <label for="wp-style">桌面适应方式</label>
+            <select id="wp-style" class="adb-input">
+              <option value="fill">填充</option>
+              <option value="fit">适应</option>
+              <option value="stretch">拉伸</option>
+              <option value="span">跨区（多屏）</option>
+              <option value="center">居中</option>
+              <option value="tile">平铺</option>
+            </select>
+          </div>
+          <div class="wp-field wp-field-actions">
+            <label>&nbsp;</label>
+            <button class="btn primary" type="button" onclick="wpSaveConfig()">保存配置</button>
+          </div>
+        </div>
+
+        <div class="wp-targets">
+          <label class="adb-check"><input type="checkbox" id="wp-target-desktop" checked> 应用到桌面</label>
+          <label class="adb-check"><input type="checkbox" id="wp-target-lock" checked> 应用到锁屏</label>
+          <label class="adb-check" title="任务计划随机换桌面时，从「锁屏同步」目录同步锁屏（睡眠/Win+L）">
+            <input type="checkbox" id="wp-lock-follow" checked onchange="wpToggleLockFollow(this.checked)"> 随机时同步锁屏
+          </label>
+          <span id="wp-sync-hint" class="hint">锁屏同步：0 张</span>
+          <span id="wp-status-text" class="wp-status-text"></span>
+        </div>
+
+        <div id="wp-grid" class="wp-grid"></div>
+        <div id="wp-pager" class="wp-pager"></div>
+      </section>
+
+      <section id="page-clipboard" class="page">
+        <div class="page-header">
+          <h1>历史复制记录</h1>
+          <div class="page-header-actions">
+            <button class="btn" type="button" onclick="cbRefresh()">刷新</button>
+            <button class="btn" type="button" onclick="cbOpenPopup()">弹出快捷窗</button>
+            <button class="btn" type="button" onclick="cbClearAll()">清空</button>
+          </div>
+        </div>
+        <p class="subtitle">自动记录系统剪贴板中的文字、图片、文件 · 点击条目即可再次复制 · 全局快捷键可单独弹窗</p>
+
+        <div class="cb-toolbar">
+          <div class="cb-field">
+            <label class="adb-check"><input type="checkbox" id="cb-enabled" onchange="cbToggleEnabled(this.checked)"> 启用监听</label>
+          </div>
+          <div class="cb-field cb-field-hotkey">
+            <label for="cb-hotkey">全局快捷键</label>
+            <div class="cb-hotkey-row">
+              <input type="text" id="cb-hotkey" class="adb-input" placeholder="ctrl+shift+v" autocomplete="off">
+              <button class="btn primary" type="button" onclick="cbSaveHotkey()">保存</button>
+            </div>
+          </div>
+          <div class="cb-field cb-field-grow">
+            <label for="cb-search">搜索</label>
+            <input type="search" id="cb-search" class="adb-input" placeholder="搜文字 / 文件名…" oninput="cbOnSearch()">
+          </div>
+          <span id="cb-status-text" class="cb-status-text"></span>
+        </div>
+
+        <div id="cb-list" class="cb-list"></div>
+      </section>
+
+      <section id="page-region-record" class="page">
+        <div class="page-header">
+          <h1>区域录屏</h1>
+          <div class="page-header-actions">
+            <button class="btn primary" type="button" onclick="rrBeginSelect()">框选录制</button>
+            <button class="btn" type="button" onclick="rrStop()">停止</button>
+            <button class="btn" type="button" onclick="rrRefresh()">刷新</button>
+            <button class="btn" type="button" onclick="rrOpenFolder()">打开目录</button>
+            <button class="btn" type="button" onclick="rrClearAll()">清空</button>
+          </div>
+        </div>
+        <p class="subtitle">全局快捷键唤起 → 拖拽框选屏幕区域 → 再按同键停止 · 视频保存在本地</p>
+
+        <div class="cb-toolbar">
+          <div class="cb-field">
+            <label class="adb-check"><input type="checkbox" id="rr-enabled" onchange="rrToggleEnabled(this.checked)"> 启用快捷键</label>
+          </div>
+          <div class="cb-field cb-field-hotkey">
+            <label for="rr-hotkey">全局快捷键</label>
+            <div class="cb-hotkey-row">
+              <input type="text" id="rr-hotkey" class="adb-input" placeholder="ctrl+shift+r" autocomplete="off">
+              <button class="btn primary" type="button" onclick="rrSaveHotkey()">保存</button>
+            </div>
+          </div>
+          <div class="cb-field">
+            <label for="rr-fps">帧率</label>
+            <input type="number" id="rr-fps" class="adb-input" min="5" max="30" step="1" style="width:88px" value="12">
+          </div>
+          <div class="cb-field">
+            <button class="btn" type="button" onclick="rrSaveFps()">保存帧率</button>
+          </div>
+          <span id="rr-status-text" class="cb-status-text"></span>
+        </div>
+
+        <div id="rr-list" class="cb-list"></div>
+      </section>
+
+      <section id="page-timelapse" class="page">
+        <div class="page-header">
+          <h1>手机延时摄影</h1>
+          <div class="page-header-actions">
+            <button class="btn primary" type="button" onclick="tlStart()">开始拍摄</button>
+            <button class="btn" type="button" onclick="tlStop()">停止</button>
+            <button class="btn" type="button" onclick="tlRefresh()">刷新</button>
+            <button class="btn" type="button" onclick="tlOpenFolder()">打开目录</button>
+            <button class="btn" type="button" onclick="tlClearAll()">清空</button>
+          </div>
+        </div>
+        <p class="subtitle">连接 LensCast / IP Webcam 等手机摄像头 → 按间隔拉帧到电脑 → ffmpeg 合成延时视频 · 长期拍摄请充电、降分辨率</p>
+
+        <div class="cb-toolbar tl-toolbar">
+          <div class="cb-field tl-field-url">
+            <label for="tl-base-url">摄像头地址</label>
+            <input type="text" id="tl-base-url" class="adb-input" placeholder="http://192.168.0.108:8080" autocomplete="off">
+          </div>
+          <div class="cb-field">
+            <label for="tl-interval">间隔(秒)</label>
+            <input type="number" id="tl-interval" class="adb-input" min="1" max="3600" step="1" style="width:88px" value="10">
+          </div>
+          <div class="cb-field">
+            <label for="tl-count">张数(0=不停)</label>
+            <input type="number" id="tl-count" class="adb-input" min="0" max="100000" step="1" style="width:100px" value="60">
+          </div>
+          <div class="cb-field">
+            <label for="tl-fps">成片帧率</label>
+            <input type="number" id="tl-fps" class="adb-input" min="1" max="60" step="1" style="width:88px" value="12">
+          </div>
+          <div class="cb-field">
+            <label class="adb-check"><input type="checkbox" id="tl-auto-compose" checked> 拍完自动合成</label>
+          </div>
+          <div class="cb-field">
+            <button class="btn" type="button" onclick="tlSaveConfig()">保存配置</button>
+            <button class="btn" type="button" onclick="tlProbe()">检测</button>
+            <button class="btn" type="button" onclick="tlPreview()">预览一帧</button>
+            <button class="btn" type="button" onclick="tlEnsureStream()">启动推流</button>
+          </div>
+          <span id="tl-status-text" class="cb-status-text"></span>
+        </div>
+
+        <div class="tl-preview-row">
+          <img id="tl-preview-img" class="tl-preview-img hidden" alt="预览帧">
+          <pre id="tl-job-log" class="adb-log tl-job-log" aria-live="polite"></pre>
+        </div>
+
+        <div id="tl-list" class="cb-list"></div>
+      </section>
+
+      <section id="page-wechat-appeal" class="page">
+        <div class="page-header">
+          <h1>微信链接申诉</h1>
+          <div class="page-header-actions">
+            <button class="btn" type="button" onclick="waRefresh()">刷新</button>
+            <button class="btn" type="button" onclick="waStopJob('按钮')">停止 (P)</button>
+            <button class="btn primary" type="button" onclick="waRunSelected()">执行申诉</button>
+          </div>
+        </div>
+        <p class="subtitle">桌面微信 PC · 双屏固定 · 先检测能否直接打开，不能则自动提交证明材料 · 执行期间请勿操作键鼠，随时按 <b>P</b> 键强制停止</p>
+
+        <div id="wa-preflight" class="wa-preflight"></div>
+
+        <div class="wa-input-row">
+          <textarea id="wa-url-input" class="wa-url-input" rows="4" placeholder="输入申诉链接，可多条（每行一条）"></textarea>
+          <button class="btn primary wa-add-btn" type="button" onclick="waAddUrls()">添加到申诉列表</button>
+        </div>
+
+        <div class="wa-table-toolbar">
+          <label class="adb-check"><input type="checkbox" id="wa-select-all" onchange="waToggleSelectAll(this.checked)"> 全选</label>
+          <span id="wa-status-text" class="cb-status-text"></span>
+        </div>
+
+        <div class="wa-table-wrap">
+          <table class="wa-table">
+            <thead>
+              <tr>
+                <th style="width:36px"></th>
+                <th>链接</th>
+                <th style="width:100px">状态</th>
+                <th>备注</th>
+                <th style="width:120px">截图</th>
+                <th style="width:140px">操作</th>
+              </tr>
+            </thead>
+            <tbody id="wa-tbody"></tbody>
+          </table>
+        </div>
+
+        <div class="wa-log-panel">
+          <div class="wa-log-title">运行日志</div>
+          <pre id="wa-log" class="adb-log" aria-live="polite"></pre>
+        </div>
+      </section>
+
+      <section id="page-ai-story" class="page">
+        <div class="page-header">
+          <h1>AI Story</h1>
+          <div class="page-header-actions">
+            <a class="btn" href="/static/ai-story-guide.html" target="_blank" rel="noopener">使用说明书</a>
+            <a class="btn" href="/static/ai-story-whitebox-previz.html" target="_blank" rel="noopener">白模镜头预演</a>
+            <button class="btn" type="button" onclick="loadAiStoryPage()">刷新状态</button>
+            <button class="btn" type="button" onclick="aiStoryStart()">启动 Docker</button>
+            <button class="btn primary" type="button" onclick="aiStoryOpenEmbedded()">进入使用</button>
+          </div>
+        </div>
+        <p class="subtitle">本地部署 <a href="https://github.com/xhongc/ai_story" target="_blank" rel="noopener">xhongc/ai_story</a> 后，可从工作台进入。默认地址 <code>http://127.0.0.1:3000</code>。新手请先打开右上角 <a href="/static/ai-story-guide.html" target="_blank" rel="noopener">使用说明书</a>。正式出片前可用 <a href="/static/ai-story-whitebox-previz.html" target="_blank" rel="noopener">白模镜头预演</a> 锁站位/运镜。</p>
+        <div id="ai-story-status" class="ai-story-status"></div>
+        <div class="ai-story-actions">
+          <button class="btn primary" type="button" onclick="aiStoryOpenEmbedded()">工作台内打开</button>
+          <button class="btn" type="button" onclick="aiStoryOpenExternal()">新窗口打开</button>
+          <a class="btn" href="/static/ai-story-whitebox-previz.html" target="_blank" rel="noopener">白模镜头预演</a>
+          <button class="btn" type="button" onclick="aiStoryOpenFolder()">打开部署目录</button>
+        </div>
+        <div class="ai-story-llm">
+          <div class="ai-story-llm-head">
+            <h3>工作台 LLM 配置（文案 / 分镜可复用）</h3>
+            <button class="btn btn-sm" type="button" onclick="aiStoryCopyLlmBundle()">一键复制地址+模型</button>
+          </div>
+          <p class="hint">出图 / 视频需在 AI Story 另配对应服务。API Key 不自动写入对方系统，请你本地粘贴。</p>
+          <div id="ai-story-llm-panel" class="ai-story-llm-panel"></div>
+        </div>
+        <div class="ai-story-help">
+          <h3>首次部署</h3>
+          <ol>
+            <li>安装并启动 Docker Desktop</li>
+            <li>运行 <code>integrated/ai_story/start.bat</code>（或点上方「启动 Docker」）</li>
+            <li>首次创建管理员：<code>docker compose exec backend python backend/manage.py createsuperuser</code></li>
+            <li>浏览器访问 <code>http://127.0.0.1:3000</code>，再回到本页点「进入使用」</li>
+          </ol>
+          <p class="hint">完整出片步骤（停用 Mock、改提示词模板、分镜到视频）见 <a href="/static/ai-story-guide.html" target="_blank" rel="noopener">使用说明书</a>。许可证：CC BY-NC-SA 4.0（仅个人学习 / 非商业）。</p>
+        </div>
+      </section>
+
+      <section id="page-relax-games" class="page">
+        <div class="page-header">
+          <h1>解压小游戏</h1>
+          <div class="page-header-actions">
+            <button class="btn" type="button" onclick="loadRelaxGamesPage()">刷新状态</button>
+            <button class="btn" type="button" onclick="relaxGamesInstallPygame()">安装依赖</button>
+            <button class="btn primary" type="button" onclick="relaxGamesLaunch('launcher')">启动游戏</button>
+          </div>
+        </div>
+        <p class="subtitle">Pygame 桌面小游戏合集，需弹出独立游戏窗口（无法内嵌到浏览器）。推荐先点「启动游戏」进入明日方舟风格选模式界面；也可直接启动某一模式。</p>
+        <div id="relax-games-status" class="ai-story-status"></div>
+        <div id="relax-games-modes" class="relax-games-modes"></div>
+        <div class="ai-story-actions">
+          <button class="btn primary" type="button" onclick="relaxGamesLaunch('launcher')">打开启动器</button>
+          <button class="btn" type="button" onclick="relaxGamesOpenFolder()">打开目录</button>
+        </div>
+        <div class="ai-story-help">
+          <h3>说明</h3>
+          <ol>
+            <li>首次使用若提示缺少 pygame，点「安装依赖」或运行 <code>integrated/relax-games/start.bat</code></li>
+            <li>启动器内选「游戏模式」可进入圆内双球、太极进化、抛射回合制 Demo、星铁双球对决</li>
+            <li>游戏窗口关闭后不影响工作台；可再次点「启动游戏」</li>
+          </ol>
+        </div>
+      </section>
+
+      </section>
+
+      <section id="page-video-swap" class="page">
+{% include 'partials/video_swap_body.html' %}
+      </section>
+
+      <section id="page-ops" class="page">
+        <div class="page-header">
+          <h1>测试运维工作区</h1>
+          <div class="page-header-actions">
+            <button class="btn primary" id="btn-daily-report" type="button" onclick="runDailyReport()">一键生成每日巡检报告</button>
+          </div>
+        </div>
+        <div id="ops-report-panel" class="ops-report-panel hidden">
+          <div class="ops-report-title">每日巡检</div>
+          <div id="ops-report-loader" class="ops-report-loader hidden" aria-live="polite">
+            <div class="ops-tl-track"><div class="ops-tl-bar"></div></div>
+            <div class="ops-tl-steps">
+              <span class="ops-tl-step">1. 准备</span>
+              <span class="ops-tl-step">2. 拉取 ECS</span>
+              <span class="ops-tl-step">3. 查询证书</span>
+              <span class="ops-tl-step">4. 生成报告</span>
+            </div>
+            <div id="ops-report-loader-msg" class="ops-report-loader-msg">正在启动…</div>
+          </div>
+          <div id="ops-report-result">
+            <div id="ops-report-msg" class="ops-report-msg">准备就绪</div>
+            <div id="ops-report-actions" class="ops-report-actions hidden"></div>
+          </div>
+        </div>
+        <div class="ops-modules">
+          <div class="ops-module" id="ops-ecs-module">
+            <div class="ops-module-header">
+              <div class="ops-module-title">二、组内 ECS 明细</div>
+              <div class="ops-module-meta">
+                <span id="ops-ecs-updated" class="ops-module-time">—</span>
+                <button class="btn btn-sm" type="button" id="btn-ops-ecs-refresh" onclick="refreshOpsEcs()">刷新</button>
+              </div>
+            </div>
+            <div id="ops-ecs-body" class="ops-module-body">
+              <div class="ops-module-hint">加载中…</div>
+            </div>
+          </div>
+          <div class="ops-module" id="ops-certs-module">
+            <div class="ops-module-header">
+              <div class="ops-module-title">三、证书到期巡检</div>
+              <div class="ops-module-meta">
+                <span id="ops-certs-updated" class="ops-module-time">—</span>
+              </div>
+            </div>
+            <div id="ops-certs-body" class="ops-module-body">
+              <div class="ops-module-hint">加载中…</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-network-capture" class="page">
+        <div class="nc-shell">
+          <header class="page-header">
+            <div>
+              <h1>网络抓包</h1>
+              <p class="subtitle">像 Charles 一样看请求与响应 · 网卡层抓包、自动解帧、zlib 解压、请求响应配对</p>
+            </div>
+            <div class="page-header-actions">
+              <button class="btn" type="button" onclick="openTool('test-tool')">← 返回入口</button>
+              <span class="nc-status" id="nc-status">已停止 · 0 条</span>
+              <button class="btn primary" id="nc-btn-start" type="button" onclick="ncStart()">▶ 开始抓包</button>
+              <button class="btn btn-warn" id="nc-btn-stop" type="button" onclick="ncStop()" disabled>■ 停止</button>
+              <button class="btn" type="button" onclick="ncClear()">清空</button>
+            </div>
+          </header>
+
+          <div class="nc-toolbar">
+            <label>网卡
+              <select id="nc-iface"><option value="6">6. 以太网</option></select>
+            </label>
+            <label class="nc-grow">抓包过滤
+              <input id="nc-filter" type="text" value="host 121.41.172.197 or port 8063" spellcheck="false">
+            </label>
+            <label>服务端 IP
+              <input id="nc-target" type="text" value="121.41.172.197" spellcheck="false" style="width:150px">
+            </label>
+          </div>
+
+          <div class="nc-toolbar">
+            <label class="nc-grow">pcapng 文件
+              <input id="nc-import-path" class="nc-import-path" type="text" placeholder="粘贴已有 .pcapng 完整路径，可直接离线解析" spellcheck="false">
+            </label>
+            <button class="btn" type="button" onclick="ncImport()">导入解析</button>
+            <button class="btn" id="nc-btn-sample" type="button" onclick="ncLoadSample()">载入示例</button>
+            <button class="btn" type="button" onclick="ncAllTraffic(this)" title="把抓包过滤改成 tcp，连短连接、其他服务器也能抓到">全量抓包</button>
+            <button class="btn" type="button" onclick="ncExport()" title="把当前列表导出成 JSON，便于留证或交给别人分析">导出列表</button>
+          </div>
+
+          <div class="nc-filterbar">
+            <label class="nc-grow">搜索
+              <input type="text" id="nc-search" placeholder="名称 / 请求体 / 响应体…" oninput="ncRender()" spellcheck="false">
+            </label>
+            <label><input type="checkbox" id="nc-hide-heartbeat" onchange="ncRender()"> 隐藏心跳</label>
+            <label title="隐藏心跳和二进制状态同步包，只留真实请求与 JSON 文字消息"><input type="checkbox" id="nc-only-business" onchange="ncRender()"> 只看业务帧</label>
+            <label><input type="checkbox" id="nc-autoscroll" checked> 自动滚动</label>
+            <span class="nc-count" id="nc-count">0 / 0 条</span>
+          </div>
+
+          <div class="nc-body">
+            <div class="nc-list-wrap">
+              <table class="nc-table">
+                <thead>
+                  <tr>
+                    <th>#</th><th>时间</th><th>类型</th><th>名称</th>
+                    <th>请求</th><th>响应</th><th>耗时</th><th>状态</th>
+                  </tr>
+                </thead>
+                <tbody id="nc-tbody">
+                  <tr><td colspan="8"><div class="nc-empty">正在加载…</div></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="nc-detail" id="nc-detail">
+              <div class="nc-empty">选择左侧任意一条，查看请求与响应详情</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-integrated" class="page">
+        <h1 id="integrated-title">集成工具</h1>
+        <p id="integrated-path" class="subtitle"></p>
+        <div id="integrated-files" class="item-list"></div>
+      </section>
+
+      <section id="page-embedded" class="page page-embedded">
+        <div class="embedded-toolbar">
+          <h1 id="embedded-title">嵌入站点</h1>
+          <button class="btn" type="button" onclick="openEmbeddedInNewTab()">新窗口打开</button>
+        </div>
+        <div class="embedded-body">
+          <iframe id="embedded-frame" class="embedded-frame" title="嵌入站点"></iframe>
+          <div id="embedded-fallback" class="embedded-fallback hidden" role="status">
+            <p>内嵌页面未渲染成功（可能资源加载失败、服务未起或页面报错）。</p>
+            <p class="hint">可先看首页「服务状态」；改过后端需重启 <code>start.bat</code>。也可 Ctrl+F5 或新窗口打开。</p>
+            <div class="embedded-fail-actions">
+              <button class="btn primary" type="button" onclick="reloadEmbeddedFrame()">刷新嵌入</button>
+              <button class="btn" type="button" onclick="openEmbeddedInNewTab()">新窗口打开</button>
+              <button class="btn" type="button" onclick="copyEmbeddedFailHint()">复制失败信息</button>
+              <button class="btn" type="button" onclick="navigate('home')">回今日工作台</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="upload-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2 id="upload-modal-title">上传文件</h2>
+      <p id="upload-modal-hint" class="upload-hint"></p>
+      <div id="upload-paste-zone" class="upload-paste-zone" tabindex="0">
+        <div class="upload-paste-placeholder" id="upload-paste-placeholder">
+          <span class="upload-paste-icon">🖼️</span>
+          <span>点击此处后按 <kbd>Ctrl+V</kbd> 粘贴截图，将自动上传</span>
+        </div>
+        <img id="upload-paste-preview" class="upload-paste-preview hidden" alt="粘贴预览">
+      </div>
+      <div class="form-row">
+        <label>选择文件</label>
+        <input type="file" id="upload-file" accept=".exe,.apk,.ipa,.aab,.app,.dmg,.txt,.md,.log,.zip,.rar,.7z,.json,.csv,.mobileprovision,.plist,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf,.png,.jpg,.jpeg,.gif,.webp,.bmp">
+      </div>
+      <div class="form-row">
+        <label>说明（可选）</label>
+        <input type="text" id="upload-note" placeholder="例如：测试包 v1.2、需求说明文档">
+      </div>
+      <p class="upload-tip">支持粘贴截图、exe / docx / pdf / txt / zip 等；txt 可在浏览器内编辑，Word/PDF/图片点击用本机程序打开。</p>
+      <div class="modal-actions">
+        <button type="button" class="btn" onclick="closeUploadModal()">取消</button>
+        <button type="button" class="btn primary" id="upload-submit-btn" onclick="submitUpload()">上传</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="image-preview-modal" class="modal image-preview-modal hidden">
+    <div class="image-preview-shell">
+      <div class="image-preview-toolbar">
+        <h2 id="image-preview-title">图片预览</h2>
+        <div class="image-preview-controls">
+          <button type="button" class="btn btn-sm" onclick="imagePreviewZoomBy(-0.25)" title="缩小">−</button>
+          <span id="image-preview-zoom-label" class="image-preview-zoom-label">100%</span>
+          <button type="button" class="btn btn-sm" onclick="imagePreviewZoomBy(0.25)" title="放大">+</button>
+          <button type="button" class="btn btn-sm" onclick="imagePreviewSetZoom(1)" title="原图 100%">原图</button>
+          <button type="button" class="btn btn-sm" onclick="imagePreviewFit()" title="适应窗口">适应</button>
+          <button type="button" class="btn btn-sm" onclick="openImageInNewTab()" title="新标签页打开原图">新标签页</button>
+        </div>
+      </div>
+      <div id="image-preview-viewport" class="image-preview-viewport">
+        <button type="button" class="image-preview-nav prev" id="image-preview-prev" onclick="imagePreviewStep(-1)" title="上一张">‹</button>
+        <button type="button" class="image-preview-nav next" id="image-preview-next" onclick="imagePreviewStep(1)" title="下一张">›</button>
+        <div id="image-preview-stage" class="image-preview-stage">
+          <img id="image-preview-img" class="image-preview-img" alt="" draggable="false">
+        </div>
+      </div>
+      <div class="image-preview-footer">
+        <span id="image-preview-meta" class="image-preview-meta"></span>
+        <div class="image-preview-footer-actions">
+          <button type="button" class="btn" onclick="openImagePreviewInSystem()">本机打开</button>
+          <button type="button" class="btn primary" onclick="closeImagePreview()">关闭</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="aq-doc-modal" class="modal hidden">
+    <div class="modal-content modal-content-wide aq-doc-modal-content">
+      <div class="aq-doc-head">
+        <h2 id="aq-doc-title">需求文档</h2>
+        <span id="aq-doc-meta" class="aq-doc-meta"></span>
+      </div>
+      <div id="aq-doc-body" class="aq-doc-body"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn" onclick="closeAutoQaRequirements()">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="text-editor-modal" class="modal hidden">
+    <div class="modal-content modal-content-wide">
+      <h2 id="text-editor-title">编辑文本</h2>
+      <textarea id="text-editor-content" class="text-editor-area" spellcheck="false"></textarea>
+      <div class="modal-actions">
+        <button type="button" class="btn" onclick="closeTextEditor()">取消</button>
+        <button type="button" class="btn primary" onclick="saveTextEditor()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <h2 id="modal-title">编辑</h2>
+      <form id="modal-form"></form>
+      <div class="modal-actions">
+        <button type="button" class="btn" onclick="closeModal()">取消</button>
+        <button type="button" class="btn primary" onclick="submitForm()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="active-test-timeline-modal" class="modal hidden" onclick="if(event.target===this)closeActiveTestTimeline()">
+    <div class="modal-content today-timeline-dialog" role="dialog" aria-labelledby="active-test-timeline-title">
+      <div class="today-timeline-head">
+        <div>
+          <h2 id="active-test-timeline-title">当前测试时间轴</h2>
+          <p class="hint" id="active-test-timeline-sub">进行中的轨道按更新时间排列；「插入」项为临时插队测试</p>
+        </div>
+        <button type="button" class="btn" onclick="closeActiveTestTimeline()">关闭</button>
+      </div>
+      <div id="active-test-timeline-body" class="today-timeline-body"></div>
+    </div>
+  </div>
+
+  <div id="loading-overlay" class="loading-overlay hidden" aria-live="polite" aria-busy="true">
+    <div class="loading-card">
+      <span class="loading-tag">请求等待</span>
+      <div class="loading-title">正在打开</div>
+      <div class="loading-desc">打开路径可能需要几秒钟</div>
+      <div class="loading-stage">
+        <span class="loading-dot"></span>
+        <span class="loading-dot"></span>
+        <span class="loading-dot"></span>
+      </div>
+      <div class="loading-msg" id="loading-msg">正在打开路径…</div>
+    </div>
+  </div>
+
+  <script src="/static/lib/gsap.min.js?v=5"></script>
+  <script src="/static/link-motion.js?v=6"></script>
+  <script src="/static/converters.js?v=5"></script>
+  <script src="/static/modules/nav-today.js?v=7"></script>
+  <script src="/static/modules/project-rounds.js?v=1"></script>
+  <script src="/static/modules/project-patch-verify.js?v=6"></script>
+  <script src="/static/modules/m4-enhance.js?v=3"></script>
+  <script src="/static/modules/video-swap.js?v=23"></script>
+  <script src="/static/modules/maker-lab.js?v=2"></script>
+  <script src="/static/network_capture.js?v=1"></script>
+  <script src="/static/app.js?v=84"></script>
+</body>
+</html>
